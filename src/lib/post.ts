@@ -46,7 +46,17 @@ export const deleteHotel = (id: number) => {
 
 // S3のKeyをDBに送信
 export const postImageKeyOfHotel = (params: string) => {
-  return client.post('/images/hotel', params, {
+  return client.post('/hotels', params, {
+    headers: {
+      "access-token": Cookies.get("_access_token"),
+      "client": Cookies.get("_client"),
+      "uid": Cookies.get("_uid")
+    },
+  });
+};
+
+export const fetchSignedUrl = (params: string) => {
+  return client.fetch('/hotels', {
     headers: {
       "access-token": Cookies.get("_access_token"),
       "client": Cookies.get("_client"),

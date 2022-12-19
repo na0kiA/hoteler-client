@@ -21,12 +21,6 @@ const Home: NextPage<Props> = (props, { statusCode }) => {
     <>
       <div className="bg-black">
         <h2>POSTの一覧</h2>
-        {props.posts.map((post, index) => (
-          <div key={index}>
-            <li>{post.id}</li>
-            <li>{post.title}</li>
-          </div>
-        ))}
       </div>
       <div>
         <OnUploadImage />
@@ -36,11 +30,11 @@ const Home: NextPage<Props> = (props, { statusCode }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/hotels`);
   const json = await res.json();
   return {
     props: {
-      posts: json.posts,
+      hotels: json,
     },
   };
 };
