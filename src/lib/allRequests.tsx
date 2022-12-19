@@ -7,8 +7,8 @@ export const getAllHotel = () => {
 };
 
 // ホテル詳細
-export const getEachHotel = (id: number) => {
-  return client.get(`/hotel/${id}`);
+export const getHotelDetail = (id: string | string[] | undefined) => {
+  return client.get(`/hotels/${id}`);
 };
 
 // ホテルを新規作成
