@@ -37,3 +37,28 @@ export type HotelDetailType = {
   dayOfTheWeek: string;
   topFourReviews: ReviewType;
 };
+
+export type ServiceRateType = {
+  plan: string;
+  rate: number;
+  startTime: Date;
+  endTime: Date;
+  restRates: string;
+};
+
+export type AfterBusinessHour = {
+  restRates: string;
+  stayRates: string;
+};
+
+export type HotelListType = {
+  id: number;
+  name: string;
+  full: boolean;
+  averageRating: number;
+  reviewsCount: number;
+  hotelImages: string;
+  dayOfTheWeek: string;
+  restRates: ServiceRateType[];
+  stayRates: ServiceRateType[];
+};

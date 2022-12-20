@@ -1,17 +1,12 @@
 import React from "react";
 import Link from "next/link";
-import type {
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-  NextPage,
-} from "next";
+import type { GetServerSideProps, NextPage } from "next";
 
-import OnUploadImage from "components/s3ByForm";
 import { getAllHotel } from "lib/allRequests";
-import { HotelDetailType } from "types/types";
+import { HotelListType } from "types/types";
 
 type PROPS = {
-  hotels: HotelDetailType[];
+  hotels: HotelListType[];
 };
 
 const Home: NextPage<PROPS> = ({ hotels }) => {
@@ -21,15 +16,19 @@ const Home: NextPage<PROPS> = ({ hotels }) => {
         <h2>ホテル一覧</h2>
         <h2>
           {hotels &&
-            hotels.map((hotel: HotelDetailType) => (
+            hotels.map((hotel: HotelListType) => (
               <li key={hotel.id}>
                 <Link href={`/hotels/${hotel.id}`}>{hotel.name}</Link>
-                {hotel.hotelImage}
-                {hotel.full}
-                {hotel.averageRating}
-                {hotel.reviewsCount}
-                {hotel.restRates.plan}
-                {hotel.stayRates.plan}
+                <p>{hotel.hotelImages}</p>
+                <p>{hotel.full}</p>
+                <p>{hotel.averageRating}</p>
+                <p>{hotel.reviewsCount}</p>
+                <p>
+                  {hotel.restRates[0].plan} {hotel.restRates[0].rate}円
+                </p>
+                <p>
+                  {hotel.stayRates[0].plan} {hotel.stayRates[0].rate}円
+                </p>
               </li>
             ))}
         </h2>
