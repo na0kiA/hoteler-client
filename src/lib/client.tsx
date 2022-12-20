@@ -1,18 +1,8 @@
-import applyCaseMiddleware  from 'axios-case-converter'
-import axios, { AxiosInstance} from 'axios'
+import axios, { AxiosInstance } from "axios";
 
-const options = {
-  ignoreHeaders: true,
-}
+const client: AxiosInstance | any = axios.create({
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/v1`,
+  headers: { "Content-Type": "application/json" },
+});
 
-const client: AxiosInstance | any = applyCaseMiddleware(
-  axios.create({
-    baseURL: `${process.env.NEXT_PUBLIC_API_URL}/v1`,
-    headers: { 'Content-Type': 'application/json' },
-    responseType: 'json'
-  }),
-  options
-)
-
-
-export default client
+export default client;

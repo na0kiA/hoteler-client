@@ -1,45 +1,47 @@
 import React from "react";
 import Link from "next/link";
-import type { GetServerSideProps, NextPage } from "next";
+import type {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  NextPage,
+} from "next";
 
 import OnUploadImage from "components/s3ByForm";
-// import TopPage from "components/topPage";
-// import { getAllHotel } from "lib/allRequests";
+import { getAllHotel } from "lib/allRequests";
+import { HotelDetailType } from "types/types";
 
-const Home: NextPage<any> = ({ hotels }) => {
+type PROPS = {
+  hotels: HotelDetailType[];
+};
+
+const Home: NextPage<PROPS> = ({ hotels }) => {
   return (
     <>
       <div className="bg-black">
         <h2>ホテル一覧</h2>
         <h2>
           {hotels &&
-            hotels.map((hotel: any) => (
+            hotels.map((hotel: HotelDetailType) => (
               <li key={hotel.id}>
-                <Link href={`/hotels/${hotel.id}`}>
-                  <a>{hotel.name}</a>
-                </Link>
-                <a>{hotel.hotel_images}</a>
-                <a>{hotel.full}</a>
-                <a>{hotel.average_rating}</a>
-                <a>{hotel.reviews_count}</a>
-                <a>{hotel.rest_rates.plan}</a>
-                <a>{hotel.stay_rates.plan}</a>
+                <Link href={`/hotels/${hotel.id}`}>{hotel.name}</Link>
+                {hotel.hotelImage}
+                {hotel.full}
+                {hotel.averageRating}
+                {hotel.reviewsCount}
+                {hotel.restRates.plan}
+                {hotel.stayRates.plan}
               </li>
             ))}
         </h2>
       </div>
       <div className="bg-black"></div>
-      <div>
-        <OnUploadImage />
-      </div>
     </>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/hotels`);
-  const hotels = await res.json();
-  // console.log(hotels);
+  const res = await getAllHotel();
+  const hotels = await res.data;
   return {
     props: {
       hotels,

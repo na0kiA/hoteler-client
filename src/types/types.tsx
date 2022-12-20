@@ -26,12 +26,12 @@ export type HotelDetailType = {
   favoritesCount: number;
   content: string;
   company: string;
-  phone_number: string;
-  postal_code: string;
+  phoneNumber: string;
+  postalCode: string;
   fullAddress: string;
   hotelFacilities: HotelFacilityType;
   full: boolean;
-  average_rating: number;
+  averageRating: number;
   reviewsCount: number;
   hotelImages: string;
   dayOfTheWeek: string;
