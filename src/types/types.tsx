@@ -54,6 +54,7 @@ export type AfterBusinessHour = {
 export type HotelListType = {
   id: number;
   name: string;
+  fullAddress: string;
   full: boolean;
   averageRating: number;
   reviewsCount: number;
