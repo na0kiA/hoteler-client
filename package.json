@@ -24,7 +24,6 @@
     "@typescript-eslint/parser": "^5.23.0",
     "autoprefixer": "^10.4.7",
     "axios": "^0.27.2",
-    "axios-case-converter": "^0.9.0",
     "eslint": "^8.0.1",
     "eslint-config-next": "12.1.6",
     "eslint-config-prettier": "^8.5.0",
