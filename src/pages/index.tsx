@@ -11,13 +11,13 @@ type PROPS = {
 };
 
 const Home = ({ hotels }: PROPS) => {
-  const opneOrClsed = (service: ServiceRateType[]) => {
+  const opneOrClsed = (service: ServiceRateType) => {
     if (typeof service === "string") {
       return service;
     } else {
       return (
         <p>
-          {service[0].plan} {service[0].rate}円
+          {service.plan} {service.rate}円
         </p>
       );
     }

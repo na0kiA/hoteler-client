@@ -60,6 +60,6 @@ export type HotelListType = {
   reviewsCount: number;
   hotelImages: string;
   dayOfTheWeek: string;
-  restRates: ServiceRateType[];
-  stayRates: ServiceRateType[];
+  restRates: ServiceRateType;
+  stayRates: ServiceRateType;
 };
