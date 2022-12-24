@@ -2,7 +2,6 @@
 // import Link from "next/link";
 // import Image from 'next/image'
 import React from "react";
-import Header from "./Header";
 
 type TITLE = {
   title: string;
