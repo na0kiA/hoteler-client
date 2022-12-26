@@ -10,7 +10,7 @@ type TITLE = {
 
 const Layout: React.FC<TITLE> = ({ children, title = "ホテラー" }) => {
   return (
-    <div>
+    <div className="bg-gray-900">
       <main>
         <div>{children}</div>
       </main>

@@ -3,8 +3,8 @@ module.exports = {
   // theme: {
   //   extend: {},
   // },
-  daisyui: {
-    themes: ["valentine"],
-  },
+  // daisyui: {
+  //   themes: ["black"],
+  // },
   plugins: [require("daisyui")],
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import type { GetServerSideProps } from "next";
 
 import { getAllHotel } from "lib/allRequests";
@@ -11,7 +12,7 @@ type PROPS = {
 };
 
 const Home = ({ hotels }: PROPS) => {
-  const opneOrClsed = (service: ServiceRateType) => {
+  const isBusinessHourOrNot = (service: ServiceRateType) => {
     if (typeof service === "string") {
       return service;
     } else {
@@ -34,36 +35,47 @@ const Home = ({ hotels }: PROPS) => {
   return (
     <>
       <Layout title={"ホテラー"}>
-        <div className="h-screen grid grid-cols-4 gap-5 p-10">
+        <div className="md:grid grid-cols-4 gap-5 p-10">
           {hotels &&
             hotels.map((hotel: HotelListType) => (
-              <div
-                key={hotel.id}
-                className="card-bordered card-compact w-68 bg-base-100 shadow-xl"
-              >
+              <div key={hotel.id}>
                 <figure>
-                  <img
-                    src="https://placeimg.com/400/225/arch"
+                  <Image
+                    className="w-screen h-screen object-fill rounded-lg"
+                    src="/hoteler_demo_photo.jpg"
                     alt="ホテル画像"
+                    width={640}
+                    height={480}
                   />
                 </figure>
-                <div className="card-body">
-                  <h2 className="card-title text-base">
-                    <Link href={`/hotels/${hotel.id}`}>
+                <div className="card-body p-0 mb-10">
+                  <h1>
+                    <Link
+                      href={`/hotels/${hotel.id}`}
+                      className="text-lg font-bold"
+                    >
                       {sliceNameOrNot(hotel.name)}
                     </Link>
-                    <div className="badge badge-secondary">
-                      {hotel.full ? "満室" : "空室"}
+                    {hotel.full ? (
+                      <p className="badge ml-1 bg-pink-500 text-black rounded-lg">
+                        満室
+                      </p>
+                    ) : (
+                      <p className="badge ml-1 bg-green-500 text-black rounded-lg">
+                        空室
+                      </p>
+                    )}
+                    <div>
+                      <p className="text-xs  font-sans">{hotel.fullAddress}</p>
+                      <p className="text-sm">
+                        {hotel.averageRating} {hotel.reviewsCount}件{" "}
+                      </p>
                     </div>
-                  </h2>
-                  <p className="card-title text-xs leading-none text-opacity-100">
-                    {hotel.fullAddress}
+                  </h1>
+                  <p className="text-sm">
+                    {isBusinessHourOrNot(hotel.restRates)}
+                    {isBusinessHourOrNot(hotel.stayRates)}
                   </p>
-                  <p className="leading-none">
-                    ({hotel.averageRating}) {hotel.reviewsCount}件
-                  </p>
-                  {opneOrClsed(hotel.restRates)}
-                  {opneOrClsed(hotel.stayRates)}
                 </div>
               </div>
             ))}
@@ -73,9 +85,15 @@ const Home = ({ hotels }: PROPS) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await getAllHotel();
-  const hotels = await res.data;
+export const getServerSideProps: GetServerSideProps = async ({ res }) => {
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=60, stale-while-revalidate=10"
+  );
+
+  const apiResponse = await getAllHotel();
+  const hotels = await apiResponse.data;
+
   return {
     props: {
       hotels,
