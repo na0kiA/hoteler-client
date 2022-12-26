@@ -6,6 +6,7 @@ import type { GetServerSideProps } from "next";
 import { getAllHotel } from "lib/allRequests";
 import { HotelListType, ServiceRateType } from "types/types";
 import Layout from "components/Layout";
+import StarsRating from "components/StarsRating";
 
 type PROPS = {
   hotels: HotelListType[];
@@ -50,32 +51,34 @@ const Home = ({ hotels }: PROPS) => {
                 </figure>
                 <div className="card-body p-0 mb-10">
                   <h1>
-                    <Link
-                      href={`/hotels/${hotel.id}`}
-                      className="text-lg font-bold"
-                    >
-                      {sliceNameOrNot(hotel.name)}
+                    <Link href={`/hotels/${hotel.id}`}>
+                      <p>{sliceNameOrNot(hotel.name)}</p>
                     </Link>
-                    {hotel.full ? (
-                      <p className="badge ml-1 bg-pink-500 text-black rounded-lg">
-                        満室
-                      </p>
-                    ) : (
-                      <p className="badge ml-1 bg-green-500 text-black rounded-lg">
-                        空室
-                      </p>
-                    )}
+                    <div>
+                      {hotel.full ? (
+                        <div className="badge ml-1 bg-pink-500 text-black rounded-lg">
+                          <p>満室</p>
+                        </div>
+                      ) : (
+                        <div className="badge ml-1 bg-green-500 text-black rounded-lg">
+                          <p>空室</p>
+                        </div>
+                      )}
+                    </div>
                     <div>
                       <p className="text-xs  font-sans">{hotel.fullAddress}</p>
-                      <p className="text-sm">
-                        {hotel.averageRating} {hotel.reviewsCount}件{" "}
-                      </p>
                     </div>
+                    <p className="text-sm">
+                      <StarsRating value={Number(hotel.averageRating)} />
+                      {hotel.reviewsCount}件
+                    </p>
                   </h1>
-                  <p className="text-sm">
-                    {isBusinessHourOrNot(hotel.restRates)}
+                  <div className="text-sm">
                     {isBusinessHourOrNot(hotel.stayRates)}
-                  </p>
+                  </div>
+                  <div className="text-sm">
+                    {isBusinessHourOrNot(hotel.restRates)}
+                  </div>
                 </div>
               </div>
             ))}
