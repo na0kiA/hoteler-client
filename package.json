@@ -13,6 +13,7 @@
     "js-cookie": "^3.0.1",
     "next": "12.1.6",
     "react": "18.1.0",
+    "react-awesome-stars-rating": "^0.13.2",
     "react-dom": "18.1.0"
   },
   "devDependencies": {
