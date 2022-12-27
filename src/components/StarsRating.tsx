@@ -1,12 +1,34 @@
 import React from "react";
-import ReactStarsRating from "react-awesome-stars-rating";
 
-const onChange = (value: number) => {
-  console.log(`React Stars Rating value is ${value}`);
+type Props = {
+  // 0.0 ~ 5.0 の値
+  rating: number | undefined;
+  // counts: number | undefined;
 };
 
-const StarsRating = ({ value }: any) => {
-  return <ReactStarsRating onChange={onChange} value={value} />;
+const StarsRating = ({ rating }: Props) => {
+  // 0.0 ~ 1.0 に変換
+  const offset = rating ? rating / 5 : 0;
+
+  return (
+    <>
+      <svg width="128" height="22.3" viewBox="0 0 128 22.3">
+        <defs>
+          {/* グラデーションを使用して塗る */}
+          <linearGradient id="a" gradientUnits="objectBoundingBox">
+            <stop offset="0" stopColor="#FABC26" />
+            <stop offset={offset} stopColor="#FABC26" />
+            <stop offset={offset} stopColor="#ddd" />
+            <stop offset="1" stopColor="#ddd" />
+          </linearGradient>
+        </defs>
+        <path
+          fill="url(#a)"
+          d="M122.3 22l-6.3-4.4-6.3 4.5a1 1 0 0 1-.5.2.8.8 0 0 1-.5-.2.9.9 0 0 1-.3-1l2.5-7.2-6.5-4.6a.8.8 0 0 1-.4-.6.7.7 0 0 1 0-.1.9.9 0 0 1 .9-.9h8l2.3-7.1a.9.9 0 0 1 1.6 0l2.4 7.1h7.9a1 1 0 0 1 1 .9.9.9 0 0 1-.3.6l-.2.1-6.4 4.6 2.5 7.2a.8.8 0 0 1-.3 1 .8.8 0 0 1-.5.2 1 1 0 0 1-.6-.3zm-26 0L90 17.7l-6.3 4.5a1 1 0 0 1-.5.2.8.8 0 0 1-.5-.2.9.9 0 0 1-.3-1l2.5-7.2-6.5-4.6a.8.8 0 0 1-.4-.6.6.6 0 0 1 0-.1.9.9 0 0 1 .9-.9h8L89.2.6a.9.9 0 0 1 1.6 0l2.4 7.1h7.9a1 1 0 0 1 1 .9.9.9 0 0 1-.3.6l-.2.1-6.4 4.6 2.5 7.2a.8.8 0 0 1-.3 1 .8.8 0 0 1-.5.2 1 1 0 0 1-.6-.3zm-26 0L64 17.7l-6.3 4.5a1 1 0 0 1-.5.2.8.8 0 0 1-.5-.2.9.9 0 0 1-.3-1l2.5-7.2-6.5-4.6a.8.8 0 0 1-.4-.6.6.6 0 0 1 0-.1.9.9 0 0 1 .9-.9h8L63.2.6a.9.9 0 0 1 1.6 0l2.4 7.1h7.9a1 1 0 0 1 1 .9.9.9 0 0 1-.3.6l-.2.1-6.4 4.6 2.5 7.2a.8.8 0 0 1-.3 1 .8.8 0 0 1-.5.2 1 1 0 0 1-.6-.3zm-26 0L38 17.7l-6.3 4.5a1 1 0 0 1-.5.2.8.8 0 0 1-.5-.2.9.9 0 0 1-.3-1l2.5-7.2-6.5-4.6a.8.8 0 0 1-.4-.6.6.6 0 0 1 0-.1.9.9 0 0 1 .9-.9h8L37.2.6a.9.9 0 0 1 1.6 0l2.4 7.1h7.9a1 1 0 0 1 .9.9.9.9 0 0 1-.3.6l-.2.1-6.4 4.6 2.5 7.2a.8.8 0 0 1-.3 1 .8.8 0 0 1-.5.2 1 1 0 0 1-.5-.3zm-26 0L12 17.7 5.7 22a1 1 0 0 1-.5.2.8.8 0 0 1-.5-.2.9.9 0 0 1-.3-1l2.5-7.2L.4 9.3a.8.8 0 0 1-.4-.6.6.6 0 0 1 0-.1.9.9 0 0 1 .9-.9h7.9L11.2.6a.9.9 0 0 1 1.6 0l2.4 7.1h7.9a1 1 0 0 1 .9.9.9.9 0 0 1-.3.6l-.2.1-6.4 4.6 2.5 7.2a.9.9 0 0 1-.3 1 .8.8 0 0 1-.5.2 1 1 0 0 1-.5-.3z"
+        />
+      </svg>
+    </>
+  );
 };
 
 export default StarsRating;

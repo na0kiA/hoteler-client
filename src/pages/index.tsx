@@ -69,8 +69,7 @@ const Home = ({ hotels }: PROPS) => {
                       <p className="text-xs  font-sans">{hotel.fullAddress}</p>
                     </div>
                     <p className="text-sm">
-                      <StarsRating value={Number(hotel.averageRating)} />
-                      {hotel.reviewsCount}件
+                      <StarsRating rating={Number(hotel.averageRating)} />
                     </p>
                   </h1>
                   <div className="text-sm">
