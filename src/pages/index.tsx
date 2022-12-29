@@ -15,13 +15,14 @@ type PROPS = {
 const Home = ({ hotels }: PROPS) => {
   const isBusinessHourOrNot = (service: ServiceRateType) => {
     if (typeof service === "string") {
-      return service;
+      return <p className="mt-2">{service}</p>;
     } else {
       return (
         <div>
+          <p className="font-mono font-thin mt-1">【{service.plan}】</p>
           <>
-            {service.plan}
-            {service.rate}円{service.startTime}時〜
+            ¥{service.rate} | {service.startTime}
+            時〜
             {service.endTime}時
           </>
         </div>
@@ -54,24 +55,26 @@ const Home = ({ hotels }: PROPS) => {
                     priority={true}
                   />
                 </figure>
-                <div className="card-body p-0 mb-10">
+                <div className="p-0 mb-10">
                   <h1>
                     <Link href={`/hotels/${hotel.id}`}>
-                      <p className="inline-block   mt-1">
+                      <div className="inline-block mt-1 text-base font-bold font-mono">
                         {sliceNameOrNot(hotel.name)}
-                      </p>
+                      </div>
                     </Link>
-                    {hotel.full ? (
-                      <p className="badge ml-1 bg-pink-500 text-black rounded-lg float-right  mt-1">
-                        満室
-                      </p>
-                    ) : (
-                      <p className="badge ml-1 bg-green-500 text-black rounded-lg float-right  mt-1">
-                        空室
-                      </p>
-                    )}
+                    <div
+                      className={
+                        hotel.full
+                          ? "badge ml-1 bg-pink-500 text-black rounded-lg float-right  mt-1"
+                          : "badge ml-1 bg-green-500 text-black rounded-lg float-right  mt-1"
+                      }
+                    >
+                      {hotel.full ? "満室" : "空室"}
+                    </div>
                     <div>
-                      <p className="text-xs  font-sans">{hotel.fullAddress}</p>
+                      <p className="text-xs  font-sans font-thin italic">
+                        {hotel.fullAddress}
+                      </p>
                     </div>
                     <div>
                       <Rating
@@ -80,7 +83,7 @@ const Home = ({ hotels }: PROPS) => {
                         size={20}
                         allowFraction
                         allowHover={false}
-                      />{" "}
+                      />
                       <span className="align-middle text-sm">
                         ({hotel.averageRating}){" "}
                         <Link
