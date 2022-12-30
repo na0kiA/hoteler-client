@@ -7,29 +7,13 @@ import { Rating } from "react-simple-star-rating";
 import { getAllHotel } from "lib/allRequests";
 import { HotelListType, ServiceRateType } from "types/types";
 import Layout from "components/Layout";
+import ServiceList from "components/serviceList";
 
 type PROPS = {
   hotels: HotelListType[];
 };
 
 const Home = ({ hotels }: PROPS) => {
-  const isBusinessHourOrNot = (service: ServiceRateType) => {
-    if (typeof service === "string") {
-      return <p className="mt-2">{service}</p>;
-    } else {
-      return (
-        <div>
-          <p className="font-mono font-thin mt-1">【{service.plan}】</p>
-          <>
-            ¥{service.rate} | {service.startTime}
-            時〜
-            {service.endTime}時
-          </>
-        </div>
-      );
-    }
-  };
-
   const sliceNameOrNot = (name: string) => {
     if (name.length > 6) {
       return name.slice(0, 5).concat("...");
@@ -95,12 +79,7 @@ const Home = ({ hotels }: PROPS) => {
                       </span>
                     </div>
                   </h1>
-                  <div className="text-sm">
-                    {isBusinessHourOrNot(hotel.stayRates)}
-                  </div>
-                  <div className="text-sm">
-                    {isBusinessHourOrNot(hotel.restRates)}
-                  </div>
+                  <ServiceList stay={hotel.stayRates} rest={hotel.restRates} />
                 </div>
               </div>
             ))}
