@@ -2,12 +2,12 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import type { GetServerSideProps } from "next";
-import { Rating } from "react-simple-star-rating";
 
 import { getAllHotel } from "lib/allRequests";
-import { HotelListType, ServiceRateType } from "types/types";
+import { HotelListType } from "types/types";
 import Layout from "components/Layout";
 import ServiceList from "components/serviceList";
+import StarsRating from "components/StarsRating";
 
 type PROPS = {
   hotels: HotelListType[];
@@ -16,7 +16,7 @@ type PROPS = {
 const Home = ({ hotels }: PROPS) => {
   const sliceNameOrNot = (name: string) => {
     if (name.length > 6) {
-      return name.slice(0, 5).concat("...");
+      return name.slice(0, 6).concat("…");
     } else {
       return name;
     }
@@ -40,45 +40,26 @@ const Home = ({ hotels }: PROPS) => {
                   />
                 </figure>
                 <div className="p-0 mb-10">
-                  <h1>
-                    <Link href={`/hotels/${hotel.id}`}>
-                      <div className="inline-block mt-1 text-base font-bold font-mono">
-                        {sliceNameOrNot(hotel.name)}
-                      </div>
-                    </Link>
-                    <div
-                      className={
-                        hotel.full
-                          ? "badge ml-1 bg-pink-500 text-black rounded-lg float-right  mt-1"
-                          : "badge ml-1 bg-green-500 text-black rounded-lg float-right  mt-1"
-                      }
-                    >
-                      {hotel.full ? "満室" : "空室"}
+                  <Link href={`/hotels/${hotel.id}`}>
+                    <div className="inline-block mt-1 text-base font-bold font-mono">
+                      {sliceNameOrNot(hotel.name)}
                     </div>
-                    <div>
-                      <p className="text-xs  font-sans font-thin italic">
-                        {hotel.fullAddress}
-                      </p>
-                    </div>
-                    <div>
-                      <Rating
-                        initialValue={hotel.averageRating}
-                        transition
-                        size={20}
-                        allowFraction
-                        allowHover={false}
-                      />
-                      <span className="align-middle text-sm">
-                        ({hotel.averageRating}){" "}
-                        <Link
-                          href={`/hotels/${hotel.id}/reviews`}
-                          className="text-blue-link"
-                        >
-                          {hotel.reviewsCount}件
-                        </Link>
-                      </span>
-                    </div>
-                  </h1>
+                  </Link>
+                  <div
+                    className={
+                      hotel.full
+                        ? "badge ml-1 bg-pink-500 text-black rounded-lg float-right  mt-1"
+                        : "badge ml-1 bg-green-500 text-black rounded-lg float-right  mt-1"
+                    }
+                  >
+                    {hotel.full ? "満室" : "空室"}
+                  </div>
+                  <div>
+                    <p className="text-xs  font-sans font-thin italic">
+                      {hotel.fullAddress}
+                    </p>
+                  </div>
+                  <StarsRating props={hotel} />
                   <ServiceList stay={hotel.stayRates} rest={hotel.restRates} />
                 </div>
               </div>
