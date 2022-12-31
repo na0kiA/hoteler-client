@@ -88,12 +88,7 @@ const Navbar = () => {
                 <img src="https://placeimg.com/80/80/people" />
               </div>
             </div>
-            {/* <div className="m-6 inline-flex relative w-fit">
-              <div className="absolute inline-block top-0 right-auto bottom-auto left-0 -translate-x-2/4 -translate-y-1/2 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 p-2.5 text-xs bg-pink-700 rounded-full z-10"></div>
-            </div> */}
-            <div className="badge badge-secondary badge-xs h-5 align-top -translate-x-full text-xs">
-              1
-            </div>
+            <div className="badge badge-secondary badge-xs absolute inline-block right-1 top-1"></div>
             <ul
               tabIndex={1}
               style={{ display: displayMenuStyle }}
@@ -102,7 +97,7 @@ const Navbar = () => {
               <li className="justify-between">
                 <Link href="/user/notifications">
                   通知
-                  <div className="badge badge-secondary">+99</div>
+                  <div className="badge badge-secondary badge-xs"></div>
                 </Link>
               </li>
               <li className="justify-between">
