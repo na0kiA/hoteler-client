@@ -22,7 +22,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="navbar bg-base-100">
+      <div className="navbar bg-neutral text-neutral-content">
         <div className="flex-1 ml-2">
           <Link
             href={"/"}
@@ -32,8 +32,35 @@ const Navbar = () => {
             ホテラー
           </Link>
         </div>
-        <div className="flex-none">
-          <label className={"relative mr-2"} onClick={searchToggle}>
+
+        {/* PCで表示する検索バー */}
+        <form className="invisible md:visible max-w-md m-auto">
+          <div className="relative">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="absolute top-0 bottom-0 w-6 h-6 my-auto text-gray-400 left-1 "
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+            <input
+              type="text"
+              placeholder="ホテルを検索"
+              className="input input-bordered w-full h-10 py-3 pl-8"
+            />
+          </div>
+        </form>
+
+        {/* スマホで表示する検索バー */}
+        <div className="flex-none gap-2">
+          <label className="md:invisible relative mr-2" onClick={searchToggle}>
             <button className="btn btn-ghost btn-circle">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -54,6 +81,7 @@ const Navbar = () => {
               </span>
             </button>
           </label>
+
           <div className="dropdown dropdown-end" onClick={showMenu}>
             <div tabIndex={1} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
@@ -84,33 +112,8 @@ const Navbar = () => {
         {search ? (
           <></>
         ) : (
-          // <div className="text-center">
-          //   <input
-          //     className="input input-bordered w-full max-w-xs inline-block"
-          //     type="search"
-          //     name="search"
-          //     placeholder="(例) 渋谷 〇〇町"
-          //   />
-
-          //   <button className="btn btn-ghost btn-circle">
-          //     <svg
-          //       xmlns="http://www.w3.org/2000/svg"
-          //       className="h-6 w-6 inline-block absolute"
-          //       fill="none"
-          //       viewBox="0 0 24 24"
-          //       stroke="currentColor"
-          //     >
-          //       <path
-          //         strokeLinecap="round"
-          //         strokeLinejoin="round"
-          //         strokeWidth="2"
-          //         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-          //       />
-          //     </svg>
-          //   </button>
-          // </div>
-          <form className="max-w-sm px-4">
-            <div className="relative">
+          <form className="max-w-md px-4 m-auto mt-5">
+            <div className="relative text-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="absolute top-0 bottom-0 w-6 h-6 my-auto text-gray-400 left-3"
@@ -127,8 +130,8 @@ const Navbar = () => {
               </svg>
               <input
                 type="text"
-                placeholder="Search"
-                className="w-full py-3 pl-12 pr-4 text-gray-500 border rounded-md outline-none bg-gray-50 focus:bg-white focus:border-indigo-600"
+                placeholder="ホテルを検索"
+                className="input input-bordered w-full h-10 py-3 pl-12 pr-4  border rounded-md outline-none"
               />
             </div>
           </form>
