@@ -6,7 +6,7 @@ import type { GetServerSideProps } from "next";
 import { getAllHotel } from "lib/allRequests";
 import { HotelListType } from "types/types";
 import Layout from "components/Layout";
-import ServiceList from "components/serviceList";
+import ServiceList from "components/ServiceList";
 import StarsRating from "components/StarsRating";
 
 type PROPS = {

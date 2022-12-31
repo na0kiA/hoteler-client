@@ -1,7 +1,7 @@
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
 
-const Header: React.FC = () => {
+const Header = () => {
   return (
     // <header className="nav-header" data-controller="header">
     <header
