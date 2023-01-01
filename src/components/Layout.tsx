@@ -13,6 +13,7 @@ const Layout = ({ children, title = "ホテラー" }: TITLE) => {
       <Navbar />
       <Head>
         <title>ホテラー</title>
+        <meta property="og:image" content={`/heartIcon.png`} />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 

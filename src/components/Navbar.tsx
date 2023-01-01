@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const Navbar = () => {
   const [menuDisplay, setmenuDisplay] = useState(true);
@@ -31,6 +32,13 @@ const Navbar = () => {
           >
             ホテラー
           </Link>
+          <Image
+            src="/hartIcon.png"
+            alt="ホテル画像"
+            width={100}
+            height={100}
+            priority={true}
+          />
         </div>
 
         {/* PCで表示する検索バー */}
