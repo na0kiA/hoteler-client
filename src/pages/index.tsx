@@ -1,46 +1,87 @@
 import React from "react";
-import Error from "next/error";
-import type { GetServerSideProps, NextPage } from "next";
+import Link from "next/link";
+import Image from "next/image";
+import type { GetServerSideProps } from "next";
 
-import OnUploadImage from "components/s3ByForm";
+import { getAllHotel } from "lib/allRequests";
+import { HotelListType } from "types/types";
+import Layout from "components/Layout";
+import ServiceList from "components/ServiceList";
+import StarsRating from "components/StarsRating";
 
-type Post = {
-  id: number;
-  title: string;
+type PROPS = {
+  hotels: HotelListType[];
 };
 
-type Props = {
-  posts: Post[];
-};
+const Home = ({ hotels }: PROPS) => {
+  const sliceNameOrNot = (name: string) => {
+    if (name.length > 6) {
+      return name.slice(0, 6).concat("…");
+    } else {
+      return name;
+    }
+  };
 
-const Home: NextPage<Props> = (props, { statusCode }) => {
-  if (statusCode) {
-    return <Error statusCode={statusCode} />;
-  }
   return (
     <>
-      <div className="bg-black">
-        <h2>POSTの一覧</h2>
-        {props.posts.map((post, index) => (
-          <div key={index}>
-            <li>{post.id}</li>
-            <li>{post.title}</li>
-          </div>
-        ))}
-      </div>
-      <div>
-        <OnUploadImage />
-      </div>
+      <Layout title={"ホテラー"}>
+        <div className="md:grid grid-cols-4 gap-5 p-10 pt-5" id="home">
+          {hotels &&
+            hotels.map((hotel: HotelListType) => (
+              <div key={hotel.id}>
+                <figure>
+                  <Image
+                    className="object-fill rounded-lg"
+                    src="/hoteler_demo_photo.jpg"
+                    alt="ホテル画像"
+                    width={640}
+                    height={480}
+                    priority={true}
+                  />
+                </figure>
+                <div className="p-0 mb-10">
+                  <Link href={`/hotels/${hotel.id}`}>
+                    <div className="inline-block mt-1 text-base font-bold font-mono">
+                      {sliceNameOrNot(hotel.name)}
+                    </div>
+                  </Link>
+                  <div
+                    className={
+                      hotel.full
+                        ? "badge ml-1 bg-pink-500 text-black rounded-lg float-right  mt-1"
+                        : "badge ml-1 bg-green-500 text-black rounded-lg float-right  mt-1"
+                    }
+                  >
+                    {hotel.full ? "満室" : "空室"}
+                  </div>
+                  <div>
+                    <p className="text-xs  font-sans font-thin italic">
+                      {hotel.fullAddress}
+                    </p>
+                  </div>
+                  <StarsRating props={hotel} />
+                  <ServiceList stay={hotel.stayRates} rest={hotel.restRates} />
+                </div>
+              </div>
+            ))}
+        </div>
+      </Layout>
     </>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts`);
-  const json = await res.json();
+export const getServerSideProps: GetServerSideProps = async ({ res }) => {
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=60, stale-while-revalidate=10"
+  );
+
+  const apiResponse = await getAllHotel();
+  const hotels = await apiResponse.data;
+
   return {
     props: {
-      posts: json.posts,
+      hotels,
     },
   };
 };
