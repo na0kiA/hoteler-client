@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { AuthContext } from "pages";
 
 const Navbar = () => {
+  const { currentUser, isSignedIn } = useContext(AuthContext);
+
   const [menuDisplay, setmenuDisplay] = useState(true);
   const [displayMenuStyle, setdisplayMenuStyle] = useState("");
   const [search, setSearch] = useState(true);
@@ -90,35 +93,47 @@ const Navbar = () => {
             </button>
           </label>
 
-          <div className="dropdown dropdown-end" onClick={showMenu}>
-            <div tabIndex={1} className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full">
-                <img src="https://placeimg.com/80/80/people" />
+          {/* tokenの有無でアバターを表示するかログインや新規登録ボタンを表示するかを切り替える */}
+          {currentUser ? (
+            <div className="dropdown dropdown-end" onClick={showMenu}>
+              <div tabIndex={1} className="btn btn-ghost btn-circle avatar">
+                <div className="w-10 rounded-full">
+                  <img src="https://placeimg.com/80/80/people" />
+                </div>
               </div>
+              <div className="badge badge-secondary badge-xs absolute inline-block right-1 top-1"></div>
+              <ul
+                tabIndex={1}
+                style={{ display: displayMenuStyle }}
+                className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
+              >
+                <li className="justify-between">
+                  <Link href="/user/notifications">
+                    通知
+                    <div className="badge badge-secondary badge-xs"></div>
+                  </Link>
+                </li>
+                <li className="justify-between">
+                  <Link href="/user/profile">プロフィール</Link>
+                </li>
+                <li>
+                  <Link href="/user/profile">設定</Link>
+                </li>
+                <li>
+                  <Link href="/">ログアウト</Link>
+                </li>
+              </ul>
             </div>
-            <div className="badge badge-secondary badge-xs absolute inline-block right-1 top-1"></div>
-            <ul
-              tabIndex={1}
-              style={{ display: displayMenuStyle }}
-              className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
-            >
-              <li className="justify-between">
-                <Link href="/user/notifications">
-                  通知
-                  <div className="badge badge-secondary badge-xs"></div>
-                </Link>
-              </li>
-              <li className="justify-between">
-                <Link href="/user/profile">プロフィール</Link>
-              </li>
-              <li>
-                <Link href="/user/profile">設定</Link>
-              </li>
-              <li>
-                <Link href="/">ログアウト</Link>
-              </li>
-            </ul>
-          </div>
+          ) : (
+            <div className="navbar-end flex-1 gap-2 ml-8">
+              <button className="btn btn-primary btn-xs md:btn-sm mr-3">
+                <Link href="/login">ログイン</Link>
+              </button>
+              <button className="btn btn-primary btn-xs md:btn-sm ">
+                <Link href="/signup">新規登録</Link>
+              </button>
+            </div>
+          )}
         </div>
       </div>
       <>
