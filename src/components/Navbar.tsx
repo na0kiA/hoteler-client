@@ -26,22 +26,22 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="navbar bg-neutral text-neutral-content">
-        <div className="flex-1 ml-2">
+      <div className="navbar bg-neutral text-neutral-content h-16">
+        <div className="navbar-start  flex-1 ml-2">
           <Link
             href={"/"}
             replace={true}
             className="btn btn-ghost normal-case text-lg p-0"
           >
-            ホテラー
+            <Image
+              src="/hartIcon.png"
+              alt="ホテル画像"
+              width={50}
+              height={50}
+              priority={true}
+            />
+            <span className="ml-2"> ホテラー</span>
           </Link>
-          <Image
-            src="/hartIcon.png"
-            alt="ホテル画像"
-            width={100}
-            height={100}
-            priority={true}
-          />
         </div>
 
         {/* PCで表示する検索バー */}
@@ -49,7 +49,7 @@ const Navbar = () => {
           <div className="relative">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="absolute top-0 bottom-0 w-6 h-6 my-auto text-gray-400 left-1 "
+              className="absolute top-0 bottom-0 w-5 h-5 my-auto text-gray-400 left-1 "
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -64,7 +64,7 @@ const Navbar = () => {
             <input
               type="text"
               placeholder="ホテルを検索"
-              className="input input-bordered w-full h-10 py-3 pl-8"
+              className="input input-bordered w-full h-8 py-3 pl-8 text-xs"
             />
           </div>
         </form>
@@ -126,10 +126,10 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="navbar-end flex-1 gap-2 ml-8">
-              <button className="btn btn-primary btn-xs md:btn-sm mr-3">
+              <button className="btn btn-primary btn-xs mr-3">
                 <Link href="/login">ログイン</Link>
               </button>
-              <button className="btn btn-primary btn-xs md:btn-sm ">
+              <button className="btn btn-primary btn-xs ">
                 <Link href="/signup">新規登録</Link>
               </button>
             </div>
