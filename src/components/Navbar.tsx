@@ -2,9 +2,13 @@ import React, { useContext, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { AuthContext } from "pages";
+import { signOut } from "lib/auth";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
-  const { currentUser, isSignedIn, loading } = useContext(AuthContext);
+  const router = useRouter();
+  const { currentUser, isSignedIn, loading, setIsSignedIn, setCurrentUser } =
+    useContext(AuthContext);
 
   const [menuDisplay, setmenuDisplay] = useState(true);
   const [displayMenuStyle, setdisplayMenuStyle] = useState("");
@@ -22,6 +26,28 @@ const Navbar = () => {
       setdisplayMenuStyle("none");
     }
     return setdisplayMenuStyle;
+  };
+
+  const handleSignOutSubmit = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+
+    try {
+      const res = await signOut();
+      if (res.status === 200) {
+        setIsSignedIn(false);
+        setCurrentUser("");
+        router.push("/");
+        console.log("ログアウトに成功");
+      } else {
+        throw new Error(
+          "ログアウトに失敗しました。画面をご確認の上もう一度実行してください。"
+        );
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
   };
 
   return (
@@ -120,7 +146,13 @@ const Navbar = () => {
                   <Link href="/user/profile">設定</Link>
                 </li>
                 <li>
-                  <Link href="/">ログアウト</Link>
+                  <button
+                    onClick={(event) => {
+                      handleSignOutSubmit(event);
+                    }}
+                  >
+                    ログアウト
+                  </button>
                 </li>
               </ul>
             </div>
