@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { getAllHotel } from "../lib/allRequests";
+import { getAllHotel } from "../lib/hotels";
 
 const TopPage: FC = () => {
   const hotelList = async () => {

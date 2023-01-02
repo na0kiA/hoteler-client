@@ -1,7 +1,7 @@
 import React from "react";
 import { GetServerSideProps } from "next";
 
-import { getHotelDetail } from "lib/allRequests";
+import { getHotelDetail } from "lib/hotels";
 import { HotelDetailType } from "types/types";
 
 const HotelDetail: React.FC<HotelDetailType> = ({

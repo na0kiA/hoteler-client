@@ -4,7 +4,7 @@ import Image from "next/image";
 import { AuthContext } from "pages";
 
 const Navbar = () => {
-  const { currentUser, isSignedIn } = useContext(AuthContext);
+  const { currentUser, isSignedIn, loading } = useContext(AuthContext);
 
   const [menuDisplay, setmenuDisplay] = useState(true);
   const [displayMenuStyle, setdisplayMenuStyle] = useState("");
@@ -94,7 +94,7 @@ const Navbar = () => {
           </label>
 
           {/* tokenの有無でアバターを表示するかログインや新規登録ボタンを表示するかを切り替える */}
-          {currentUser ? (
+          {isSignedIn ? (
             <div className="dropdown dropdown-end" onClick={showMenu}>
               <div tabIndex={1} className="btn btn-ghost btn-circle avatar">
                 <div className="w-10 rounded-full">
@@ -125,14 +125,20 @@ const Navbar = () => {
               </ul>
             </div>
           ) : (
-            <div className="navbar-end flex-1 gap-2 ml-8">
-              <button className="btn btn-primary btn-xs mr-3">
-                <Link href="/login">ログイン</Link>
-              </button>
-              <button className="btn btn-primary btn-xs ">
-                <Link href="/signup">新規登録</Link>
-              </button>
-            </div>
+            <>
+              {loading ? (
+                <></>
+              ) : (
+                <div className="navbar-end flex-1 gap-2 ml-8">
+                  <button className="btn btn-primary btn-xs mr-3">
+                    <Link href="/signin">ログイン</Link>
+                  </button>
+                  <button className="btn btn-primary btn-xs ">
+                    <Link href="/signup">新規登録</Link>
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

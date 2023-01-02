@@ -3,11 +3,13 @@ import Link from "next/link";
 import Image from "next/image";
 import type { GetServerSideProps } from "next";
 
-import { getAllHotel, getCurrentUser } from "lib/allRequests";
+import { getAllHotel } from "lib/hotels";
 import { HotelListType } from "types/types";
 import Layout from "components/Layout";
 import StarsRating from "components/StarsRating";
 import ServiceList from "components/serviceList";
+import { getCurrentUser } from "lib/auth";
+import Cookies from "js-cookie";
 
 type PROPS = {
   hotels: HotelListType[];
@@ -32,13 +34,12 @@ const Home = ({ hotels }: PROPS) => {
   const handleGetCurrentUser = async () => {
     try {
       const res = await getCurrentUser();
+      console.log(res);
 
-      if (res?.data.isLogin === true) {
+      if (res?.data.is_login === true) {
         setIsSignedIn(true);
         setCurrentUser(res?.data.data);
-        console.log(res?.data.data);
       } else {
-        console.log("no current user");
         setIsSignedIn(false);
       }
     } catch (e) {

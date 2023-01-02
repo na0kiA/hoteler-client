@@ -2,7 +2,7 @@ import { render, screen, cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
-import { getAllHotel } from "../lib/allRequests";
+import { getAllHotel } from "../lib/hotels";
 
 const handlers = [
   rest.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/hotels`, (req, res, ctx) => {
