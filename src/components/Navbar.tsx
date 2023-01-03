@@ -52,8 +52,8 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="navbar bg-neutral text-neutral-content h-16">
-        <div className="navbar-start  flex-1 ml-2">
+      <div className="navbar bg-neutral text-neutral-content  h-16">
+        <div className="navbar-start flex-1 ml-2">
           <Link
             href={"/"}
             replace={true}
@@ -71,8 +71,8 @@ const Navbar = () => {
         </div>
 
         {/* PCで表示する検索バー */}
-        <form className="invisible md:visible max-w-md m-auto">
-          <div className="relative">
+        <form className="invisible md:visible">
+          <div className="navbar-end flex-auto left-full relative">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="absolute top-0 bottom-0 w-5 h-5 my-auto text-gray-400 left-1 "
@@ -96,7 +96,7 @@ const Navbar = () => {
         </form>
 
         {/* スマホで表示する検索バー */}
-        <div className="flex-none gap-2">
+        <div className="md:invisible flex-1 gap-2">
           <label className="md:invisible relative mr-2" onClick={searchToggle}>
             <button className="btn btn-ghost btn-circle">
               <svg
@@ -118,61 +118,74 @@ const Navbar = () => {
               </span>
             </button>
           </label>
-
-          {/* tokenの有無でアバターを表示するかログインや新規登録ボタンを表示するかを切り替える */}
-          {isSignedIn ? (
-            <div className="dropdown dropdown-end" onClick={showMenu}>
-              <div tabIndex={1} className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full">
-                  <img src="https://placeimg.com/80/80/people" />
-                </div>
-              </div>
-              <div className="badge badge-secondary badge-xs absolute inline-block right-1 top-1"></div>
-              <ul
-                tabIndex={1}
-                style={{ display: displayMenuStyle }}
-                className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
-              >
-                <li className="justify-between">
-                  <Link href="/user/notifications">
-                    通知
-                    <div className="badge badge-secondary badge-xs"></div>
-                  </Link>
-                </li>
-                <li className="justify-between">
-                  <Link href="/user/profile">プロフィール</Link>
-                </li>
-                <li>
-                  <Link href="/user/profile">設定</Link>
-                </li>
-                <li>
-                  <button
-                    onClick={(event) => {
-                      handleSignOutSubmit(event);
-                    }}
-                  >
-                    ログアウト
-                  </button>
-                </li>
-              </ul>
-            </div>
-          ) : (
-            <>
-              {loading ? (
-                <></>
-              ) : (
-                <div className="navbar-end flex-1 gap-2 ml-8">
-                  <button className="btn btn-primary btn-xs mr-3">
-                    <Link href="/signin">ログイン</Link>
-                  </button>
-                  <button className="btn btn-primary btn-xs ">
-                    <Link href="/signup">新規登録</Link>
-                  </button>
-                </div>
-              )}
-            </>
-          )}
         </div>
+
+        {/* tokenの有無でアバターを表示するかログインや新規登録ボタンを表示するかを切り替える */}
+        {isSignedIn ? (
+          <div className="dropdown dropdown-end" onClick={showMenu}>
+            <div tabIndex={1} className="btn btn-ghost btn-circle avatar">
+              <div className="w-10 rounded-full">
+                <img src="https://placeimg.com/80/80/people" />
+              </div>
+            </div>
+            <div className="badge badge-secondary badge-xs absolute inline-block right-1 top-1"></div>
+            <ul
+              tabIndex={1}
+              style={{ display: displayMenuStyle }}
+              className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
+            >
+              <li className="justify-between">
+                <Link href="/user/notifications">
+                  通知
+                  <div className="badge badge-secondary badge-xs"></div>
+                </Link>
+              </li>
+              <li className="justify-between">
+                <Link href="/user/profile">プロフィール</Link>
+              </li>
+              <li>
+                <Link href="/user/profile">設定</Link>
+              </li>
+              <li>
+                <button
+                  onClick={(event) => {
+                    handleSignOutSubmit(event);
+                  }}
+                >
+                  ログアウト
+                </button>
+              </li>
+            </ul>
+          </div>
+        ) : (
+          <>
+            {loading ? (
+              <></>
+            ) : (
+              <>
+                <div className="navbar-end flex-auto gap-3 ml-5">
+                  <button className="btn btn-primary btn-xs">
+                    <Link href="/signin">
+                      <span className="text-ssm font-bold font-mono">
+                        ログイン
+                      </span>
+                    </Link>
+                  </button>
+                  <button className="btn btn-primary btn-xs mr-2">
+                    <Link href="/signup">
+                      <span className="text-ssm font-bold font-mono">
+                        新規登録
+                      </span>
+                    </Link>
+                  </button>
+                </div>
+                {/* <div className="navbar-end flex-none  gap-2 ml-8">
+
+                </div> */}
+              </>
+            )}
+          </>
+        )}
       </div>
       <>
         {search ? (
