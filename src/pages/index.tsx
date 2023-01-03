@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import type { GetServerSideProps } from "next";
@@ -16,15 +16,18 @@ type PROPS = {
 };
 
 type AuthContextType = {
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  isSignedIn: boolean;
-  setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
-  currentUser: string;
-  setCurrentUser: React.Dispatch<React.SetStateAction<string>>;
+  loading: any;
+  setLoading: any;
+  isSignedIn: any;
+  setIsSignedIn: any;
+  currentUser: any;
+  setCurrentUser: any;
 };
 
 export const AuthContext = createContext({} as AuthContextType);
+// export const AuthContext = createContext<AuthContextType>(
+//   {} as AuthContextType
+// );
 
 const Home = ({ hotels }: PROPS) => {
   const [loading, setLoading] = useState(true);

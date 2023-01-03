@@ -36,9 +36,8 @@ export const SignIn = () => {
         Cookies.set("_client", res.headers["client"]);
         Cookies.set("_uid", res.headers["uid"]);
 
-        setIsSignedIn(true);
-        setCurrentUser(res.data.data);
-        // console.log(setCurrentUser);
+        setIsSignedIn == true;
+        setCurrentUser == res.data.data;
         router.push("/");
       }
     } catch (error: any) {
