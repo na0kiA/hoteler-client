@@ -74,3 +74,18 @@ export type SignInParams = {
   email: string;
   password: string;
 };
+
+export type UserFavorites = {
+  id: number;
+  hotelName: string;
+  hotelTopImage: string;
+  fiveStarRate: number;
+};
+
+export type UserDetailType = {
+  id: number;
+  name: string;
+  image: string;
+  favorites: UserFavorites;
+  reviews: ReviewType;
+};

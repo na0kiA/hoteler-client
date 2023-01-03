@@ -23,6 +23,16 @@ export const signOut = () => {
   });
 };
 
+export const deleteAccount = () => {
+  return client.delete("/auth", {
+    headers: {
+      "access-token": Cookies.get("_access_token"),
+      client: Cookies.get("_client"),
+      uid: Cookies.get("_uid"),
+    },
+  });
+};
+
 // ログインユーザーの取得
 export const getCurrentUser = () => {
   if (
@@ -39,4 +49,9 @@ export const getCurrentUser = () => {
       uid: Cookies.get("_uid"),
     },
   });
+};
+
+// ユーザー詳細を取得
+export const getUserShow = (id: string | string[] | undefined) => {
+  return client.get(`/users/${id}`);
 };
