@@ -9,6 +9,7 @@ import Navbar from "components/Navbar";
 
 export const SignIn = () => {
   const { setCurrentUser, setIsSignedIn } = useContext(AuthContext);
+  const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [invalidEmail, setInvalidEmail] = useState("");
@@ -42,8 +43,11 @@ export const SignIn = () => {
       }
     } catch (error: any) {
       console.log(error);
-      // setInvalidEmail(error.response.data.errors.email);
-      // setInvalidPassword(error.response.data.errors.password);
+      if (error.response.data) {
+        setError(error.response.data.errors);
+      } else {
+        console.log(error);
+      }
     }
   };
   return (
@@ -80,18 +84,9 @@ export const SignIn = () => {
           ログイン
         </button>
       </form>
-      {invalidEmail && (
+      {error && (
         <>
-          <p className="whitespace-pre-wrap mt-5 text-red-600">
-            {invalidEmail}
-          </p>
-        </>
-      )}
-      {invalidPassword && (
-        <>
-          <p className="whitespace-pre-wrap mt-5 text-red-600">
-            {invalidPassword}
-          </p>
+          <p className="whitespace-pre-wrap mt-5 text-red-600">{error}</p>
         </>
       )}
       <Link href="/signup">サインアップへ</Link>
