@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import Link from "next/link";
-import { signIn } from "lib/auth";
+import { getCurrentUser, signIn } from "lib/auth";
 import { AuthContext } from "pages";
 import { useRouter } from "next/router";
 import { SignInParams } from "types/types";
@@ -12,8 +12,6 @@ export const SignIn = () => {
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [invalidEmail, setInvalidEmail] = useState("");
-  const [invalidPassword, setInvalidPassword] = useState("");
   const router = useRouter();
 
   const generateParams = () => {
@@ -50,6 +48,7 @@ export const SignIn = () => {
       }
     }
   };
+
   return (
     <>
       <Navbar />
