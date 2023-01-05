@@ -25,14 +25,11 @@ type AuthContextType = {
 };
 
 export const AuthContext = createContext({} as AuthContextType);
-// export const AuthContext = createContext<AuthContextType>(
-//   {} as AuthContextType
-// );
 
 const Home = ({ hotels }: PROPS) => {
   const [loading, setLoading] = useState(true);
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState("");
+  const [currentUser, setCurrentUser] = useState();
 
   const handleGetCurrentUser = async () => {
     try {

@@ -19,22 +19,26 @@ const Signin = () => {
     }
   };
 
-  // useLayoutEffect(() => {
-  //   handleGetCurrentUser();
-  // }, []);
+  useLayoutEffect(() => {
+    handleGetCurrentUser();
+  }, []);
+
   return <SignIn />;
 };
 export default Signin;
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await getCurrentUser();
-  if (res?.data.is_login === true) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/",
-      },
-    };
-  }
-  return { res.data };
-};
+// export const getServerSideProps: GetServerSideProps = async () => {
+
+//   const res = await getCurrentUser();
+//   const data = {login: false}
+
+//   if (res?.data.is_login === true) {
+//     return {
+//       redirect: {
+//         permanent: false,
+//         destination: "/",
+//       },
+//     };
+//   }
+//   return {  data };
+// };

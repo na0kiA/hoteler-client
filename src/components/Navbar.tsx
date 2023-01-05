@@ -141,8 +141,9 @@ const Navbar = () => {
                 </Link>
               </li>
               <li className="justify-between">
-                {/* <Link href="/user/profile">プロフィール</Link> */}
-                <Link href={`/users/${currentUser.data.data.id}`}>プロフィール</Link>
+                <Link href={`/users/${currentUser && currentUser.id}`}>
+                  プロフィール
+                </Link>
               </li>
               <li>
                 <Link href="/user/profile">設定</Link>
