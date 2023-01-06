@@ -37,7 +37,6 @@ const Navbar = () => {
       const res = await signOut();
       if (res.status === 200) {
         setIsSignedIn(false);
-        setCurrentUser("");
         router.push("/");
         console.log("ログアウトに成功");
       } else {

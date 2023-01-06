@@ -1,35 +1,34 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import type { GetServerSideProps } from "next";
 
 import { getAllHotel } from "lib/hotels";
-import { HotelListType } from "types/types";
+import { CurrentUser, HotelListType } from "types/types";
 import Layout from "components/Layout";
 import StarsRating from "components/StarsRating";
 import ServiceList from "components/serviceList";
 import { getCurrentUser } from "lib/auth";
-import Cookies from "js-cookie";
 
 type PROPS = {
   hotels: HotelListType[];
 };
 
 type AuthContextType = {
-  loading: any;
-  setLoading: any;
-  isSignedIn: any;
-  setIsSignedIn: any;
-  currentUser: any;
-  setCurrentUser: any;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  isSignedIn: boolean;
+  setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  currentUser: CurrentUser | undefined;
+  setCurrentUser: React.Dispatch<React.SetStateAction<CurrentUser | undefined>>;
 };
 
 export const AuthContext = createContext({} as AuthContextType);
 
 const Home = ({ hotels }: PROPS) => {
-  const [loading, setLoading] = useState(true);
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
+  const [currentUser, setCurrentUser] = useState<CurrentUser>();
 
   const handleGetCurrentUser = async () => {
     try {
