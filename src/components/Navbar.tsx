@@ -4,6 +4,7 @@ import Image from "next/image";
 import { AuthContext } from "pages";
 import { signOut } from "lib/auth";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
   const router = useRouter();
@@ -36,6 +37,10 @@ const Navbar = () => {
     try {
       const res = await signOut();
       if (res.status === 200) {
+        Cookies.remove("_access_token");
+        Cookies.remove("_client");
+        Cookies.remove("_uid");
+
         setIsSignedIn(false);
         router.push("/");
         console.log("ログアウトに成功");

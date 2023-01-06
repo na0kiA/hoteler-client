@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { SignInParams, SignUpParams } from "types/types";
+import { SignInParams, SignUpParams, updateUserShowParams } from "types/types";
 import client from "./client";
 
 // サインアップ
@@ -25,6 +25,16 @@ export const signOut = () => {
 
 export const deleteAccount = () => {
   return client.delete("/auth", {
+    headers: {
+      "access-token": Cookies.get("_access_token"),
+      client: Cookies.get("_client"),
+      uid: Cookies.get("_uid"),
+    },
+  });
+};
+
+export const updateUserShow = (params: updateUserShowParams) => {
+  return client.patch("/auth", params, {
     headers: {
       "access-token": Cookies.get("_access_token"),
       client: Cookies.get("_client"),
