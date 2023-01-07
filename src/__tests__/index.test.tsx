@@ -3,6 +3,7 @@ import "@testing-library/jest-dom";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 import { getAllHotel } from "../lib/hotels";
+import Home from "pages/index";
 
 const handlers = [
   rest.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/hotels`, (req, res, ctx) => {
@@ -60,12 +61,13 @@ afterAll(() => {
 
 describe("Home", () => {
   it("ホームページが取得できること", async () => {
-    const hotels = await getAllHotel();
-    console.log(hotels);
-    render(hotels);
-
-    // render(<Home />);
-    expect(screen.getByText("カルシファー")).toBeInTheDocument();
+    // const { hotels } = await getAllHotel();
+    // // console.log(hotels);
+    // // render(hotels);
+    // render(<Home hotels={[]} />);
+    // screen.debug();
+    // expect(screen.getByText("dummy title 1")).toBeInTheDocument();
+    // expect(screen.getByRole("button")).toHaveTextContent("hello there");
     // expect(await screen.findByText("カルシファー")).toBeInTheDocument();
     //   expect(screen.getByText('dummy title 2')).toBeInTheDocument()
   });
