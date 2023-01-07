@@ -8,26 +8,21 @@ type TITLE = {
   children: any;
 };
 
-const Layout = ({ children, title = "ホテラー" }: TITLE) => {
+const Layout = ({ children, title }: TITLE) => {
   console.log("レイアウトが呼ばれたよ");
 
   return (
     <>
-      <AuthProvider>
-        <Navbar />
-        <Head>
-          <title>ホテラー</title>
-          <meta property="og:image" content={`/heartIcon.png`} />
-          <meta
-            name="viewport"
-            content="initial-scale=1.0, width=device-width"
-          />
-        </Head>
+      <Head>
+        <title>{title}</title>
+        <meta property="og:image" content={`/heartIcon.png`} />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
 
-        <main>
-          <div>{children}</div>
-        </main>
-      </AuthProvider>
+      <main>
+        <Navbar />
+        <div>{children}</div>
+      </main>
     </>
   );
 };

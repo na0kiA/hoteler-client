@@ -1,17 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { GetServerSideProps } from "next";
-import {
-  deleteAccount,
-  getCurrentUser,
-  getUserShow,
-  updateUserShow,
-} from "lib/auth";
-import { CurrentUser, updateUserShowParams, UserDetailType } from "types/types";
+import { deleteAccount, getUserShow, updateUserShow } from "lib/auth";
+import { updateUserShowParams, UserDetailType } from "types/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import Navbar from "components/Navbar";
-import { AuthContext } from "pages";
+import { useAuthStateContext } from "context/AuthProvider";
+import Layout from "components/Layout";
 
 const UserDetail = ({
   id,
@@ -24,15 +20,11 @@ const UserDetail = ({
 }: UserDetailType) => {
   const router = useRouter();
   const { currentUser, isSignedIn, loading, setIsSignedIn, setCurrentUser } =
-    useContext(AuthContext);
+    useAuthStateContext();
   console.log("ユーザー詳細ページが呼ばれたよ");
-  console.log(currentUser);
 
   const [userName, setUserName] = useState<string>("");
   const [userEmail, setUserEmail] = useState<string>(uid);
-  // const [loading, setLoading] = useState<boolean>(true);
-  // const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
-  // const [currentUser, setCurrentUser] = useState<CurrentUser>();
   const [s3ImageKey, setAwsS3ImageKey] = useState(image);
   const [error, setError] = useState("");
 
@@ -97,67 +89,69 @@ const UserDetail = ({
 
   return (
     <>
-      <Navbar />
-      {myAccount ? (
-        <>
+      <Layout title={`${name}さんの詳細ページ`}>
+        {console.log(currentUser)}
+        {currentUser ? (
+          <>
+            <div>
+              <input
+                type="text"
+                className="input input-bordered"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+              />
+              <button
+                className="btn btn-primary btn-xs"
+                onClick={(event) => {
+                  handleEditUserProfile(event);
+                }}
+              >
+                編集する
+              </button>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
+        <h1>{name}</h1>
+        <h1>
+          <Image
+            src={image}
+            alt="ユーザー画像"
+            width={50}
+            height={50}
+            priority={true}
+          />
+        </h1>
+        <h1>{reviews.title}</h1>
+        <h1>{reviews.content}</h1>
+        <h1>{reviews.userName}</h1>
+        <h1>{reviews.userImage}</h1>
+        {currentUser && id === currentUser.id ? (
           <div>
-            <input
-              type="text"
-              className="input input-bordered"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-            />
             <button
               className="btn btn-primary btn-xs"
               onClick={(event) => {
-                handleEditUserProfile(event);
+                handleDeleteAccount(event);
               }}
             >
-              編集する
+              アカウントを削除
             </button>
           </div>
-        </>
-      ) : (
-        <></>
-      )}
-      <h1>{name}</h1>
-      <h1>
-        <Image
-          src={image}
-          alt="ユーザー画像"
-          width={50}
-          height={50}
-          priority={true}
-        />
-      </h1>
-      <h1>{reviews.title}</h1>
-      <h1>{reviews.content}</h1>
-      <h1>{reviews.userName}</h1>
-      <h1>{reviews.userImage}</h1>
-      {currentUser && id === currentUser.id ? (
-        <div>
-          <button
-            className="btn btn-primary btn-xs"
-            onClick={(event) => {
-              handleDeleteAccount(event);
-            }}
-          >
-            アカウントを削除
-          </button>
-        </div>
-      ) : (
-        <></>
-      )}
+        ) : (
+          <></>
+        )}
+      </Layout>
     </>
   );
 };
 export default UserDetail;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  // ctx.res.setHeader(
-  //   "Cache-Control",
-  //   "public, s-maxage=1800, stale-while-revalidate=180"
-  // );
+  ctx.res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=1800, stale-while-revalidate=180"
+  );
 
   const { id } = ctx.query;
   const apiResponse = await getUserShow(id);

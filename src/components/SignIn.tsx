@@ -1,15 +1,11 @@
 import Cookies from "js-cookie";
-import React, { useContext, useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import Link from "next/link";
-import { getCurrentUser, signIn } from "lib/auth";
+import { signIn } from "lib/auth";
 import { useRouter } from "next/navigation";
-import { CurrentUser, SignInParams } from "types/types";
+import { SignInParams } from "types/types";
 import Navbar from "components/Navbar";
-import {
-  AuthContext,
-  AuthProvider,
-  useAuthStateContext,
-} from "context/AuthProvider";
+import { useAuthStateContext } from "context/AuthProvider";
 
 export const SignIn = () => {
   const [error, setError] = useState("");
