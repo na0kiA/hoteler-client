@@ -4,11 +4,13 @@ import Link from "next/link";
 import { getCurrentUser, signIn } from "lib/auth";
 import { AuthContext } from "pages";
 import { useRouter } from "next/navigation";
-import { SignInParams } from "types/types";
+import { CurrentUser, SignInParams } from "types/types";
 import Navbar from "components/Navbar";
 
 export const SignIn = () => {
-  const { setCurrentUser, setIsSignedIn } = useContext(AuthContext);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
+  const [currentUser, setCurrentUser] = useState<CurrentUser>();
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -41,13 +43,29 @@ export const SignIn = () => {
       }
     } catch (error: any) {
       console.log(error);
-      if (error.response.data) {
-        setError(error.response.data.errors);
+      if (error.response?.data) {
+        setError(error.response?.data.errors);
       } else {
         console.log(error);
       }
     }
   };
+
+  const handleGetCurrentUser = async () => {
+    try {
+      const res = await getCurrentUser();
+      console.log(res);
+      if (res?.data.is_login === true) {
+        router.push("/");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useLayoutEffect(() => {
+    Layout();
+  }, []);
 
   return (
     <>
