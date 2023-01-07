@@ -1,19 +1,24 @@
 import Cookies from "js-cookie";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import Link from "next/link";
 import { getCurrentUser, signIn } from "lib/auth";
 import { useRouter } from "next/navigation";
 import { CurrentUser, SignInParams } from "types/types";
 import Navbar from "components/Navbar";
+import {
+  AuthContext,
+  AuthProvider,
+  useAuthStateContext,
+} from "context/AuthProvider";
 
 export const SignIn = () => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
-  const [currentUser, setCurrentUser] = useState<CurrentUser>();
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+
+  const { setIsSignedIn, setCurrentUser, isSignedIn, currentUser } =
+    useAuthStateContext();
 
   const generateParams = () => {
     const signInParams: SignInParams = {
@@ -31,6 +36,8 @@ export const SignIn = () => {
 
     try {
       const res = await signIn(params);
+      console.log(res);
+
       if (res.status === 200) {
         Cookies.set("_access_token", res.headers["access-token"]);
         Cookies.set("_client", res.headers["client"]);
@@ -38,6 +45,7 @@ export const SignIn = () => {
 
         setIsSignedIn(true);
         setCurrentUser(res.data.data);
+
         router.push("/");
       }
     } catch (error: any) {
@@ -50,25 +58,12 @@ export const SignIn = () => {
     }
   };
 
-  const handleGetCurrentUser = async () => {
-    try {
-      const res = await getCurrentUser();
-      console.log(res);
-      if (res?.data.is_login === true) {
-        router.push("/");
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   useLayoutEffect(() => {
-    handleGetCurrentUser();
+    currentUser && router.push("/");
   }, []);
 
   return (
     <>
-      <Navbar />
       <p>ホテラーにログイン</p>
       <form>
         <div>

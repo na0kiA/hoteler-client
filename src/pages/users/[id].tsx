@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import {
   deleteAccount,
@@ -11,6 +11,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import Navbar from "components/Navbar";
+import { AuthContext } from "pages";
 
 const UserDetail = ({
   id,
@@ -22,22 +23,24 @@ const UserDetail = ({
   myAccount,
 }: UserDetailType) => {
   const router = useRouter();
+  const { currentUser, isSignedIn, loading, setIsSignedIn, setCurrentUser } =
+    useContext(AuthContext);
   console.log("ユーザー詳細ページが呼ばれたよ");
+  console.log(currentUser);
 
   const [userName, setUserName] = useState<string>("");
   const [userEmail, setUserEmail] = useState<string>(uid);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
-  const [currentUser, setCurrentUser] = useState<CurrentUser>();
-  // const [awsS3Image, setAwsS3Image] = useState("");
+  // const [loading, setLoading] = useState<boolean>(true);
+  // const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
+  // const [currentUser, setCurrentUser] = useState<CurrentUser>();
+  const [s3ImageKey, setAwsS3ImageKey] = useState(image);
   const [error, setError] = useState("");
 
   const generateParams = () => {
     const editProfileParams: updateUserShowParams = {
       name: userName,
       email: userEmail,
-      image:
-        "https://hoteler-image.s3.ap-northeast-1.amazonaws.com/uploads/hoteler/b0e2987c-016e-4ce6-8099-fb8ae43115fc/blank-profile-picture-g89cfeb4dc_640.png",
+      image: s3ImageKey,
     };
     return editProfileParams;
   };
@@ -151,10 +154,10 @@ const UserDetail = ({
 export default UserDetail;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  ctx.res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=1800, stale-while-revalidate=180"
-  );
+  // ctx.res.setHeader(
+  //   "Cache-Control",
+  //   "public, s-maxage=1800, stale-while-revalidate=180"
+  // );
 
   const { id } = ctx.query;
   const apiResponse = await getUserShow(id);
