@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { AuthContext } from "pages";
 import { signOut } from "lib/auth";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
 const Navbar = () => {

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { AuthContext } from "pages";
 import { signUp } from "lib/auth";
 import { SignUpParams } from "types/types";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export const SignUp = () => {
   const { setIsSignedIn, setCurrentUser, currentUser } =

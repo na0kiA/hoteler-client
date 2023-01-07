@@ -8,7 +8,7 @@ import {
 } from "lib/auth";
 import { CurrentUser, updateUserShowParams, UserDetailType } from "types/types";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
 const UserDetail = ({
@@ -18,6 +18,7 @@ const UserDetail = ({
   favorites,
   reviews,
 }: UserDetailType) => {
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<CurrentUser>();
@@ -25,7 +26,6 @@ const UserDetail = ({
   const [awsS3Image, setAwsS3Image] = useState<string>("");
   const [userEmail, setUserEmail] = useState<string>("");
   const [error, setError] = useState("");
-  const router = useRouter();
 
   const generateParams = () => {
     const editProfileParams: updateUserShowParams = {

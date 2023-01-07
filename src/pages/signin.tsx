@@ -3,7 +3,7 @@ import SignIn from "components/SignIn";
 import { getUserShow, getCurrentUser } from "lib/auth";
 import { GetServerSideProps } from "next";
 import { UserDetailType } from "types/types";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const Signin = () => {
   const router = useRouter();

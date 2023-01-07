@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import Link from "next/link";
 import { getCurrentUser, signIn } from "lib/auth";
 import { AuthContext } from "pages";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { SignInParams } from "types/types";
 import Navbar from "components/Navbar";
 
@@ -35,8 +35,8 @@ export const SignIn = () => {
         Cookies.set("_client", res.headers["client"]);
         Cookies.set("_uid", res.headers["uid"]);
 
-        setIsSignedIn == true;
-        setCurrentUser == res.data.data;
+        setIsSignedIn(true);
+        setCurrentUser(res.data.data);
         router.push("/");
       }
     } catch (error: any) {
