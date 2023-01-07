@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import {
   deleteAccount,
@@ -10,50 +10,37 @@ import { CurrentUser, updateUserShowParams, UserDetailType } from "types/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import Navbar from "components/Navbar";
 
 const UserDetail = ({
   id,
   name,
   image,
+  uid,
   favorites,
   reviews,
+  myAccount,
 }: UserDetailType) => {
   const router = useRouter();
+  console.log("ユーザー詳細ページが呼ばれたよ");
+
+  const [userName, setUserName] = useState<string>("");
+  const [userEmail, setUserEmail] = useState<string>(uid);
   const [loading, setLoading] = useState<boolean>(true);
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<CurrentUser>();
-  const [userName, setUserName] = useState<string>("");
-  const [awsS3Image, setAwsS3Image] = useState<string>("");
-  const [userEmail, setUserEmail] = useState<string>("");
+  // const [awsS3Image, setAwsS3Image] = useState("");
   const [error, setError] = useState("");
 
   const generateParams = () => {
     const editProfileParams: updateUserShowParams = {
       name: userName,
       email: userEmail,
-      image: awsS3Image,
+      image:
+        "https://hoteler-image.s3.ap-northeast-1.amazonaws.com/uploads/hoteler/b0e2987c-016e-4ce6-8099-fb8ae43115fc/blank-profile-picture-g89cfeb4dc_640.png",
     };
     return editProfileParams;
   };
-
-  const handleGetCurrentUser = async () => {
-    try {
-      const res = await getCurrentUser();
-      if (res?.data.is_login === true) {
-        setIsSignedIn(true);
-        setCurrentUser(res?.data.data);
-      } else {
-        setIsSignedIn(false);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    handleGetCurrentUser();
-  }, [setCurrentUser]);
 
   const handleDeleteAccount = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -107,14 +94,13 @@ const UserDetail = ({
 
   return (
     <>
-      {currentUser && id === currentUser.id ? (
+      <Navbar />
+      {myAccount ? (
         <>
           <div>
-            <label htmlFor="name">名前</label>
             <input
-              type="name"
-              id="name"
-              name="name"
+              type="text"
+              className="input input-bordered"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
             />
@@ -141,8 +127,6 @@ const UserDetail = ({
           priority={true}
         />
       </h1>
-      {console.log(reviews)}
-
       <h1>{reviews.title}</h1>
       <h1>{reviews.content}</h1>
       <h1>{reviews.userName}</h1>
@@ -174,7 +158,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const { id } = ctx.query;
   const apiResponse = await getUserShow(id);
+
   const UserDetail: UserDetailType = apiResponse.data;
+  console.log(UserDetail);
+
+  if (ctx.req.cookies._uid === apiResponse.data.uid) {
+    UserDetail.myAccount = true;
+  } else {
+    UserDetail.myAccount = false;
+  }
+
   if (!UserDetail) {
     return {
       notFound: true,

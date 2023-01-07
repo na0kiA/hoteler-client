@@ -1,8 +1,7 @@
 import Cookies from "js-cookie";
-import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import Link from "next/link";
 import { getCurrentUser, signIn } from "lib/auth";
-import { AuthContext } from "pages";
 import { useRouter } from "next/navigation";
 import { CurrentUser, SignInParams } from "types/types";
 import Navbar from "components/Navbar";
@@ -64,7 +63,7 @@ export const SignIn = () => {
   };
 
   useLayoutEffect(() => {
-    Layout();
+    handleGetCurrentUser();
   }, []);
 
   return (

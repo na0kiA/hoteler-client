@@ -9,6 +9,7 @@ import Layout from "components/Layout";
 import StarsRating from "components/StarsRating";
 import ServiceList from "components/serviceList";
 import { getCurrentUser } from "lib/auth";
+import Navbar from "components/Navbar";
 
 type PROPS = {
   hotels: HotelListType[];
@@ -26,6 +27,8 @@ type AuthContextType = {
 export const AuthContext = createContext({} as AuthContextType);
 
 const Home = ({ hotels }: PROPS) => {
+  console.log("index.tsxが呼ばれたよ");
+
   const [loading, setLoading] = useState<boolean>(true);
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<CurrentUser>();
@@ -121,7 +124,7 @@ const Home = ({ hotels }: PROPS) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ res }) => {
+export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
   res.setHeader(
     "Cache-Control",
     "public, s-maxage=60, stale-while-revalidate=10"
@@ -129,6 +132,13 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 
   const apiResponse = await getAllHotel();
   const hotels = await apiResponse.data;
+  // console.log(req.cookies._access_token);
+
+  // if (req.cookies._access_token) {
+  //   hotels.isLogin = true;
+  // } else {
+  //   hotels.isLogin = false;
+  // }
 
   return {
     props: {

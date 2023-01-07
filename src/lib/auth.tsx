@@ -1,3 +1,4 @@
+import { GetServerSideProps } from "next";
 import Cookies from "js-cookie";
 import { SignInParams, SignUpParams, updateUserShowParams } from "types/types";
 import client from "./client";
@@ -65,3 +66,24 @@ export const getCurrentUser = () => {
 export const getUserShow = (id: string | string[] | undefined) => {
   return client.get(`/users/${id}`);
 };
+
+// export const withAuthServerSideProps = (url: string): GetServerSideProps => {
+//   return async (context) => {
+//     const { req, res } = context;
+
+//     const response = await client.get("/auth/sessions", {
+//       headers: {
+//         "Content-Type": "application/json",
+//         uid: req.cookies["uid"],
+//         client: req.cookies["client"],
+//         "access-token": req.cookies["access-token"],
+//       },
+//     });
+//     const props = await response.data;
+//     if(props.data.is_login === true){
+//       return props.
+//     }
+//     // TODO: 他にも500エラーを考慮した分岐も必要
+//     return { props };
+//   };
+// };

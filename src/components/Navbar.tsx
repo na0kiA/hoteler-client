@@ -1,12 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { memo, useContext, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { AuthContext } from "pages";
 import { signOut } from "lib/auth";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { AuthContextType } from "types/types";
 
-const Navbar = () => {
+const Navbar = memo(() => {
+  console.log("Navbarが呼ばれたよ");
   const router = useRouter();
   const { currentUser, isSignedIn, loading, setIsSignedIn, setCurrentUser } =
     useContext(AuthContext);
@@ -224,6 +226,6 @@ const Navbar = () => {
       </>
     </>
   );
-};
+});
 
-export default Navbar;
+export default React.memo(Navbar);

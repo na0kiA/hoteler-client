@@ -88,6 +88,8 @@ export type UserDetailType = {
   image: string;
   favorites: UserFavorites;
   reviews: ReviewType;
+  myAccount: boolean;
+  uid: string;
 };
 
 export type CurrentUser = {
@@ -107,4 +109,13 @@ export type updateUserShowParams = {
   email: string;
   name: string;
   image: string;
+};
+
+export type AuthContextType = {
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  isSignedIn: boolean;
+  setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  currentUser: CurrentUser | undefined;
+  setCurrentUser: React.Dispatch<React.SetStateAction<CurrentUser | undefined>>;
 };

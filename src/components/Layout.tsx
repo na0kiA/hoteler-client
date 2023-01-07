@@ -10,7 +10,7 @@ type TITLE = {
 const Layout = ({ children, title = "ホテラー" }: TITLE) => {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <Head>
         <title>ホテラー</title>
         <meta property="og:image" content={`/heartIcon.png`} />
