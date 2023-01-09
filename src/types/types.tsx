@@ -12,12 +12,19 @@ export type HotelFacilityType = {
 };
 
 export type ReviewType = {
+  id: number;
   title: string;
   content: string;
   fiveStarRate: number;
   helpfulnessesCount: number;
   userName: string;
   userImage: string;
+  hotelName: string;
+  hotelImage: string;
+  hotelId: number;
+  hotelReviewsCount: number;
+  hotelAverageRating: number;
+  hotelFullAddress: string;
   createdAt: Date;
 };
 
@@ -87,7 +94,7 @@ export type UserDetailType = {
   name: string;
   image: string;
   favorites: UserFavorites;
-  reviews: ReviewType;
+  reviews: ReviewType[];
   myAccount: boolean;
   uid: string;
 };

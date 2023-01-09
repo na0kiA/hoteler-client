@@ -1,13 +1,18 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { GetServerSideProps } from "next";
-import { deleteAccount, getUserShow, updateUserShow } from "lib/auth";
-import { updateUserShowParams, UserDetailType } from "types/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import Navbar from "components/Navbar";
+
+import { deleteAccount, getUserShow, updateUserShow } from "lib/auth";
+import { ReviewType, updateUserShowParams, UserDetailType } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import Layout from "components/Layout";
+import OnUploadImage from "components/s3ByForm";
+import Link from "next/link";
+import StarsRating from "components/StarsRating";
+import { Rating } from "react-simple-star-rating";
+import ReviewsHotelCard from "components/ReviewsHotelCard";
 
 const UserDetail = ({
   id,
@@ -19,13 +24,16 @@ const UserDetail = ({
   myAccount,
 }: UserDetailType) => {
   const router = useRouter();
+  const forSliceImageKeyNumber = 54;
   const { currentUser, isSignedIn, loading, setIsSignedIn, setCurrentUser } =
     useAuthStateContext();
   console.log("ユーザー詳細ページが呼ばれたよ");
 
-  const [userName, setUserName] = useState<string>("");
+  const [userName, setUserName] = useState<string>("あいうえお");
   const [userEmail, setUserEmail] = useState<string>(uid);
-  const [s3ImageKey, setAwsS3ImageKey] = useState(image);
+  const [s3ImageKey, setS3ImageKey] = useState(
+    image.slice(forSliceImageKeyNumber)
+  );
   const [error, setError] = useState("");
 
   const generateParams = () => {
@@ -63,7 +71,7 @@ const UserDetail = ({
     }
   };
 
-  const handleEditUserProfile = async (
+  const handleUpdateUserProfile = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
@@ -87,57 +95,81 @@ const UserDetail = ({
     }
   };
 
+  const handleEditUserProfile = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    return (
+      <>
+        <input
+          type="text"
+          className="input input-bordered"
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
+        />
+        <OnUploadImage />
+      </>
+    );
+  };
+
   return (
     <>
       <Layout title={`${name}さんの詳細ページ`}>
-        {console.log(currentUser)}
+        <div className="card w-full bg-base-100 shadow-xl pt-5">
+          <figure className="">
+            <Image
+              src={image}
+              alt="ユーザー画像"
+              width={50}
+              height={50}
+              priority={true}
+              className="rounded-full m-auto"
+            />
+          </figure>
+          <div className="card-body items-center text-center pt-1">
+            <h2 className="card-title">
+              <div className="p-2">{userName}</div>
+            </h2>
+            <div className="card-actions">
+              {currentUser ? (
+                <>
+                  <button
+                    className="btn btn-primary btn-xs"
+                    onClick={(event) => {
+                      handleUpdateUserProfile(event);
+                    }}
+                  >
+                    プロフィールを編集する
+                  </button>
+                </>
+              ) : (
+                <></>
+              )}
+            </div>
+          </div>
+        </div>
         {currentUser ? (
           <>
-            <div>
-              <input
-                type="text"
-                className="input input-bordered"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-              />
-              <button
-                className="btn btn-primary btn-xs"
-                onClick={(event) => {
-                  handleEditUserProfile(event);
-                }}
+            <div className="tabs flex  mt-5">
+              <a className="tab tab-bordered tab-active pl-3">口コミ</a>
+              <a className="tab tab-bordered pl-3">ホテル一覧</a>
+              <Link
+                href={`/users/${id}/favorites`}
+                className="tab tab-bordered pl-3"
               >
-                編集する
-              </button>
+                お気に入り一覧
+              </Link>
             </div>
+            {typeof reviews === "string" ? (
+              reviews
+            ) : (
+              <>
+                {reviews.map((review: ReviewType) => (
+                  <ReviewsHotelCard props={review} />
+                ))}
+              </>
+            )}
           </>
-        ) : (
-          <></>
-        )}
-        <h1>{name}</h1>
-        <h1>
-          <Image
-            src={image}
-            alt="ユーザー画像"
-            width={50}
-            height={50}
-            priority={true}
-          />
-        </h1>
-        <h1>{reviews.title}</h1>
-        <h1>{reviews.content}</h1>
-        <h1>{reviews.userName}</h1>
-        <h1>{reviews.userImage}</h1>
-        {currentUser && id === currentUser.id ? (
-          <div>
-            <button
-              className="btn btn-primary btn-xs"
-              onClick={(event) => {
-                handleDeleteAccount(event);
-              }}
-            >
-              アカウントを削除
-            </button>
-          </div>
         ) : (
           <></>
         )}
@@ -157,13 +189,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const apiResponse = await getUserShow(id);
 
   const UserDetail: UserDetailType = apiResponse.data;
-  console.log(UserDetail);
 
-  if (ctx.req.cookies._uid === apiResponse.data.uid) {
-    UserDetail.myAccount = true;
-  } else {
-    UserDetail.myAccount = false;
-  }
+  console.log(UserDetail);
 
   if (!UserDetail) {
     return {

@@ -1,6 +1,6 @@
 import { AuthProvider } from "context/AuthProvider";
 import Head from "next/head";
-import React from "react";
+import React, { memo } from "react";
 import Navbar from "./Navbar";
 
 type TITLE = {
@@ -26,4 +26,4 @@ const Layout = ({ children, title }: TITLE) => {
     </>
   );
 };
-export default Layout;
+export default React.memo(Layout);

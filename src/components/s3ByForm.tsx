@@ -1,7 +1,7 @@
 // import { postImageKeyOfHotel } from "lib/post";
 import React, { useState } from "react";
 
-const OnUploadImage: React.FC<any> = ({ locationOfImage }) => {
+const OnUploadImage = ({ locationOfImage }: any) => {
   const [imageUrl, setImageUrl] = useState("");
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/images`);
@@ -15,7 +15,6 @@ const OnUploadImage: React.FC<any> = ({ locationOfImage }) => {
       formData.append(key, fields[key]);
     }
     formData.append("file", file);
-    // console.log(formData);
 
     const ret = await fetch(S3DirectPost.url, {
       method: "POST",
@@ -24,14 +23,10 @@ const OnUploadImage: React.FC<any> = ({ locationOfImage }) => {
       },
       body: formData,
     });
-    console.log(ret);
-    // https://hoteler-image.s3.ap-northeast-1.amazonaws.com
 
     const resText = await ret.text();
-    // console.log(resText);
 
     const resXML = await parseXML(resText);
-    // console.log(resXML);
 
     const locationOfImage =
       resXML.getElementsByTagName("Location")[0].childNodes[0].nodeValue;
@@ -44,7 +39,6 @@ const OnUploadImage: React.FC<any> = ({ locationOfImage }) => {
     const hotelKey: any = {
       key,
     };
-    console.log(hotelKey);
     // postImageKeyOfHotel(hotelKey);
   };
 

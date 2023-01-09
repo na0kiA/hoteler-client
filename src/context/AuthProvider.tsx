@@ -6,6 +6,7 @@ import {
   useEffect,
   memo,
   useCallback,
+  useMemo,
 } from "react";
 import { CurrentUser } from "types/types";
 
@@ -27,7 +28,7 @@ export const AuthProvider = memo(({ children }: any) => {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<CurrentUser>();
 
-  const handleGetCurrentUser = async () => {
+  const handleGetCurrentUser = useCallback(async () => {
     try {
       const res = await getCurrentUser();
 
@@ -41,7 +42,7 @@ export const AuthProvider = memo(({ children }: any) => {
       console.log(e);
     }
     setLoading(false);
-  };
+  }, [currentUser]);
 
   useEffect(() => {
     handleGetCurrentUser();

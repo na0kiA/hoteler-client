@@ -7,12 +7,11 @@ import Cookies from "js-cookie";
 import UserProfile from "./UserProfile";
 import { useAuthStateContext } from "context/AuthProvider";
 
-const Navbar = memo(() => {
+const Navbar = () => {
   console.log("Navbarが呼ばれたよ");
   const router = useRouter();
   const { currentUser, isSignedIn, loading, setIsSignedIn } =
     useAuthStateContext();
-
   const [menuDisplay, setmenuDisplay] = useState(true);
   const [displayMenuStyle, setdisplayMenuStyle] = useState("");
   const [search, setSearch] = useState(true);
@@ -127,11 +126,17 @@ const Navbar = memo(() => {
         </div>
 
         {/* tokenの有無でアバターを表示するかログインや新規登録ボタンを表示するかを切り替える */}
-        {isSignedIn ? (
+        {isSignedIn && currentUser ? (
           <div className="dropdown dropdown-end" onClick={showMenu}>
             <div tabIndex={1} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
-                <img src="https://placeimg.com/80/80/people" />
+                <Image
+                  src={`https://hoteler-image.s3.ap-northeast-1.amazonaws.com/${currentUser.image}`}
+                  alt="アバター"
+                  width={50}
+                  height={50}
+                  priority={true}
+                />
               </div>
             </div>
             <div className="badge badge-secondary badge-xs absolute inline-block right-1 top-1"></div>
@@ -148,7 +153,6 @@ const Navbar = memo(() => {
               </li>
               <li className="justify-between">
                 <Link href={`/users/${currentUser && currentUser.id}`}>
-                  <UserProfile />
                   プロフィール
                 </Link>
               </li>
@@ -227,6 +231,6 @@ const Navbar = memo(() => {
       </>
     </>
   );
-});
+};
 
 export default React.memo(Navbar);
