@@ -10,8 +10,6 @@ import { useAuthStateContext } from "context/AuthProvider";
 import Layout from "components/Layout";
 import OnUploadImage from "components/s3ByForm";
 import Link from "next/link";
-import StarsRating from "components/StarsRating";
-import { Rating } from "react-simple-star-rating";
 import ReviewsHotelCard from "components/ReviewsHotelCard";
 
 const UserDetail = ({
@@ -19,6 +17,7 @@ const UserDetail = ({
   name,
   image,
   uid,
+  hotelsCount,
   favorites,
   reviews,
   myAccount,
@@ -148,30 +147,34 @@ const UserDetail = ({
             </div>
           </div>
         </div>
-        {currentUser ? (
-          <>
-            <div className="tabs flex  mt-5">
-              <a className="tab tab-bordered tab-active pl-3">口コミ</a>
-              <a className="tab tab-bordered pl-3">ホテル一覧</a>
+        <div className="tabs flex  mt-5">
+          <a className="tab tab-bordered tab-active pl-3">
+            口コミ {reviews.length}件
+          </a>
+          <Link href="/users/${id}/hotels" className="tab tab-bordered pl-3">
+            掲載ホテル<> {hotelsCount}件</>
+          </Link>
+          {currentUser ? (
+            <>
               <Link
                 href={`/users/${id}/favorites`}
                 className="tab tab-bordered pl-3"
               >
                 お気に入り一覧
               </Link>
-            </div>
-            {typeof reviews === "string" ? (
-              reviews
-            ) : (
-              <>
-                {reviews.map((review: ReviewType) => (
-                  <ReviewsHotelCard props={review} />
-                ))}
-              </>
-            )}
-          </>
+            </>
+          ) : (
+            <></>
+          )}
+        </div>
+        {typeof reviews === "string" ? (
+          reviews
         ) : (
-          <></>
+          <>
+            {reviews.map((review: ReviewType) => (
+              <ReviewsHotelCard props={review} />
+            ))}
+          </>
         )}
       </Layout>
     </>
@@ -190,9 +193,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const UserDetail: UserDetailType = apiResponse.data;
 
-  const yearAndMonthAndDays = UserDetail.reviews[0].createdAt
-    .toString()
-    .slice(0, 10);
+  console.log(UserDetail);
 
   if (!UserDetail) {
     return {

@@ -16,45 +16,30 @@ const ReviewsHotelCard = ({ props }: PROPS) => {
       7
     )}月${yearAndMonthAndDays.slice(8, 10)}日`;
   }, []);
-  console.log(createdDateByJapanese);
+
+  const sliceReviewContent = useCallback((content: string) => {
+    if (content.length > 15) {
+      return content.slice(0, 15).concat("…");
+    } else {
+      return content;
+    }
+  }, []);
 
   return (
-    <div
-      className="card card-side card-compact bg-base-100 shadow-xl"
-      key={props.id}
-    >
-      <div className="m-auto">
-        <Link href={`/hotels/${props.hotelId}`}>
-          <figure className="">
-            {props.hotelImage ? (
-              <>
-                <Image
-                  src={props.hotelImage}
-                  alt="ホテル画像"
-                  width={50}
-                  height={50}
-                  priority={true}
-                  className="rounded-lg"
-                />
-              </>
-            ) : (
-              <>
-                <Image
-                  src="/hoteler_demo_photo.jpg"
-                  alt="ホテル画像"
-                  width={50}
-                  height={50}
-                  priority={true}
-                  className="rounded-lg"
-                />
-              </>
-            )}
-          </figure>
-          <p className="mt-1">{props.hotelName}</p>
-        </Link>
+    <div className="flex card card-side bg-base-100 shadow-xl">
+      <div className="flex-none m-auto pl-3">
+        <Image
+          className="rounded-lg"
+          src="/hoteler_demo_photo.jpg"
+          alt="ホテル画像"
+          width={100}
+          height={100}
+          priority={true}
+        />
+        <a className="m-auto">{props.hotelName}</a>
       </div>
-      <div className="card-body">
-        <span className="align-middle text-base">
+      <div className="card-body flex-1 p-5 pb-1">
+        <div className="pt-5">
           <Rating
             initialValue={props.fiveStarRate}
             transition
@@ -64,15 +49,23 @@ const ReviewsHotelCard = ({ props }: PROPS) => {
             readonly={true}
             allowTitleTag={false}
           />
-          <span className="align-bottom"> ({props.fiveStarRate})</span>
-        </span>
-        <span className="align-bottom">
+          <span className="align-bottom">({props.fiveStarRate})</span>
+        </div>
+        <p className="text-xs">
           <>{createdDateByJapanese(props.createdAt)}に作成</>
-        </span>
-        <h2 className="card-title">
-          <span className="align-middle text-base">{props.title}</span>
-        </h2>
-        <p className="text-xs pt-0">{props.content}</p>
+        </p>
+        <h2 className="card-title text-base">{props.title}</h2>
+        <p className="card-title text-xs">
+          {sliceReviewContent(props.content)}
+        </p>
+        <div className="card-actions justify-start">
+          <Link
+            href={`/users/reviews/${props.id}`}
+            className="text-xs text-blue-link"
+          >
+            口コミ全文を表示する
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -97,6 +97,7 @@ export type UserDetailType = {
   reviews: ReviewType[];
   myAccount: boolean;
   uid: string;
+  hotelsCount: number;
 };
 
 export type CurrentUser = {
