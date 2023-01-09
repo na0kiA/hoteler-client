@@ -190,7 +190,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const UserDetail: UserDetailType = apiResponse.data;
 
-  console.log(UserDetail);
+  const yearAndMonthAndDays = UserDetail.reviews[0].createdAt
+    .toString()
+    .slice(0, 10);
 
   if (!UserDetail) {
     return {
