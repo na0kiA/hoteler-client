@@ -1,6 +1,11 @@
 import { GetServerSideProps } from "next";
 import Cookies from "js-cookie";
-import { SignInParams, SignUpParams, updateUserShowParams } from "types/types";
+import {
+  ReviewEditParams,
+  SignInParams,
+  SignUpParams,
+  updateUserShowParams,
+} from "types/types";
 import client from "./client";
 
 // ホテルの口コミ一覧を取得
@@ -25,7 +30,7 @@ export const deleteReview = (id: number) => {
 };
 
 // 口コミを新規作成
-export const createReview = (hotelId: number, params: string | number) => {
+export const createReview = (hotelId: number, params: ReviewEditParams) => {
   return client.post(`/hotels/${hotelId}/reviews`, params, {
     headers: {
       "access-token": Cookies.get("_access_token"),
@@ -36,7 +41,7 @@ export const createReview = (hotelId: number, params: string | number) => {
 };
 
 // 口コミを更新
-export const updateReview = (id: number, params: string | number) => {
+export const updateReview = (id: number, params: ReviewEditParams) => {
   return client.patch(`/reviews/${id}`, params, {
     headers: {
       "access-token": Cookies.get("_access_token"),

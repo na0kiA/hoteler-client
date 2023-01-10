@@ -4,18 +4,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
-import {
-  deleteAccount,
-  getUserShow,
-  updateUserShow,
-  withAuthServerSideProps,
-} from "lib/auth";
+import { deleteAccount, getUserShow, updateUserShow } from "lib/auth";
 import { ReviewType, updateUserShowParams, UserDetailType } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import Layout from "components/Layout";
 import OnUploadImage from "components/s3ByForm";
 import Link from "next/link";
-import ReviewsHotelCard from "components/ReviewsHotelCard";
+import ReviewsOfUserProfile from "components/ReviewsOfUserProfile";
 
 const UserDetail = ({
   id,
@@ -178,7 +173,9 @@ const UserDetail = ({
         ) : (
           <>
             {reviews.map((review: ReviewType) => (
-              <ReviewsHotelCard props={review} />
+              <div key={review.id}>
+                <ReviewsOfUserProfile props={review} uid={uid} />
+              </div>
             ))}
           </>
         )}
