@@ -3,12 +3,19 @@ import Image from "next/image";
 import { Rating } from "react-simple-star-rating";
 import { ReviewType } from "types/types";
 import Link from "next/link";
+import { useAuthStateContext } from "context/AuthProvider";
+import { useRouter } from "next/navigation";
+import { deleteReview } from "lib/reviews";
 
 type PROPS = {
   props: ReviewType;
 };
 
 const ReviewsHotelCard = ({ props }: PROPS) => {
+  const { currentUser, isSignedIn, loading, setIsSignedIn, setCurrentUser } =
+    useAuthStateContext();
+  const router = useRouter();
+
   const createdDateByJapanese = useCallback((date: Date) => {
     const yearAndMonthAndDays = date.toString().slice(0, 10);
     return `${yearAndMonthAndDays.slice(0, 4)}年${yearAndMonthAndDays.slice(
@@ -25,6 +32,25 @@ const ReviewsHotelCard = ({ props }: PROPS) => {
     }
   }, []);
 
+  const handleDeleteReviews = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+
+    try {
+      const res = await deleteReview(props.id);
+      if (res.status == 200) {
+        // router.push("/");
+        console.log("口コミ削除に成功");
+      } else {
+        throw new Error(
+          "口コミ削除に失敗しました。画面をご確認の上もう一度実行してください。"
+        );
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <div className="flex card card-side bg-base-100 shadow-xl">
       <div className="flex-none m-auto pl-3 pt-5">

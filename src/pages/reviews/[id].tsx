@@ -4,7 +4,7 @@ import Image from "next/image";
 import { GetServerSideProps } from "next";
 import { Rating } from "react-simple-star-rating";
 
-import { getReviewShow } from "lib/auth";
+import { getReviewShow } from "lib/reviews";
 import { ReviewShowType } from "types/types";
 
 const UserReviewShow = ({
