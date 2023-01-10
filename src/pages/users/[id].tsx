@@ -4,7 +4,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
-import { deleteAccount, getUserShow, updateUserShow } from "lib/auth";
+import {
+  deleteAccount,
+  getUserShow,
+  updateUserShow,
+  withAuthServerSideProps,
+} from "lib/auth";
 import { ReviewType, updateUserShowParams, UserDetailType } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import Layout from "components/Layout";
@@ -27,6 +32,7 @@ const UserDetail = ({
   const { currentUser, isSignedIn, loading, setIsSignedIn, setCurrentUser } =
     useAuthStateContext();
   console.log("ユーザー詳細ページが呼ばれたよ");
+  console.log(currentUser);
 
   const [userName, setUserName] = useState<string>("あいうえお");
   const [userEmail, setUserEmail] = useState<string>(uid);
@@ -130,7 +136,7 @@ const UserDetail = ({
               <div className="p-2">{userName}</div>
             </h2>
             <div className="card-actions">
-              {currentUser ? (
+              {currentUser && currentUser.uid === uid ? (
                 <>
                   <button
                     className="btn btn-primary btn-xs"
@@ -154,7 +160,7 @@ const UserDetail = ({
           <Link href="/users/${id}/hotels" className="tab tab-bordered pl-3">
             掲載ホテル<> {hotelsCount}件</>
           </Link>
-          {currentUser ? (
+          {currentUser && currentUser.uid === uid ? (
             <>
               <Link
                 href={`/users/${id}/favorites`}
@@ -192,8 +198,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const apiResponse = await getUserShow(id);
 
   const UserDetail: UserDetailType = apiResponse.data;
-
-  console.log(UserDetail);
 
   if (!UserDetail) {
     return {
