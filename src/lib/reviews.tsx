@@ -50,3 +50,25 @@ export const updateReview = (id: number, params: ReviewEditParams) => {
     },
   });
 };
+
+// 参考になったを登録
+export const createHelpfulness = (reviewId: number) => {
+  return client.post(`/reviews/${reviewId}/helpfulnesses`, {
+    headers: {
+      "access-token": Cookies.get("_access_token"),
+      client: Cookies.get("_client"),
+      uid: Cookies.get("_uid"),
+    },
+  });
+};
+
+// 参考になったを解除
+export const deleteHelpfulness = (reviewId: number) => {
+  return client.delete(`/reviews/${reviewId}/helpfulnesses`, {
+    headers: {
+      "access-token": Cookies.get("_access_token"),
+      client: Cookies.get("_client"),
+      uid: Cookies.get("_uid"),
+    },
+  });
+};

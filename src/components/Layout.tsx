@@ -14,7 +14,7 @@ const Layout = ({ children, title }: TITLE) => {
   return (
     <>
       <Head>
-        <title>{title}</title>
+        <title>{`${title} - ホテラー`}</title>
         <meta property="og:image" content={`/heartIcon.png`} />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>

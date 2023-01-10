@@ -27,7 +27,7 @@ const Home = ({ hotels }: PROPS) => {
 
   return (
     <>
-      <Layout title={"ホテラー"}>
+      <Layout title={"ホテル一覧"}>
         <div className="md:grid grid-cols-4 gap-5 p-10 pt-5" id="home">
           {hotels &&
             hotels.map((hotel: HotelListType) => (

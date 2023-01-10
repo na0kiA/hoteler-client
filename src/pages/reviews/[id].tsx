@@ -4,10 +4,17 @@ import Image from "next/image";
 import { GetServerSideProps } from "next";
 import { Rating } from "react-simple-star-rating";
 
-import { deleteReview, getReviewShow, updateReview } from "lib/reviews";
+import {
+  createHelpfulness,
+  deleteHelpfulness,
+  deleteReview,
+  getReviewShow,
+  updateReview,
+} from "lib/reviews";
 import { ReviewEditParams, ReviewShowType } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import { useRouter } from "next/router";
+import Layout from "components/Layout";
 
 const UserReviewShow = ({
   title,
@@ -28,7 +35,6 @@ const UserReviewShow = ({
     useState<number>(fiveStarRate);
 
   const router = useRouter();
-  console.log(editReviewRating);
 
   const handleRating = (rate: number) => {
     setEditReviewRating(rate);
@@ -93,130 +99,178 @@ const UserReviewShow = ({
     }
   };
 
+  const handleDeleteHelpfulness = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+
+    try {
+      const res = await deleteHelpfulness(id);
+      if (res.status == 200) {
+        console.log("参考になったの解除に成功");
+        router.push(`/reviews/${id}`);
+      } else {
+        throw new Error(
+          "参考になったの解除に失敗しました。画面をご確認の上もう一度実行してください。"
+        );
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleCreateHelpfulness = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+
+    try {
+      const res = await createHelpfulness(id);
+      if (res.status == 200) {
+        console.log("参考になったの登録に成功");
+        router.push(`/reviews/${id}`);
+      } else {
+        throw new Error(
+          "参考になったの登録に失敗しました。画面をご確認の上もう一度実行してください。"
+        );
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
-      <div className="flex bg-base-100 shadow-xl">
-        <div className="flex-none p-3">
+      <Layout title={`${title}`}>
+        <div className="bg-base-100 shadow-xl p-5">
           <Link href={`/users/${userId}`}>
-            <Image
-              className="rounded-lg"
-              src={userImage}
-              alt="アバター"
-              width={50}
-              height={50}
-              priority={true}
-            />
-            <span className="m-auto">{userName}</span>
+            <div className="flex">
+              <Image
+                className="rounded-lg"
+                src={userImage}
+                alt="アバター"
+                width={40}
+                height={40}
+                priority={true}
+              />
+              <span className="ml-2 mt-2">{userName}</span>
+
+              {/* 編集と削除と保存ボタン */}
+              {currentUser && currentUser.id === userId ? (
+                <>
+                  <button
+                    className="btn btn-primary btn-xs flex-1 justify-end w-2/3"
+                    onClick={(event) => {
+                      handleDeleteReviews(event);
+                    }}
+                  >
+                    削除
+                  </button>
+
+                  <button
+                    className="btn btn-primary btn-xs flex-1 justify-end"
+                    onClick={() => {
+                      setEditToggle(!editToggle);
+                    }}
+                  >
+                    編集
+                  </button>
+
+                  {editToggle && (
+                    <>
+                      <button
+                        className="btn btn-primary btn-xs"
+                        onClick={(event) => {
+                          handleUpdateReview(event);
+                          setEditToggle(!editToggle);
+                        }}
+                      >
+                        保存
+                      </button>
+                    </>
+                  )}
+                </>
+              ) : (
+                <></>
+              )}
+            </div>
           </Link>
-        </div>
-        <div className="flex-1 p-5 pb-1">
+
+          {/* 星評価の編集 */}
           <div className="">
-            {editToggle ? (
-              <>
-                <Rating
-                  initialValue={editReviewRating}
-                  transition
-                  size={20}
-                  allowTitleTag={false}
-                  onClick={handleRating}
-                />{" "}
-                <span className="align-bottom">({editReviewRating})</span>
-              </>
-            ) : (
-              <>
-                <Rating
-                  initialValue={editReviewRating}
-                  transition
-                  size={20}
-                  allowFraction
-                  allowHover={false}
-                  readonly={true}
-                  allowTitleTag={false}
-                />{" "}
-                <span className="align-bottom">({editReviewRating})</span>
-              </>
-            )}
-          </div>
-          <p className="text-xs mt-1">
-            <>{createdDateByJapanese(createdAt)}に作成</>
-          </p>
-          <h2 className="text-base mt-1 mb-1">
-            {editToggle ? (
-              <>
+            <div className="">
+              {editToggle ? (
+                <>
+                  <Rating
+                    initialValue={editReviewRating}
+                    transition
+                    size={20}
+                    allowTitleTag={false}
+                    onClick={handleRating}
+                  />{" "}
+                  <span className="align-bottom">({editReviewRating})</span>
+                </>
+              ) : (
+                <>
+                  <Rating
+                    initialValue={editReviewRating}
+                    transition
+                    size={20}
+                    allowFraction
+                    allowHover={false}
+                    readonly={true}
+                    allowTitleTag={false}
+                  />{" "}
+                  <span className="align-bottom">({editReviewRating})</span>
+                </>
+              )}
+            </div>
+
+            {/* 口コミのタイトル */}
+            <div>
+              {editToggle ? (
                 <input
                   type="text"
-                  name="title"
-                  id="title"
+                  className="input input-bordered input-sm w-full max-w-xs"
                   value={editReviewTitle}
                   onChange={(event) => {
                     setEditReviewTitle(event.target.value);
                   }}
                 />
-              </>
-            ) : (
-              <>{title}</>
-            )}
-          </h2>
-          <p className="text-xs">
-            {editToggle ? (
-              <>
-                <input
-                  type="text"
-                  name="title"
-                  id="title"
-                  value={editReviewContent}
-                  onChange={(event) => {
-                    setEditReviewContent(event.target.value);
-                  }}
-                />
-              </>
-            ) : (
-              <>{content}</>
-            )}
-          </p>
-          <div className="justify-start">
-            <p className="text-xs">
-              <span className="text-sm"> {helpfulnessesCount}</span>
-              人が参考になった
+              ) : (
+                <div className="text-sm font-bold">{title}</div>
+              )}
+            </div>
+            <p className="text-xs italic mt-1 mb-1">
+              {createdDateByJapanese(createdAt)}に口コミを投稿
             </p>
-          </div>
-        </div>
-      </div>
-      {currentUser && currentUser.id === userId ? (
-        <>
-          <button
-            className="btn btn-xs"
-            onClick={(event) => {
-              handleDeleteReviews(event);
-            }}
-          >
-            削除
-          </button>
-          <button
-            className="btn btn-xs"
-            onClick={() => {
-              setEditToggle(!editToggle);
-            }}
-          >
-            編集
-          </button>
-          {editToggle && (
-            <>
-              <button
-                className="btn btn-xs"
-                onClick={(event) => {
-                  handleUpdateReview(event);
-                  setEditToggle(!editToggle);
+
+            {/* 口コミの内容 */}
+            {editToggle ? (
+              <textarea
+                className="textarea textarea-bordered"
+                value={editReviewContent}
+                onChange={(event) => {
+                  setEditReviewContent(event.target.value);
                 }}
               >
-                保存
-              </button>
-            </>
-          )}
-        </>
-      ) : (
-        <></>
-      )}
+                {editReviewContent}
+              </textarea>
+            ) : (
+              <div className="text-sm">{content}</div>
+            )}
+
+            {/* 参考になったの数 */}
+            <p className="text-xs  mt-1 mb-1">
+              <span className="text-sm"> {helpfulnessesCount}</span>
+              人のお客様がこれが役に立ったと考えています
+            </p>
+          </div>
+          <button className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg">
+            参考になった
+          </button>
+        </div>
+      </Layout>
     </>
   );
 };
