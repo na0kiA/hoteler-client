@@ -28,6 +28,18 @@ export type ReviewType = {
   createdAt: Date;
 };
 
+export type ReviewShowType = {
+  id: number;
+  title: string;
+  content: string;
+  fiveStarRate: number;
+  helpfulnessesCount: number;
+  userName: string;
+  userImage: string;
+  userId: number;
+  createdAt: Date;
+};
+
 export type HotelDetailType = {
   name: string;
   favoritesCount: number;

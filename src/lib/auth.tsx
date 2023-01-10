@@ -67,6 +67,11 @@ export const getUserShow = (id: string | string[] | undefined) => {
   return client.get(`/users/${id}`);
 };
 
+// 口コミ詳細を取得
+export const getReviewShow = (id: string | string[] | undefined) => {
+  return client.get(`/reviews/${id}`);
+};
+
 export const withAuthServerSideProps = (url: string): GetServerSideProps => {
   return async (context) => {
     const { req, res } = context;

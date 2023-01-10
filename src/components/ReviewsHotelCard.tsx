@@ -27,19 +27,34 @@ const ReviewsHotelCard = ({ props }: PROPS) => {
 
   return (
     <div className="flex card card-side bg-base-100 shadow-xl">
-      <div className="flex-none m-auto pl-3">
-        <Image
-          className="rounded-lg"
-          src="/hoteler_demo_photo.jpg"
-          alt="ホテル画像"
-          width={100}
-          height={100}
-          priority={true}
-        />
-        <a className="m-auto">{props.hotelName}</a>
+      <div className="flex-none m-auto pl-3 pt-5">
+        <Link href={`/hotels/${props.hotelId}`}>
+          <Image
+            className="rounded-lg"
+            src="/hoteler_demo_photo.jpg"
+            alt="ホテル画像"
+            width={100}
+            height={100}
+            priority={true}
+          />
+          <span className="m-auto">{props.hotelName}</span>
+          <p className="text-ssm m-auto">{props.hotelFullAddress}</p>
+        </Link>
+        <div>
+          <Rating
+            initialValue={props.hotelAverageRating}
+            transition
+            size={15}
+            allowFraction
+            allowHover={false}
+            readonly={true}
+            allowTitleTag={false}
+          />
+          <span className="text-ssm"> {props.hotelReviewsCount}件</span>
+        </div>
       </div>
-      <div className="card-body flex-1 p-5 pb-1">
-        <div className="pt-5">
+      <div className="flex-1 p-5 pb-1">
+        <div className="">
           <Rating
             initialValue={props.fiveStarRate}
             transition
@@ -51,20 +66,24 @@ const ReviewsHotelCard = ({ props }: PROPS) => {
           />
           <span className="align-bottom">({props.fiveStarRate})</span>
         </div>
-        <p className="text-xs">
+        <p className="text-xs mt-1">
           <>{createdDateByJapanese(props.createdAt)}に作成</>
         </p>
-        <h2 className="card-title text-base">{props.title}</h2>
+        <h2 className="card-title text-base mt-1 mb-1">{props.title}</h2>
         <p className="card-title text-xs">
           {sliceReviewContent(props.content)}
         </p>
-        <div className="card-actions justify-start">
+        <div className="justify-start">
           <Link
-            href={`/users/reviews/${props.id}`}
+            href={`/reviews/${props.id}`}
             className="text-xs text-blue-link"
           >
             口コミ全文を表示する
           </Link>
+          <p className="text-xs">
+            <span className="text-sm"> {props.helpfulnessesCount}</span>
+            人が参考になった
+          </p>
         </div>
       </div>
     </div>
