@@ -33,6 +33,7 @@ const UserReviewShow = ({
   const [editReviewContent, setEditReviewContent] = useState<string>(content);
   const [editReviewRating, setEditReviewRating] =
     useState<number>(fiveStarRate);
+  console.log(editToggle);
 
   const router = useRouter();
 
@@ -143,8 +144,8 @@ const UserReviewShow = ({
     <>
       <Layout title={`${title}`}>
         <div className="bg-base-100 shadow-xl p-5">
-          <Link href={`/users/${userId}`}>
-            <div className="flex">
+          <div className="flex">
+            <Link href={`/users/${userId}`} className="flex">
               <Image
                 className="rounded-lg"
                 src={userImage}
@@ -154,47 +155,47 @@ const UserReviewShow = ({
                 priority={true}
               />
               <span className="ml-2 mt-2">{userName}</span>
+            </Link>
 
-              {/* 編集と削除と保存ボタン */}
-              {currentUser && currentUser.id === userId ? (
-                <>
-                  <button
-                    className="btn btn-primary btn-xs flex-1 justify-end w-2/3"
-                    onClick={(event) => {
-                      handleDeleteReviews(event);
-                    }}
-                  >
-                    削除
-                  </button>
+            {/* 編集と削除と保存ボタン */}
+            {currentUser && currentUser.id === userId ? (
+              <div className="m-auto">
+                <button
+                  className="btn btn-primary btn-xs flex-none mr-2"
+                  onClick={() => {
+                    setEditToggle(!editToggle);
+                  }}
+                >
+                  編集
+                </button>
 
-                  <button
-                    className="btn btn-primary btn-xs flex-1 justify-end"
-                    onClick={() => {
-                      setEditToggle(!editToggle);
-                    }}
-                  >
-                    編集
-                  </button>
+                <button
+                  className="btn btn-primary btn-xs flex-none"
+                  onClick={(event) => {
+                    handleDeleteReviews(event);
+                  }}
+                >
+                  削除
+                </button>
 
-                  {editToggle && (
-                    <>
-                      <button
-                        className="btn btn-primary btn-xs"
-                        onClick={(event) => {
-                          handleUpdateReview(event);
-                          setEditToggle(!editToggle);
-                        }}
-                      >
-                        保存
-                      </button>
-                    </>
-                  )}
-                </>
-              ) : (
-                <></>
-              )}
-            </div>
-          </Link>
+                {editToggle && (
+                  <>
+                    <button
+                      className="btn btn-primary btn-xs flex-none"
+                      onClick={(event) => {
+                        handleUpdateReview(event);
+                        setEditToggle(!editToggle);
+                      }}
+                    >
+                      保存
+                    </button>
+                  </>
+                )}
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
 
           {/* 星評価の編集 */}
           <div className="">
