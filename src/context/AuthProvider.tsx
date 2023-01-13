@@ -22,13 +22,13 @@ type AuthContextType = {
 export const AuthContext = createContext({} as AuthContextType);
 
 export const AuthProvider = memo(({ children }: any) => {
-  console.log("AuthProviderが呼ばれたよ");
-
   const [loading, setLoading] = useState<boolean>(true);
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<CurrentUser>();
 
-  const handleGetCurrentUser = useCallback(async () => {
+  console.log("AuthProviderが呼ばれたよ");
+
+  const handleGetCurrentUser = async () => {
     try {
       const res = await getCurrentUser();
 
@@ -42,7 +42,7 @@ export const AuthProvider = memo(({ children }: any) => {
       console.log(e);
     }
     setLoading(false);
-  }, [currentUser]);
+  };
 
   useEffect(() => {
     handleGetCurrentUser();

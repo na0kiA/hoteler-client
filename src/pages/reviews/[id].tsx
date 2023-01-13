@@ -15,6 +15,11 @@ import { ReviewEditParams, ReviewShowType } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import { useRouter } from "next/router";
 import Layout from "components/Layout";
+import client from "lib/client";
+import Cookies from "js-cookie";
+import { withAuthServerSideProps } from "lib/auth";
+import axios, { AxiosInstance } from "axios";
+import postClient from "lib/axios";
 
 const UserReviewShow = ({
   title,
@@ -27,7 +32,8 @@ const UserReviewShow = ({
   createdAt,
   id,
 }: ReviewShowType) => {
-  const { currentUser } = useAuthStateContext();
+  const { currentUser, isSignedIn } = useAuthStateContext();
+  const [error, setError] = useState("");
   const [editToggle, setEditToggle] = useState<boolean>(false);
   const [editReviewTitle, setEditReviewTitle] = useState<string>(title);
   const [editReviewContent, setEditReviewContent] = useState<string>(content);
@@ -121,12 +127,14 @@ const UserReviewShow = ({
   };
 
   const handleCreateHelpfulness = async (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    event.preventDefault();
+    e.preventDefault();
 
     try {
-      const res = await createHelpfulness(id);
+      const res = await postClient.post(`/reviews/${id}/helpfulnesses`);
+      console.log(res);
+
       if (res.status == 200) {
         console.log("参考になったの登録に成功");
         router.push(`/reviews/${id}`);
@@ -135,15 +143,20 @@ const UserReviewShow = ({
           "参考になったの登録に失敗しました。画面をご確認の上もう一度実行してください。"
         );
       }
-    } catch (e) {
-      console.log(e);
+    } catch (error: any) {
+      console.log(error);
+      if (error.response?.data) {
+        setError(error.response?.data.errors);
+      } else {
+        console.log(error);
+      }
     }
   };
 
   return (
     <>
       <Layout title={`${title}`}>
-        <div className="bg-base-100 shadow-xl p-5">
+        <div className="md:w-2/3 bg-base-100 shadow-xl p-5 ">
           <div className="flex">
             <Link href={`/users/${userId}`} className="flex">
               <Image
@@ -154,34 +167,38 @@ const UserReviewShow = ({
                 height={40}
                 priority={true}
               />
-              <span className="ml-2 mt-2">{userName}</span>
+              <span className="ml-2 mt-2">ssssssssssssssssssss</span>
             </Link>
 
             {/* 編集と削除と保存ボタン */}
             {currentUser && currentUser.id === userId ? (
               <div className="m-auto">
                 <button
-                  className="btn btn-primary btn-xs flex-none mr-2"
+                  className="btn btn-primary btn-xs md:btn-sm   flex-none mr-2"
                   onClick={() => {
                     setEditToggle(!editToggle);
                   }}
                 >
-                  編集
+                  {editToggle ? "キャンセル" : "編集"}
                 </button>
 
-                <button
-                  className="btn btn-primary btn-xs flex-none"
-                  onClick={(event) => {
-                    handleDeleteReviews(event);
-                  }}
-                >
-                  削除
-                </button>
+                {editToggle ? (
+                  <></>
+                ) : (
+                  <button
+                    className="btn btn-primary btn-xs md:btn-sm flex-none"
+                    onClick={(event) => {
+                      handleDeleteReviews(event);
+                    }}
+                  >
+                    削除
+                  </button>
+                )}
 
                 {editToggle && (
                   <>
                     <button
-                      className="btn btn-primary btn-xs flex-none"
+                      className="btn btn-primary btn-xs md:btn-sm  flex-none"
                       onClick={(event) => {
                         handleUpdateReview(event);
                         setEditToggle(!editToggle);
@@ -199,7 +216,7 @@ const UserReviewShow = ({
 
           {/* 星評価の編集 */}
           <div className="">
-            <div className="">
+            <div className="mt-3">
               {editToggle ? (
                 <>
                   <Rating
@@ -228,48 +245,90 @@ const UserReviewShow = ({
             </div>
 
             {/* 口コミのタイトル */}
-            <div>
+            <div className="mt-3">
               {editToggle ? (
-                <input
-                  type="text"
-                  className="input input-bordered input-sm w-full max-w-xs"
-                  value={editReviewTitle}
-                  onChange={(event) => {
-                    setEditReviewTitle(event.target.value);
-                  }}
-                />
+                <div className="form-control">
+                  <label className="label p-1">
+                    <span className="label-text text-sm">タイトル</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered input-sm w-full max-w-xs text-xs"
+                    value={editReviewTitle}
+                    onChange={(event) => {
+                      setEditReviewTitle(event.target.value);
+                    }}
+                  />
+                </div>
               ) : (
                 <div className="text-sm font-bold">{title}</div>
               )}
             </div>
             <p className="text-xs italic mt-1 mb-1">
-              {createdDateByJapanese(createdAt)}に口コミを投稿
+              {editToggle ? (
+                <></>
+              ) : (
+                <>{createdDateByJapanese(createdAt)}に口コミを投稿</>
+              )}
             </p>
 
             {/* 口コミの内容 */}
-            {editToggle ? (
-              <textarea
-                className="textarea textarea-bordered"
-                value={editReviewContent}
-                onChange={(event) => {
-                  setEditReviewContent(event.target.value);
-                }}
-              >
-                {editReviewContent}
-              </textarea>
-            ) : (
-              <div className="text-sm">{content}</div>
-            )}
+            <div className="mt-3">
+              {editToggle ? (
+                <div className="form-control">
+                  <label className="label p-1">
+                    <span className="label-text text-sm">内容</span>
+                  </label>
+                  <textarea
+                    className="textarea textarea-bordered w-full h-10 text-xs"
+                    // className="text-xs input input-bordered input-lg w-full max-w-xs"
+                    value={editReviewContent}
+                    onChange={(event) => {
+                      setEditReviewContent(event.target.value);
+                    }}
+                  >
+                    {editReviewContent}
+                  </textarea>
+                </div>
+              ) : (
+                <div className="text-sm">{content}</div>
+              )}
+            </div>
 
             {/* 参考になったの数 */}
             <p className="text-xs  mt-1 mb-1">
-              <span className="text-sm"> {helpfulnessesCount}</span>
-              人のお客様がこれが役に立ったと考えています
+              {editToggle ? (
+                <></>
+              ) : (
+                <>
+                  <span className="text-sm"> {helpfulnessesCount}</span>
+                  人のお客様がこれが役に立ったと考えています
+                </>
+              )}
             </p>
           </div>
-          <button className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg">
-            参考になった
-          </button>
+
+          {editToggle ? (
+            <></>
+          ) : (
+            <>
+              <button
+                type="submit"
+                className="btn btn-outline btn-xs md:btn-sm"
+                onClick={(e) => handleCreateHelpfulness(e)}
+              >
+                参考になった
+              </button>
+              {/* <button className="btn btn-xs md:btn-sm">参考になった</button> */}
+              {error && (
+                <>
+                  <p className="whitespace-pre-wrap mt-5 text-red-600">
+                    {error}
+                  </p>
+                </>
+              )}
+            </>
+          )}
         </div>
       </Layout>
     </>

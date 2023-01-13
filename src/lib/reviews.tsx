@@ -52,8 +52,8 @@ export const updateReview = (id: number, params: ReviewEditParams) => {
 };
 
 // 参考になったを登録
-export const createHelpfulness = (reviewId: number) => {
-  return client.post(`/reviews/${reviewId}/helpfulnesses`, {
+export const createHelpfulness = (id: number) => {
+  return client.post(`/reviews/${id}/helpfulnesses`, {
     headers: {
       "access-token": Cookies.get("_access_token"),
       client: Cookies.get("_client"),
