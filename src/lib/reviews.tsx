@@ -7,6 +7,7 @@ import {
   updateUserShowParams,
 } from "types/types";
 import client from "./client";
+import postClient from "./postClient";
 
 // ホテルの口コミ一覧を取得
 export const getReviewIndex = (hotelId: string | string[] | undefined) => {
@@ -53,14 +54,18 @@ export const updateReview = (id: number, params: ReviewEditParams) => {
 
 // 参考になったを登録
 export const createHelpfulness = (id: number) => {
-  return client.post(`/reviews/${id}/helpfulnesses`, {
-    headers: {
-      "access-token": Cookies.get("_access_token"),
-      client: Cookies.get("_client"),
-      uid: Cookies.get("_uid"),
-    },
-  });
+  return postClient.post(`/reviews/${id}/helpfulnesses`);
 };
+
+// export const createHelpfulness = (id: number) => {
+//   return client.post(`/reviews/${id}/helpfulnesses`, {
+//     headers: {
+//       "access-token": Cookies.get("_access_token"),
+//       client: Cookies.get("_client"),
+//       uid: Cookies.get("_uid"),
+//     },
+//   });
+// };
 
 // 参考になったを解除
 export const deleteHelpfulness = (reviewId: number) => {

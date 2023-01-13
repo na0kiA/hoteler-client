@@ -116,6 +116,7 @@ export type UserDetailType = {
   myAccount: boolean;
   uid: string;
   hotelsCount: number;
+  reviewsCount: number;
 };
 
 export type CurrentUser = {

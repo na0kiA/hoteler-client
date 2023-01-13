@@ -8,7 +8,7 @@ type TITLE = {
   children: any;
 };
 
-const Layout = ({ children, title }: TITLE) => {
+const Layout = memo(({ children, title }: TITLE) => {
   console.log("レイアウトが呼ばれたよ");
 
   return (
@@ -25,5 +25,5 @@ const Layout = ({ children, title }: TITLE) => {
       </main>
     </>
   );
-};
-export default React.memo(Layout);
+});
+export default Layout;

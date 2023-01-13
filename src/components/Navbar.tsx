@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import UserProfile from "./UserProfile";
 import { useAuthStateContext } from "context/AuthProvider";
 
-const Navbar = () => {
+const Navbar = memo(() => {
   console.log("Navbarが呼ばれたよ");
   const router = useRouter();
   const { currentUser, isSignedIn, loading, setIsSignedIn } =
@@ -231,6 +231,6 @@ const Navbar = () => {
       </>
     </>
   );
-};
+});
 
-export default React.memo(Navbar);
+export default Navbar;

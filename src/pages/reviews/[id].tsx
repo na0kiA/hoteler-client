@@ -15,11 +15,6 @@ import { ReviewEditParams, ReviewShowType } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import { useRouter } from "next/router";
 import Layout from "components/Layout";
-import client from "lib/client";
-import Cookies from "js-cookie";
-import { withAuthServerSideProps } from "lib/auth";
-import axios, { AxiosInstance } from "axios";
-import postClient from "lib/axios";
 
 const UserReviewShow = ({
   title,
@@ -34,6 +29,7 @@ const UserReviewShow = ({
 }: ReviewShowType) => {
   const { currentUser, isSignedIn } = useAuthStateContext();
   const [error, setError] = useState("");
+  const [submitHelpfulness, setSubmitHelpfulness] = useState<boolean>(false);
   const [editToggle, setEditToggle] = useState<boolean>(false);
   const [editReviewTitle, setEditReviewTitle] = useState<string>(title);
   const [editReviewContent, setEditReviewContent] = useState<string>(content);
@@ -70,8 +66,13 @@ const UserReviewShow = ({
           "口コミ削除に失敗しました。画面をご確認の上もう一度実行してください。"
         );
       }
-    } catch (e) {
-      console.log(e);
+    } catch (error: any) {
+      console.log(error);
+      if (error.response?.data) {
+        setError(error.response?.data.errors);
+      } else {
+        console.log(error);
+      }
     }
   };
 
@@ -101,8 +102,13 @@ const UserReviewShow = ({
           "口コミ削除に失敗しました。画面をご確認の上もう一度実行してください。"
         );
       }
-    } catch (e) {
-      console.log(e);
+    } catch (error: any) {
+      console.log(error);
+      if (error.response?.data) {
+        setError(error.response?.data.errors);
+      } else {
+        console.log(error);
+      }
     }
   };
 
@@ -121,8 +127,13 @@ const UserReviewShow = ({
           "参考になったの解除に失敗しました。画面をご確認の上もう一度実行してください。"
         );
       }
-    } catch (e) {
-      console.log(e);
+    } catch (error: any) {
+      console.log(error);
+      if (error.response?.data) {
+        setError(error.response?.data.errors);
+      } else {
+        console.log(error);
+      }
     }
   };
 
@@ -132,7 +143,7 @@ const UserReviewShow = ({
     e.preventDefault();
 
     try {
-      const res = await postClient.post(`/reviews/${id}/helpfulnesses`);
+      const res = await createHelpfulness(id);
       console.log(res);
 
       if (res.status == 200) {
@@ -156,7 +167,7 @@ const UserReviewShow = ({
   return (
     <>
       <Layout title={`${title}`}>
-        <div className="md:w-2/3 bg-base-100 shadow-xl p-5 ">
+        <div className="md:w-2/3 md:h-5/6 bg-base-100 shadow-xl p-5 ">
           <div className="flex">
             <Link href={`/users/${userId}`} className="flex">
               <Image
@@ -167,7 +178,7 @@ const UserReviewShow = ({
                 height={40}
                 priority={true}
               />
-              <span className="ml-2 mt-2">ssssssssssssssssssss</span>
+              <span className="ml-2 mt-2">{userName}</span>
             </Link>
 
             {/* 編集と削除と保存ボタン */}
@@ -222,11 +233,13 @@ const UserReviewShow = ({
                   <Rating
                     initialValue={editReviewRating}
                     transition
-                    size={20}
+                    size={30}
                     allowTitleTag={false}
                     onClick={handleRating}
                   />{" "}
-                  <span className="align-bottom">({editReviewRating})</span>
+                  <span className="align-middle text-base">
+                    ({editReviewRating})
+                  </span>
                 </>
               ) : (
                 <>
@@ -280,8 +293,7 @@ const UserReviewShow = ({
                     <span className="label-text text-sm">内容</span>
                   </label>
                   <textarea
-                    className="textarea textarea-bordered w-full h-10 text-xs"
-                    // className="text-xs input input-bordered input-lg w-full max-w-xs"
+                    className="textarea textarea-bordered w-full max-h-full text-xs"
                     value={editReviewContent}
                     onChange={(event) => {
                       setEditReviewContent(event.target.value);
@@ -312,14 +324,35 @@ const UserReviewShow = ({
             <></>
           ) : (
             <>
-              <button
-                type="submit"
-                className="btn btn-outline btn-xs md:btn-sm"
-                onClick={(e) => handleCreateHelpfulness(e)}
-              >
-                参考になった
-              </button>
-              {/* <button className="btn btn-xs md:btn-sm">参考になった</button> */}
+              {submitHelpfulness ? (
+                <>
+                  <button
+                    type="submit"
+                    className="btn btn-outline btn-active btn-xs md:btn-sm"
+                    onClick={(e) => {
+                      handleDeleteHelpfulness(e),
+                        setSubmitHelpfulness(!submitHelpfulness),
+                        setError("");
+                    }}
+                  >
+                    参考になったを取り消す
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="submit"
+                    className="btn btn-outline btn-xs md:btn-sm"
+                    onClick={(e) => {
+                      handleCreateHelpfulness(e),
+                        setSubmitHelpfulness(!submitHelpfulness),
+                        setError("");
+                    }}
+                  >
+                    参考になった
+                  </button>
+                </>
+              )}
               {error && (
                 <>
                   <p className="whitespace-pre-wrap mt-5 text-red-600">
