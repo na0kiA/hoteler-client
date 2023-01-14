@@ -77,7 +77,6 @@ export const withAuthServerSideProps = (url: string): GetServerSideProps => {
         uid: req.cookies["uid"],
         client: req.cookies["client"],
         "access-token": req.cookies["access-token"],
-        "X-CSRF-Token": "x-csrf-token",
       },
     });
 
@@ -98,7 +97,7 @@ export const withAuthServerSideProps = (url: string): GetServerSideProps => {
     }
 
     // TODO: 他にも500エラーを考慮した分岐も必要
-    const props = await response.data;
-    return { props };
+    const currentUserResponse = await response.data;
+    return { props: { ...currentUserResponse } };
   };
 };

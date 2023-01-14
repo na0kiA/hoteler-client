@@ -180,14 +180,16 @@ const UserDetail = ({
             <div className="card-actions">
               {currentUser && currentUser.uid === uid ? (
                 <>
-                  <button
-                    className="btn btn-primary btn-xs md:btn-sm   flex-none mr-2"
-                    onClick={() => {
-                      setEditToggle(!editToggle);
-                    }}
-                  >
-                    {editToggle ? "キャンセル" : "プロフィールを編集する"}
-                  </button>
+                  <div>
+                    <button
+                      className="btn btn-primary btn-xs md:btn-sm   flex-none mr-2"
+                      onClick={() => {
+                        setEditToggle(!editToggle);
+                      }}
+                    >
+                      {editToggle ? "キャンセル" : "プロフィールを編集する"}
+                    </button>
+                  </div>
                   {editToggle ? (
                     <>
                       <button
