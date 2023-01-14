@@ -15,6 +15,10 @@ import { ReviewEditParams, ReviewShowType } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import { useRouter } from "next/router";
 import Layout from "components/Layout";
+import axios from "axios";
+import postClient from "lib/postClient";
+import client from "lib/client";
+import { getCurrentUser } from "lib/auth";
 
 const UserReviewShow = ({
   title,
@@ -380,8 +384,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const apiResponse = await getReviewShow(id);
 
   const ReviewDetail: ReviewShowType = apiResponse.data;
-
-  console.log(ReviewDetail);
 
   if (!ReviewDetail) {
     return {

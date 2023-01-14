@@ -77,18 +77,28 @@ export const withAuthServerSideProps = (url: string): GetServerSideProps => {
         uid: req.cookies["uid"],
         client: req.cookies["client"],
         "access-token": req.cookies["access-token"],
+        "X-CSRF-Token": "x-csrf-token",
       },
     });
+
     if (response.status === 401) {
       return {
         redirect: {
-          destination: "/login",
+          destination: "/signin",
+          permanent: false,
+        },
+      };
+    } else if (response.status === 422) {
+      return {
+        redirect: {
+          destination: "/",
           permanent: false,
         },
       };
     }
+
     // TODO: 他にも500エラーを考慮した分岐も必要
-    const props = await response.json();
+    const props = await response.data;
     return { props };
   };
 };

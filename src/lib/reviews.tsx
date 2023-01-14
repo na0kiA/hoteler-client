@@ -8,6 +8,7 @@ import {
 } from "types/types";
 import client from "./client";
 import postClient from "./postClient";
+import axios from "axios";
 
 // ホテルの口コミ一覧を取得
 export const getReviewIndex = (hotelId: string | string[] | undefined) => {

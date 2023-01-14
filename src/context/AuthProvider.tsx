@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import { getCurrentUser } from "lib/auth";
 import {
   useContext,

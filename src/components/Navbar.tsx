@@ -157,7 +157,7 @@ const Navbar = memo(() => {
                 </Link>
               </li>
               <li>
-                <Link href="/user/profile">設定</Link>
+                <Link href="/users/settings">設定</Link>
               </li>
               <li>
                 <button
@@ -192,9 +192,6 @@ const Navbar = memo(() => {
                     </Link>
                   </button>
                 </div>
-                {/* <div className="navbar-end flex-none  gap-2 ml-8">
-
-                </div> */}
               </>
             )}
           </>

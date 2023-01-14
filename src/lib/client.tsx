@@ -6,4 +6,9 @@ const client: AxiosInstance | any = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+// axios.defaults.xsrfCookieName = "CSRF-TOKEN";
+// axios.defaults.xsrfHeaderName = "X-CSRF-Token";
+// axios.defaults.withCredentials = true;
+
 export default client;
