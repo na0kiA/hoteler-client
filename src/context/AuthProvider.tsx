@@ -28,6 +28,7 @@ export const AuthProvider = memo(({ children }: any) => {
   const [currentUser, setCurrentUser] = useState<CurrentUser>();
 
   console.log("AuthProviderが呼ばれたよ");
+  console.log(currentUser);
 
   const handleGetCurrentUser = async () => {
     try {

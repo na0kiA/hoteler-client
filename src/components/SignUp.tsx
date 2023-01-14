@@ -1,13 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
-import { AuthContext } from "pages";
 import { signUp } from "lib/auth";
 import { SignUpParams } from "types/types";
 import { useRouter } from "next/navigation";
+import { useAuthStateContext } from "context/AuthProvider";
 
 export const SignUp = () => {
-  const { setIsSignedIn, setCurrentUser, currentUser } =
-    useContext(AuthContext);
+  const { setIsSignedIn, setCurrentUser, currentUser } = useAuthStateContext();
   const [invalidEmail, setInvalidEmail] = useState("");
   const [invalidPassword, setInvalidPassword] = useState("");
   const [email, setEmail] = useState("");

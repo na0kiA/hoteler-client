@@ -16,6 +16,8 @@ export const SignIn = () => {
   const { setIsSignedIn, setCurrentUser, isSignedIn, currentUser } =
     useAuthStateContext();
 
+  console.log(currentUser);
+
   const generateParams = () => {
     const signInParams: SignInParams = {
       email: email,
@@ -60,7 +62,71 @@ export const SignIn = () => {
 
   return (
     <>
-      <p>ホテラーにログイン</p>
+      <div className="hero min-h-screen  bg-base-200">
+        <div className="hero-content flex-col w-full lg:flex-row-reverse">
+          <div className="text-center lg:text-left">
+            <h1 className="text-3xl font-bold">ホテラーにログイン</h1>
+          </div>
+          <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+            <div className="card-body">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Email</span>
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="input input-bordered"
+                />
+              </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Password</span>
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="input input-bordered"
+                />
+                <label className="label">
+                  <p className="label-text-alt link link-hover">
+                    パスワードを忘れた場合
+                  </p>
+                </label>
+                <label className="label">
+                  <p className="label-text-alt link link-hover ">
+                    アカウントを持っていない場合は
+                    <Link href={"/signup"} className="text-blue-link">
+                      新規登録
+                    </Link>
+                    から。
+                  </p>
+                </label>
+              </div>
+              <div className="form-control mt-6">
+                <button
+                  className="btn btn-primary"
+                  onClick={(event) => {
+                    handleSignInSubmit(event);
+                  }}
+                >
+                  ログイン
+                </button>
+              </div>
+              {error && (
+                <>
+                  <p className="whitespace-pre-wrap mt-5 text-red-600">
+                    {error}
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <p>ホテラーにログイン</p>
       <form>
         <div>
           <label htmlFor="email">メールアドレス</label>
@@ -96,7 +162,7 @@ export const SignIn = () => {
           <p className="whitespace-pre-wrap mt-5 text-red-600">{error}</p>
         </>
       )}
-      <Link href="/signup">サインアップへ</Link>
+      <Link href="/signup">サインアップへ</Link> */}
     </>
   );
 };
