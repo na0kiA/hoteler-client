@@ -13,10 +13,7 @@ export const SignIn = () => {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const { setIsSignedIn, setCurrentUser, isSignedIn, currentUser } =
-    useAuthStateContext();
-
-  console.log(currentUser);
+  const { setIsSignedIn, setCurrentUser, currentUser } = useAuthStateContext();
 
   const generateParams = () => {
     const signInParams: SignInParams = {
@@ -69,6 +66,9 @@ export const SignIn = () => {
           </div>
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <div className="card-body">
+              {error && (
+                <p className="text-red-600 font-bold text-xs">{error}</p>
+              )}
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Email</span>
@@ -115,54 +115,10 @@ export const SignIn = () => {
                   ログイン
                 </button>
               </div>
-              {error && (
-                <>
-                  <p className="whitespace-pre-wrap mt-5 text-red-600">
-                    {error}
-                  </p>
-                </>
-              )}
             </div>
           </div>
         </div>
       </div>
-      {/* <p>ホテラーにログイン</p>
-      <form>
-        <div>
-          <label htmlFor="email">メールアドレス</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">パスワード</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button
-          type="submit"
-          onClick={(event) => {
-            handleSignInSubmit(event);
-          }}
-        >
-          ログイン
-        </button>
-      </form>
-      {error && (
-        <>
-          <p className="whitespace-pre-wrap mt-5 text-red-600">{error}</p>
-        </>
-      )}
-      <Link href="/signup">サインアップへ</Link> */}
     </>
   );
 };
