@@ -1,5 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+// import fs from "node:timers/promises";
+// import { setTimeout } from "node:timers/promises";
+
 import { signUp } from "lib/auth";
 import { SignUpParams } from "types/types";
 import { useRouter } from "next/navigation";
@@ -9,9 +13,12 @@ export const SignUp = () => {
   const { setIsSignedIn, setCurrentUser, currentUser } = useAuthStateContext();
   const [invalidEmail, setInvalidEmail] = useState("");
   const [invalidPassword, setInvalidPassword] = useState("");
+  const [invalidPasswordConfirmation, setInvalidPasswordConfirmation] =
+    useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [confirmAlart, setConfirmAlart] = useState(false);
   const confirmSuccessUrl = "http://localhost:3000/signin";
   const router = useRouter();
 
@@ -33,118 +40,126 @@ export const SignUp = () => {
 
     try {
       const res: SignUpParams = await signUp(params);
+      closeConfirmAlart();
       console.log(res);
-      alert("confirm email");
     } catch (error: any) {
       console.log(error);
       if (error.response.data) {
         console.log(error.response.data.errors);
         setInvalidEmail(error.response.data.errors.email);
         setInvalidPassword(error.response.data.errors.password);
+        setInvalidPasswordConfirmation(
+          error.response.data.errors.password_confirmation
+        );
       } else {
         console.log(error);
       }
     }
   };
 
-  const successAlart = () => {
-    return (
-      <>
-        <div className="alert alert-success shadow-lg">
-          <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="stroke-current flex-shrink-0 h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>アカウント認証用のメールを送信致しました。</span>
-          </div>
-        </div>
-      </>
-    );
+  const closeConfirmAlart = () => {
+    setConfirmAlart(true);
+    setTimeout(() => {
+      setConfirmAlart(false);
+    }, 5000);
   };
 
   return (
     <>
-      <h1>ホテラーへようこそ!</h1>
-      <form>
-        <div>
-          <label htmlFor="email">メールアドレス</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+      {confirmAlart ? (
+        <div className="alert alert-success">
+          <div>
+            <span>認証用のメールを送信しました。</span>
+          </div>
         </div>
-        <div>
-          <label htmlFor="password">パスワード</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password_confirmation">パスワード確認</label>
-          <input
-            type="password"
-            id="password_confirmation"
-            name="password_confirmation"
-            value={passwordConfirmation}
-            onChange={(e) => setPasswordConfirmation(e.target.value)}
-          />
-        </div>
-        <div>
-          <input
-            type="hidden"
-            id="confirm_success_url"
-            name="confirm_success_url"
-            value={confirmSuccessUrl}
-          />
-        </div>
-        <button
-          type="submit"
-          onClick={(e) => {
-            handleSignUpSubmit(e);
-            setInvalidPassword("");
-            setInvalidEmail("");
-            successAlart;
-          }}
-        >
-          登録する
-        </button>
-      </form>
-      {invalidEmail && (
-        <>
-          <p className="whitespace-pre-wrap mt-5 text-red-600">
-            {invalidEmail}
-          </p>
-        </>
+      ) : (
+        <></>
       )}
-      {invalidPassword && (
-        <>
-          <p className="whitespace-pre-wrap mt-5 text-red-600">
-            {invalidPassword}
-          </p>
-        </>
-      )}
-      <div>
-        既にアカウントを持っている方は
-        <Link href="/signin" className="text-blue-link">
-          ログインから。
-        </Link>
+      <div className="hero bg-base-200 min-h-screen">
+        <div className="hero-content  flex-col md:flex-row w-full">
+          <div className="flex text-left  md:text-left">
+            <Image
+              src="/hartIcon.png"
+              alt="ホテル画像"
+              width={80}
+              height={80}
+              priority={true}
+            />
+            <h1 className="text-2xl font-bold m-auto">ホテラーへようこそ！</h1>
+            {/* <p className="py-3">ホテラーへようこそ！</p> */}
+          </div>
+          <div className="card card-compact	flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+            <div className="card-body">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">メールアドレス</span>
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="input input-bordered"
+                />
+                {invalidEmail && (
+                  <p className="text-red-600 text-sm mt-2">{invalidEmail}</p>
+                )}
+              </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">パスワード</span>
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="input input-bordered"
+                />
+                {invalidPassword && (
+                  <p className="text-red-600 text-sm mt-2">{invalidPassword}</p>
+                )}
+              </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">パスワード確認用</span>
+                </label>
+                <input
+                  type="password"
+                  name="password_confirmation"
+                  value={passwordConfirmation}
+                  onChange={(e) => setPasswordConfirmation(e.target.value)}
+                  className="input input-bordered"
+                />
+                {invalidPasswordConfirmation && (
+                  <p className="text-red-600 text-sm mt-2">
+                    {invalidPasswordConfirmation}
+                  </p>
+                )}
+                <label className="label">
+                  <p className="label-text-alt link link-hover ">
+                    既にアカウントをお持ちの方は
+                    <Link href={"/signin"} className="text-blue-link">
+                      ログイン
+                    </Link>
+                    から。
+                  </p>
+                </label>
+              </div>
+              <div className="form-control mt-6">
+                <button
+                  className="btn btn-primary"
+                  onClick={(e) => {
+                    handleSignUpSubmit(e);
+                    setInvalidPassword("");
+                    setInvalidEmail("");
+                    setInvalidPasswordConfirmation("");
+                  }}
+                >
+                  登録する
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
