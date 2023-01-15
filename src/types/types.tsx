@@ -113,7 +113,7 @@ export type EditPasswordParams = {
 
 export type UpdatePasswordParams = {
   password: string;
-  password_confirmation: string;
+  passwordConfirmation: string;
   token: string;
 };
 
