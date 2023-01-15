@@ -92,7 +92,9 @@ export const SignIn = () => {
                 />
                 <label className="label">
                   <p className="label-text-alt link link-hover">
-                    <Link href={"/reset-password"}>パスワードを忘れた場合</Link>
+                    <Link href={"/users/settings/reset-password"}>
+                      パスワードを忘れた場合
+                    </Link>
                   </p>
                 </label>
                 <label className="label">

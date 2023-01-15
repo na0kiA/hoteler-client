@@ -3,11 +3,11 @@ import React, { useLayoutEffect, useState } from "react";
 import Link from "next/link";
 import { postResetPassword, signIn } from "lib/auth";
 import { useRouter } from "next/navigation";
-import { PostResetPasswordParams, SignInParams } from "types/types";
+import { PostResetPasswordParams } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 
 export const ResetPassword = () => {
-  const { setIsSignedIn, setCurrentUser, currentUser } = useAuthStateContext();
+  const { currentUser } = useAuthStateContext();
   const router = useRouter();
 
   const [error, setError] = useState("");

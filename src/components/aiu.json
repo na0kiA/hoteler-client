@@ -1,5 +1,0 @@
-// {"url":"https://hoteler-image.s3.ap-northeast-1.amazonaws.com","fields":{
-//   "key":"uploads/test/b10a9672-3a25-4aa9-8420-69022cdb5fb5/${filename}",
-//   "success_action_status":"201","acl":"public-read","policy":"eyJleHBpcmF0aW9uIjoiMjAyMi0wNy0wNVQxMjoxNjo1MVoiLCJjb25kaXRpb25zIjpbeyJidWNrZXQiOiJob3RlbGVyLWltYWdlIn0sWyJzdGFydHMtd2l0aCIsIiRrZXkiLCJ1cGxvYWRzL3Rlc3QvYjEwYTk2NzItM2EyNS00YWE5LTg0MjAtNjkwMjJjZGI1ZmI1LyJdLHsic3VjY2Vzc19hY3Rpb25fc3RhdHVzIjoiMjAxIn0seyJhY2wiOiJwdWJsaWMtcmVhZCJ9LFsiY29udGVudC1sZW5ndGgtcmFuZ2UiLDEsMTA0ODU3NjBdLHsieC1hbXotY3JlZGVudGlhbCI6IkFLSUE1UDZCVUs0NDVXWlVYQlBYLzIwMjIwNzA1L2FwLW5vcnRoZWFzdC0xL3MzL2F3czRfcmVxdWVzdCJ9LHsieC1hbXotYWxnb3JpdGhtIjoiQVdTNC1ITUFDLVNIQTI1NiJ9LHsieC1hbXotZGF0ZSI6IjIwMjIwNzA1VDExMTY1MVoifV19",
-//   "x-amz-credential":"AKIA5P6BUK445WZUXBPX/20220705/ap-northeast-1/s3/aws4_request",
-//   "x-amz-algorithm":"AWS4-HMAC-SHA256","x-amz-date":"20220705T111651Z","x-amz-signature":"64046dca7c5835d77f3f1ac7a95eb0c144bff0eafa8394c98756b8675fc9d6fd"}}
