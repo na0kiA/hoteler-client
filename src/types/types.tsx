@@ -95,6 +95,28 @@ export type SignUpParams = {
   passwordConfirmation: string;
 };
 
+export type PostResetPasswordParams = {
+  email: string;
+  redirectUrl: string;
+};
+
+export type EditPasswordParams = {
+  accessToken: string;
+  client: string;
+  client_id: string;
+  config: string;
+  expiry: number;
+  reset_password: boolean;
+  token: string;
+  uid: string;
+};
+
+export type UpdatePasswordParams = {
+  password: string;
+  password_confirmation: string;
+  token: string;
+};
+
 export type SignInParams = {
   email: string;
   password: string;

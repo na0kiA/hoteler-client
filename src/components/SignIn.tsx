@@ -60,7 +60,7 @@ export const SignIn = () => {
   return (
     <>
       <div className="hero min-h-screen  bg-base-200">
-        <div className="hero-content flex-col w-full lg:flex-row-reverse">
+        <div className="hero-content flex-col w-full">
           <div className="text-center lg:text-left">
             <h1 className="text-3xl font-bold">ホテラーにログイン</h1>
           </div>
@@ -71,7 +71,7 @@ export const SignIn = () => {
               )}
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text">Email</span>
+                  <span className="label-text">メールアドレス</span>
                 </label>
                 <input
                   type="email"
@@ -82,7 +82,7 @@ export const SignIn = () => {
               </div>
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text">Password</span>
+                  <span className="label-text">パスワード</span>
                 </label>
                 <input
                   type="password"
@@ -92,7 +92,7 @@ export const SignIn = () => {
                 />
                 <label className="label">
                   <p className="label-text-alt link link-hover">
-                    パスワードを忘れた場合
+                    <Link href={"/reset-password"}>パスワードを忘れた場合</Link>
                   </p>
                 </label>
                 <label className="label">

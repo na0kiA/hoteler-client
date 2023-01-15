@@ -67,16 +67,18 @@ export const SignUp = () => {
   return (
     <>
       {confirmAlart ? (
-        <div className="alert alert-success">
-          <div>
-            <span>認証用のメールを送信しました。</span>
+        <div className="toast toast-end">
+          <div className="alert alert-success">
+            <div>
+              <span>認証用のメールを送信しました。</span>
+            </div>
           </div>
         </div>
       ) : (
         <></>
       )}
       <div className="hero bg-base-200 min-h-screen">
-        <div className="hero-content  flex-col md:flex-row w-full">
+        <div className="hero-content  flex-col  w-full">
           <div className="flex text-left  md:text-left">
             <Image
               src="/hartIcon.png"

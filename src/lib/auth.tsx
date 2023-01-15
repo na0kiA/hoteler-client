@@ -1,6 +1,12 @@
 import { GetServerSideProps } from "next";
 import Cookies from "js-cookie";
-import { SignInParams, SignUpParams, updateUserShowParams } from "types/types";
+import {
+  PostResetPasswordParams,
+  SignInParams,
+  SignUpParams,
+  UpdatePasswordParams,
+  updateUserShowParams,
+} from "types/types";
 import client from "./client";
 
 // サインアップ
@@ -8,7 +14,16 @@ export const signUp = (params: SignUpParams) => {
   return client.post("/auth", params);
 };
 
-// サインイン
+// パスワード変更の申請
+export const postResetPassword = (params: PostResetPasswordParams) => {
+  return client.post("/auth/password", params);
+};
+
+// パスワード変更
+export const updatePassword = (params: UpdatePasswordParams) => {
+  return client.put("/auth/password", params);
+};
+
 export const signIn = (params: SignInParams) => {
   return client.post("/auth/sign_in", params);
 };
