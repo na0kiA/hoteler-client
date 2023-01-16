@@ -114,7 +114,7 @@ export type EditPasswordParams = {
 export type UpdatePasswordParams = {
   password: string;
   passwordConfirmation: string;
-  token: string;
+  token: string | string[] | undefined;
 };
 
 export type SignInParams = {

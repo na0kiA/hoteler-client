@@ -8,6 +8,7 @@ import {
   updateUserShowParams,
 } from "types/types";
 import client from "./client";
+import { ParsedUrlQuery } from "querystring";
 
 // サインアップ
 export const signUp = (params: SignUpParams) => {
@@ -20,8 +21,17 @@ export const postResetPassword = (params: PostResetPasswordParams) => {
 };
 
 // パスワード変更
-export const updatePassword = (params: UpdatePasswordParams) => {
-  return client.put("/auth/password", params);
+export const updatePassword = (
+  params: UpdatePasswordParams,
+  query: ParsedUrlQuery
+) => {
+  return client.put("/auth/password", params, {
+    headers: {
+      "access-token": query["access-token"],
+      client: query["client"],
+      uid: query["uid"],
+    },
+  });
 };
 
 export const signIn = (params: SignInParams) => {

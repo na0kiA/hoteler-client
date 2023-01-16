@@ -7,20 +7,18 @@ import { useAuthStateContext } from "context/AuthProvider";
 export const UpdatePassword = () => {
   const { currentUser } = useAuthStateContext();
   const router = useRouter();
-  const token = router.query.token;
-  // http://localhost:3000/signin?access-token=626lewpywkqNA5lNdBHgkw&client=Jv7zzlGEDnXSSugGengojA&client_id=Jv7zzlGEDnXSSugGengojA&config=default&expiry=1674929954&reset_password=true&token=626lewpywkqNA5lNdBHgkw&uid=myuhisu%40tapi.re
+  const query = router.query;
 
   const [error, setError] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [confirmAlart, setConfirmAlart] = useState(false);
-  const redirectUrl = "http://localhost:3000/update-password";
 
   const generateParams = () => {
     const updatePasswordParams: UpdatePasswordParams = {
       password: password,
       passwordConfirmation: passwordConfirmation,
-      token: "ss",
+      token: query.token,
     };
     return updatePasswordParams;
   };
@@ -39,10 +37,10 @@ export const UpdatePassword = () => {
     const params = generateParams();
 
     try {
-      const res = await updatePassword(params);
-      closeConfirmAlart();
-
+      const res = await updatePassword(params, query);
       if (res.status === 200) {
+        closeConfirmAlart();
+        router.push("/signin");
       }
     } catch (error: any) {
       console.log(error);
@@ -56,7 +54,6 @@ export const UpdatePassword = () => {
 
   useEffect(() => {
     currentUser && router.push("/");
-    if (router.isReady) console.log(token);
   }, [router]);
 
   return (
@@ -65,7 +62,7 @@ export const UpdatePassword = () => {
         <div className="toast toast-end">
           <div className="alert alert-success">
             <div>
-              <span>認証用のメールを送信しました。</span>
+              <span>パスワードが正常に更新されました。</span>
             </div>
           </div>
         </div>
@@ -95,7 +92,7 @@ export const UpdatePassword = () => {
               </div>
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text">新規パスワード確認用</span>
+                  <span className="label-text">新規パスワード(確認用)</span>
                 </label>
                 <input
                   type="password"

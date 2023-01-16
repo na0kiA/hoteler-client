@@ -13,7 +13,7 @@ export const ResetPassword = () => {
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [confirmAlart, setConfirmAlart] = useState(false);
-  const redirectUrl = "http://localhost:3000/update-password";
+  const redirectUrl = "http://localhost:3000/users/settings/update-password";
 
   const generateParams = () => {
     const signInParams: PostResetPasswordParams = {
