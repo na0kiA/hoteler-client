@@ -3,6 +3,7 @@ import { updatePassword } from "lib/auth";
 import { useRouter } from "next/router";
 import { UpdatePasswordParams } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
+import HomeIcon from "./HomeIcon";
 
 export const UpdatePassword = () => {
   const { currentUser } = useAuthStateContext();
@@ -58,6 +59,7 @@ export const UpdatePassword = () => {
 
   return (
     <>
+      <HomeIcon title={"パスワード更新ページ"} />
       {confirmAlart ? (
         <div className="toast toast-end">
           <div className="alert alert-success">
@@ -70,9 +72,11 @@ export const UpdatePassword = () => {
         <></>
       )}
       <div className="hero min-h-screen  bg-base-200">
-        <div className="hero-content flex-col w-full">
-          <div className="text-center lg:text-left">
-            <h1 className="text-3xl font-bold">パスワードを更新する</h1>
+        <div className="hero-content flex-col w-full mb-auto">
+          <div className="text-center m-auto">
+            <h1 className="text-2xl md:text-4xl font-bold">
+              パスワードを更新する
+            </h1>
           </div>
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <div className="card-body">

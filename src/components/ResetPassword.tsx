@@ -5,6 +5,7 @@ import { postResetPassword, signIn } from "lib/auth";
 import { useRouter } from "next/navigation";
 import { PostResetPasswordParams } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
+import HomeIcon from "./HomeIcon";
 
 export const ResetPassword = () => {
   const { currentUser } = useAuthStateContext();
@@ -58,6 +59,7 @@ export const ResetPassword = () => {
 
   return (
     <>
+      <HomeIcon title={"パスワード再設定ページ"} />
       {confirmAlart ? (
         <div className="toast toast-end">
           <div className="alert alert-success">
@@ -69,10 +71,12 @@ export const ResetPassword = () => {
       ) : (
         <></>
       )}
-      <div className="hero min-h-screen  bg-base-200">
-        <div className="hero-content flex-col w-full">
-          <div className="text-center lg:text-left">
-            <h1 className="text-3xl font-bold">パスワードを再設定する</h1>
+      <div className="hero min-h-screen bg-base-200">
+        <div className="hero-content flex-col w-full mb-auto">
+          <div className="text-center m-auto">
+            <h1 className="text-2xl md:text-3xl font-bold">
+              パスワードを再設定する
+            </h1>
           </div>
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <div className="card-body">

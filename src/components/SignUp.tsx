@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useAuthStateContext } from "context/AuthProvider";
 import { addingCountAtom, closeConfirmAlart, confirmAlartAtom } from "lib/atom";
 import { useAtom } from "jotai";
+import HomeIcon from "./HomeIcon";
 
 export const SignUp = () => {
   const { setIsSignedIn, setCurrentUser, currentUser } = useAuthStateContext();
@@ -74,6 +75,7 @@ export const SignUp = () => {
 
   return (
     <>
+      <HomeIcon title={"新規登録"} />
       {confirmAlart ? (
         <div className="toast toast-end">
           <div className="alert alert-success">
@@ -85,9 +87,9 @@ export const SignUp = () => {
       ) : (
         <></>
       )}
-      <div className="hero bg-base-200 min-h-screen">
-        <div className="hero-content  flex-col  w-full">
-          <div className="flex text-left  md:text-left">
+      <div className="hero min-h-screen bg-base-200">
+        <div className="hero-content flex-col w-full mb-auto">
+          <div className="flex text-center m-auto">
             <Image
               src="/hartIcon.png"
               alt="ホテル画像"
@@ -95,7 +97,9 @@ export const SignUp = () => {
               height={80}
               priority={true}
             />
-            <h1 className="text-2xl font-bold m-auto">ホテラーへようこそ！</h1>
+            <h1 className="text-2xl md:text-3xl font-bold m-auto">
+              ホテラーへようこそ！
+            </h1>
           </div>
           <div className="card card-compact	flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <div className="card-body">

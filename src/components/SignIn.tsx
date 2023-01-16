@@ -5,6 +5,7 @@ import { signIn } from "lib/auth";
 import { useRouter } from "next/navigation";
 import { SignInParams } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
+import HomeIcon from "./HomeIcon";
 
 export const SignIn = () => {
   const [error, setError] = useState("");
@@ -61,10 +62,13 @@ export const SignIn = () => {
 
   return (
     <>
-      <div className="hero min-h-screen  bg-base-200">
-        <div className="hero-content flex-col w-full">
-          <div className="text-center lg:text-left">
-            <h1 className="text-3xl font-bold">ホテラーにログイン</h1>
+      <HomeIcon title={"ログイン"} />
+      <div className="hero bg-base-200 min-h-screen">
+        <div className="hero-content flex-col w-full mb-auto">
+          <div className="text-center m-auto">
+            <h1 className="text-3xl md:text-4xl font-bold">
+              ホテラーにログイン
+            </h1>
           </div>
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <div className="card-body">
