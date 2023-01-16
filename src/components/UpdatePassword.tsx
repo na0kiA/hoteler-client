@@ -10,6 +10,9 @@ export const UpdatePassword = () => {
   const router = useRouter();
   const query = router.query;
 
+  const [invalidPassword, setInvalidPassword] = useState("");
+  const [invalidPasswordConfirmation, setInvalidPasswordConfirmation] =
+    useState("");
   const [error, setError] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
@@ -44,18 +47,25 @@ export const UpdatePassword = () => {
         router.push("/signin");
       }
     } catch (error: any) {
-      console.log(error);
-      if (error.response?.data) {
-        setError(error.response?.data.errors);
+      if (error.response?.data.errors == "Unauthorized") {
+        setError("認証情報が無効です。");
+      } else if (error.response?.data) {
+        setInvalidPassword(error.response.data.errors.password);
+        setInvalidPasswordConfirmation(
+          error.response.data.errors.password_confirmation
+        );
       } else {
         console.log(error);
       }
     }
   };
 
-  useEffect(() => {
-    currentUser && router.push("/");
-  }, [router]);
+  // useEffect(() => {
+  //   // currentUser && router.push("/");
+  //   if (currentUser?.uid != query.uid) {
+  //     router.push("/");
+  //   }
+  // }, [router]);
 
   return (
     <>
@@ -81,7 +91,9 @@ export const UpdatePassword = () => {
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <div className="card-body">
               {error && (
-                <p className="text-red-600 font-bold text-xs">{error}</p>
+                <p className="text-red-600 font-bold text-xs md:text-sm">
+                  {error}
+                </p>
               )}
               <div className="form-control">
                 <label className="label">
@@ -93,6 +105,11 @@ export const UpdatePassword = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   className="input input-bordered"
                 />
+                {invalidPassword && (
+                  <p className="text-red-600 text-sm md:text-sm mt-2">
+                    {invalidPassword}
+                  </p>
+                )}
               </div>
               <div className="form-control">
                 <label className="label">
@@ -104,6 +121,11 @@ export const UpdatePassword = () => {
                   onChange={(e) => setPasswordConfirmation(e.target.value)}
                   className="input input-bordered"
                 />
+                {invalidPasswordConfirmation && (
+                  <p className="text-red-600 text-sm md:text-sm mt-2">
+                    {invalidPasswordConfirmation}
+                  </p>
+                )}
               </div>
               <div className="form-control mt-6">
                 <button

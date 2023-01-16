@@ -15,8 +15,10 @@ const Layout = memo(({ children, title }: TITLE) => {
     <>
       <Head>
         <title>{`${title} - ホテラー`}</title>
-        <meta property="og:image" content={`/heartIcon.png`} />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta property="og:image" content={`/heartIcon.png`} />
+        <meta property="og:image:width" content={String(50)} />
+        <meta property="og:image:height" content={String(50)} />
       </Head>
 
       <main>

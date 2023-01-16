@@ -53,10 +53,6 @@ export const ResetPassword = () => {
     }
   };
 
-  useLayoutEffect(() => {
-    currentUser && router.push("/");
-  }, []);
-
   return (
     <>
       <HomeIcon title={"パスワード再設定ページ"} />
@@ -81,7 +77,9 @@ export const ResetPassword = () => {
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <div className="card-body">
               {error && (
-                <p className="text-red-600 font-bold text-xs">{error}</p>
+                <p className="text-red-600 font-bold text-xs md:text-sm">
+                  {error}
+                </p>
               )}
               <div className="form-control">
                 <label className="label">

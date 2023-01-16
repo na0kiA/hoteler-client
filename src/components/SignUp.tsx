@@ -114,7 +114,9 @@ export const SignUp = () => {
                   className="input input-bordered"
                 />
                 {invalidEmail && (
-                  <p className="text-red-600 text-sm mt-2">{invalidEmail}</p>
+                  <p className="text-red-600 text-sm md:text-sm mt-2">
+                    {invalidEmail}
+                  </p>
                 )}
               </div>
               <div className="form-control">
@@ -128,7 +130,9 @@ export const SignUp = () => {
                   className="input input-bordered"
                 />
                 {invalidPassword && (
-                  <p className="text-red-600 text-sm mt-2">{invalidPassword}</p>
+                  <p className="text-red-600 text-sm md:text-sm mt-2">
+                    {invalidPassword}
+                  </p>
                 )}
               </div>
               <div className="form-control">
@@ -143,7 +147,7 @@ export const SignUp = () => {
                   className="input input-bordered"
                 />
                 {invalidPasswordConfirmation && (
-                  <p className="text-red-600 text-sm mt-2">
+                  <p className="text-red-600 text-sm md:text-sm mt-2">
                     {invalidPasswordConfirmation}
                   </p>
                 )}
