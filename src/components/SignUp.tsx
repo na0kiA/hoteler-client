@@ -8,6 +8,8 @@ import { signUp } from "lib/auth";
 import { SignUpParams } from "types/types";
 import { useRouter } from "next/navigation";
 import { useAuthStateContext } from "context/AuthProvider";
+import { addingCountAtom, closeConfirmAlart, confirmAlartAtom } from "lib/atom";
+import { useAtom } from "jotai";
 
 export const SignUp = () => {
   const { setIsSignedIn, setCurrentUser, currentUser } = useAuthStateContext();
@@ -18,7 +20,8 @@ export const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [confirmAlart, setConfirmAlart] = useState(false);
+  // const [confirmAlart, setConfirmAlart] = useState(false);
+  const [confirmAlart, setConfirmAlart] = useAtom(closeConfirmAlart);
   const confirmSuccessUrl = "http://localhost:3000/signin";
   const router = useRouter();
 
@@ -27,8 +30,6 @@ export const SignUp = () => {
       email: email,
       password: password,
       name: "名無しさん",
-      image:
-        "uploads/hoteler/b0e2987c-016e-4ce6-8099-fb8ae43115fc/blank-profile-picture-g89cfeb4dc_640.png",
       passwordConfirmation: passwordConfirmation,
       confirmSuccessUrl: confirmSuccessUrl,
     };
@@ -43,7 +44,11 @@ export const SignUp = () => {
 
     try {
       const res: SignUpParams = await signUp(params);
-      closeConfirmAlart();
+      setConfirmAlart(
+        setTimeout(() => {
+          setConfirmAlart(false);
+        }, 5000)
+      );
       console.log(res);
     } catch (error: any) {
       console.log(error);
@@ -60,12 +65,12 @@ export const SignUp = () => {
     }
   };
 
-  const closeConfirmAlart = () => {
-    setConfirmAlart(true);
-    setTimeout(() => {
-      setConfirmAlart(false);
-    }, 5000);
-  };
+  // const closeConfirmAlart = () => {
+  //   setConfirmAlart(true);
+  //   setTimeout(() => {
+  //     setConfirmAlart(false);
+  //   }, 5000);
+  // };
 
   return (
     <>
