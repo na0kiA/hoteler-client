@@ -123,6 +123,8 @@ export const withAuthServerSideProps = (url: string): GetServerSideProps => {
 
     // TODO: 他にも500エラーを考慮した分岐も必要
     const currentUserResponse = await response.data;
+    console.log(currentUserResponse);
+
     return { props: { ...currentUserResponse } };
   };
 };

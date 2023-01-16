@@ -132,7 +132,7 @@ const Navbar = memo(() => {
             <div tabIndex={1} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
                 <Image
-                  src={`https://hoteler-image.s3.ap-northeast-1.amazonaws.com/${currentUser.image}`}
+                  src={`${currentUser.image}`}
                   alt="アバター"
                   width={50}
                   height={50}
