@@ -1,7 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import type { GetServerSideProps } from "next";
 
 import { getAllHotel } from "lib/hotels";
 import { HotelListType } from "types/types";
@@ -73,7 +72,7 @@ const Home = ({ hotels }: PROPS) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ res }) => {
+export const getServerSideProps = async ({ res }: any) => {
   res.setHeader(
     "Cache-Control",
     "public, s-maxage=60, stale-while-revalidate=10"

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { signIn } from "lib/auth";
 import { useRouter } from "next/navigation";
 import { SignInParams } from "types/types";
-import Navbar from "components/Navbar";
 import { useAuthStateContext } from "context/AuthProvider";
 
 export const SignIn = () => {
@@ -13,7 +12,8 @@ export const SignIn = () => {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const { setIsSignedIn, setCurrentUser, currentUser } = useAuthStateContext();
+  const { setIsSignedIn, setCurrentUser, currentUser, loading } =
+    useAuthStateContext();
 
   const generateParams = () => {
     const signInParams: SignInParams = {
@@ -52,10 +52,12 @@ export const SignIn = () => {
       }
     }
   };
+  console.log(currentUser);
 
   useLayoutEffect(() => {
+    console.log("useEffectが実行されました");
     currentUser && router.push("/");
-  }, []);
+  }, [currentUser]);
 
   return (
     <>

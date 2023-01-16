@@ -154,7 +154,7 @@ export type CurrentUser = {
   updated_at: Date;
 };
 
-export type updateUserShowParams = {
+export type UpdateUserShowParams = {
   email: string;
   name: string;
   image: string;

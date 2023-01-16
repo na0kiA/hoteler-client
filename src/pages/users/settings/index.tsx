@@ -1,47 +1,27 @@
 import { useAuthStateContext } from "context/AuthProvider";
-import {
-  getCurrentUser,
-  getUserShow,
-  updateUserShow,
-  withAuthServerSideProps,
-} from "lib/auth";
+import { getCurrentUser, getUserShow, updateUserShow } from "lib/auth";
 import Link from "next/link";
-import { GetServerSideProps } from "next";
 import React, { useState } from "react";
 import Layout from "components/Layout";
-import router, { useRouter } from "next/router";
 import Image from "next/image";
 import { fetchSignedUrl } from "lib/image";
-import { updateUserShowParams, UserDetailType } from "types/types";
+import { UpdateUserShowParams, UserDetailType } from "types/types";
 import client from "lib/client";
 
-const Home = ({
-  id,
-  name,
-  image,
-  uid,
-  hotelsCount,
-  favorites,
-  reviews,
-  reviewsCount,
-}: UserDetailType) => {
+const Home = ({ name, image, uid }: UserDetailType) => {
   const { currentUser } = useAuthStateContext();
-  const forSliceImageKeyNumber = 54;
-  const [error, setError] = useState("");
+  const [nameError, setNameError] = useState("");
   const [userName, setUserName] = useState<string>(name);
   const [userEmail, setUserEmail] = useState<string>(uid);
   const [editToggle, setEditToggle] = useState<boolean>(false);
-  const [userImage, setUserImage] = useState(
-    image.slice(forSliceImageKeyNumber)
-  );
+  const [userImageKey, setUserImageKey] = useState(image);
   const [imageUrl, setImageUrl] = useState("");
-  console.log(image);
 
   const generateParams = () => {
-    const editProfileParams: updateUserShowParams = {
+    const editProfileParams: UpdateUserShowParams = {
       name: userName,
       email: userEmail,
-      image: userImage,
+      image: userImageKey,
     };
     return editProfileParams;
   };
@@ -51,23 +31,15 @@ const Home = ({
   ) => {
     event.preventDefault();
     const params = generateParams();
-    const res = await updateUserShow(params);
+
     try {
-      if (res.status == 200) {
-        console.log("アカウント編集に成功");
-        router.reload();
-        setImageUrl("");
-      } else {
-        throw new Error(
-          "アカウント編集に失敗しました。画面をご確認の上もう一度実行してください。"
-        );
-      }
+      await updateUserShow(params);
+      setImageUrl("");
     } catch (error: any) {
-      console.log(error);
       if (error.response.data) {
-        setError(error.response.data.errors);
+        setNameError(error.response.data.errors.name);
       } else {
-        console.log(error);
+        console.log("エラー");
       }
     }
   };
@@ -106,7 +78,7 @@ const Home = ({
     if (!key) return;
 
     setImageUrl(locationOfImage);
-    // setUserImage(key);
+    setUserImageKey(key);
   };
   return (
     <Layout title={"設定"}>
@@ -114,7 +86,7 @@ const Home = ({
         {editToggle ? (
           <>
             <Image
-              src={image}
+              src={`https://hoteler-image.s3.ap-northeast-1.amazonaws.com/${image}`}
               alt="ユーザー画像"
               width={50}
               height={50}
@@ -141,7 +113,7 @@ const Home = ({
         ) : (
           <>
             <Image
-              src={image}
+              src={`https://hoteler-image.s3.ap-northeast-1.amazonaws.com/${userImageKey}`}
               alt="ユーザー画像"
               width={50}
               height={50}
@@ -170,7 +142,14 @@ const Home = ({
               </>
             ) : (
               <>
-                <div className="p-2">{userName}</div>
+                <div className="p-2">
+                  {userName}
+                  {nameError && (
+                    <p className="text-red-600 font-bold text-xs">
+                      {nameError}
+                    </p>
+                  )}
+                </div>
               </>
             )}
           </h2>
@@ -193,6 +172,7 @@ const Home = ({
                       className="btn btn-primary btn-xs md:btn-sm  flex-none"
                       onClick={(event) => {
                         handleUpdateUserProfile(event);
+                        setNameError("");
                         setEditToggle(!editToggle);
                       }}
                     >
@@ -251,7 +231,7 @@ const Home = ({
 
 export default Home;
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps = async (ctx: any) => {
   const { req, res } = ctx;
 
   const response = await client.get(`/auth/sessions`, {

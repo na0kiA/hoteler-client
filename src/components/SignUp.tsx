@@ -26,6 +26,9 @@ export const SignUp = () => {
     const signUpParams = {
       email: email,
       password: password,
+      name: "名無しさん",
+      image:
+        "uploads/hoteler/b0e2987c-016e-4ce6-8099-fb8ae43115fc/blank-profile-picture-g89cfeb4dc_640.png",
       passwordConfirmation: passwordConfirmation,
       confirmSuccessUrl: confirmSuccessUrl,
     };
@@ -88,7 +91,6 @@ export const SignUp = () => {
               priority={true}
             />
             <h1 className="text-2xl font-bold m-auto">ホテラーへようこそ！</h1>
-            {/* <p className="py-3">ホテラーへようこそ！</p> */}
           </div>
           <div className="card card-compact	flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <div className="card-body">

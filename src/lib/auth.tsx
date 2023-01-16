@@ -1,11 +1,11 @@
-import { GetServerSideProps } from "next";
+import GetServerSideProps from "next/types";
 import Cookies from "js-cookie";
 import {
   PostResetPasswordParams,
   SignInParams,
   SignUpParams,
   UpdatePasswordParams,
-  updateUserShowParams,
+  UpdateUserShowParams,
 } from "types/types";
 import client from "./client";
 import { ParsedUrlQuery } from "querystring";
@@ -59,7 +59,7 @@ export const deleteAccount = () => {
   });
 };
 
-export const updateUserShow = (params: updateUserShowParams) => {
+export const updateUserShow = (params: UpdateUserShowParams) => {
   return client.patch("/auth", params, {
     headers: {
       "access-token": Cookies.get("_access_token"),
@@ -90,41 +90,4 @@ export const getCurrentUser = () => {
 // ユーザー詳細を取得
 export const getUserShow = (id: string | string[] | undefined) => {
   return client.get(`/users/${id}`);
-};
-
-export const withAuthServerSideProps = (url: string): GetServerSideProps => {
-  return async (context) => {
-    const { req, res } = context;
-
-    const response = client.get(`/${url}`, {
-      headers: {
-        "Content-Type": "application/json",
-        uid: req.cookies["uid"],
-        client: req.cookies["client"],
-        "access-token": req.cookies["access-token"],
-      },
-    });
-
-    if (response.status === 401) {
-      return {
-        redirect: {
-          destination: "/signin",
-          permanent: false,
-        },
-      };
-    } else if (response.status === 422) {
-      return {
-        redirect: {
-          destination: "/",
-          permanent: false,
-        },
-      };
-    }
-
-    // TODO: 他にも500エラーを考慮した分岐も必要
-    const currentUserResponse = await response.data;
-    console.log(currentUserResponse);
-
-    return { props: { ...currentUserResponse } };
-  };
 };

@@ -4,7 +4,6 @@ import Image from "next/image";
 import { signOut } from "lib/auth";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import UserProfile from "./UserProfile";
 import { useAuthStateContext } from "context/AuthProvider";
 
 const Navbar = memo(() => {
@@ -15,6 +14,8 @@ const Navbar = memo(() => {
   const [menuDisplay, setmenuDisplay] = useState(true);
   const [displayMenuStyle, setdisplayMenuStyle] = useState("");
   const [search, setSearch] = useState(true);
+
+  console.log(currentUser);
 
   const searchToggle = () => {
     setSearch(!search);
@@ -45,7 +46,6 @@ const Navbar = memo(() => {
         setIsSignedIn(false);
         setCurrentUser(undefined);
         router.push("/");
-        console.log("ログアウトに成功");
       } else {
         throw new Error(
           "ログアウトに失敗しました。画面をご確認の上もう一度実行してください。"
@@ -132,7 +132,7 @@ const Navbar = memo(() => {
             <div tabIndex={1} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
                 <Image
-                  src={`${currentUser.image}`}
+                  src={`https://hoteler-image.s3.ap-northeast-1.amazonaws.com/${currentUser?.image}`}
                   alt="アバター"
                   width={50}
                   height={50}

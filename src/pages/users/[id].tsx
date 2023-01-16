@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { GetServerSideProps } from "next";
+import GetServerSideProps from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 
 import { deleteAccount, getUserShow, updateUserShow } from "lib/auth";
-import { ReviewType, updateUserShowParams, UserDetailType } from "types/types";
+import { ReviewType, UpdateUserShowParams, UserDetailType } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import Layout from "components/Layout";
 import Link from "next/link";
@@ -29,46 +29,39 @@ const UserDetail = ({
     useAuthStateContext();
   console.log("ユーザー詳細ページが呼ばれたよ");
 
-  const [error, setError] = useState("");
+  const [nameError, setNameError] = useState("");
   const [userName, setUserName] = useState<string>(name);
   const [userEmail, setUserEmail] = useState<string>(uid);
   const [editToggle, setEditToggle] = useState<boolean>(false);
-  const [userImage, setUserImage] = useState(
+  const [userImageKey, setUserImageKey] = useState(
     image.slice(forSliceImageKeyNumber)
   );
   const [imageUrl, setImageUrl] = useState("");
 
   const generateParams = () => {
-    const editProfileParams: updateUserShowParams = {
+    const editProfileParams: UpdateUserShowParams = {
       name: userName,
       email: userEmail,
-      image: userImage,
+      image: userImageKey,
     };
     return editProfileParams;
   };
+  console.log(userImageKey);
 
   const handleUpdateUserProfile = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
     const params = generateParams();
-    const res = await updateUserShow(params);
+
     try {
-      if (res.status == 200) {
-        console.log("アカウント編集に成功");
-        router.reload();
-        setImageUrl("");
-      } else {
-        throw new Error(
-          "アカウント編集に失敗しました。画面をご確認の上もう一度実行してください。"
-        );
-      }
+      await updateUserShow(params);
+      setImageUrl("");
     } catch (error: any) {
-      console.log(error);
       if (error.response.data) {
-        setError(error.response.data.errors);
+        setNameError(error.response.data.errors.name);
       } else {
-        console.log(error);
+        console.log(error.response);
       }
     }
   };
@@ -107,7 +100,7 @@ const UserDetail = ({
     if (!key) return;
 
     setImageUrl(locationOfImage);
-    setUserImage(key);
+    setUserImageKey(key);
   };
 
   return (
@@ -144,7 +137,7 @@ const UserDetail = ({
           ) : (
             <>
               <Image
-                src={image}
+                src={`https://hoteler-image.s3.ap-northeast-1.amazonaws.com/${userImageKey}`}
                 alt="ユーザー画像"
                 width={50}
                 height={50}
@@ -173,7 +166,14 @@ const UserDetail = ({
                 </>
               ) : (
                 <>
-                  <div className="p-2">{userName}</div>
+                  <div className="p-2">
+                    {userName}
+                    {nameError && (
+                      <p className="text-red-600 font-bold text-xs mt-3">
+                        {nameError}
+                      </p>
+                    )}
+                  </div>
                 </>
               )}
             </h2>
@@ -196,6 +196,7 @@ const UserDetail = ({
                         className="btn btn-primary btn-xs md:btn-sm  flex-none"
                         onClick={(event) => {
                           handleUpdateUserProfile(event);
+                          setNameError("");
                           setEditToggle(!editToggle);
                         }}
                       >
@@ -249,7 +250,7 @@ const UserDetail = ({
 };
 export default UserDetail;
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps = async (ctx: any) => {
   ctx.res.setHeader(
     "Cache-Control",
     "public, s-maxage=1800, stale-while-revalidate=180"
