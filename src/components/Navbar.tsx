@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { signOut } from "lib/auth";
@@ -14,7 +14,6 @@ const Navbar = memo(() => {
   const [menuDisplay, setmenuDisplay] = useState(true);
   const [displayMenuStyle, setdisplayMenuStyle] = useState("");
   const [search, setSearch] = useState(true);
-
   console.log(currentUser);
 
   const searchToggle = () => {
@@ -58,7 +57,7 @@ const Navbar = memo(() => {
 
   return (
     <>
-      <div className="navbar bg-neutral text-neutral-content  h-16">
+      <div className="navbar bg-neutral text-neutral-content h-16">
         <div className="navbar-start flex-1 ml-2">
           <Link
             href={"/"}
@@ -78,7 +77,7 @@ const Navbar = memo(() => {
 
         {/* PCで表示する検索バー */}
         <form className="invisible md:visible">
-          <div className="navbar-end flex-auto left-full relative">
+          <div className="relative m-auto">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="absolute top-0 bottom-0 w-5 h-5 my-auto text-gray-400 left-1 "
@@ -96,14 +95,14 @@ const Navbar = memo(() => {
             <input
               type="text"
               placeholder="ホテルを検索"
-              className="input input-bordered w-full h-8 py-3 pl-8 text-xs"
+              className="input input-bordered md:w-80 h-9 py-3 pl-8"
             />
           </div>
         </form>
 
         {/* スマホで表示する検索バー */}
-        <div className="md:invisible flex-1 gap-2">
-          <label className="md:invisible relative mr-2" onClick={searchToggle}>
+        <div className="visible md:invisible">
+          <div className="navbar-center relative m-auto" onClick={searchToggle}>
             <button className="btn btn-ghost btn-circle">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -123,53 +122,70 @@ const Navbar = memo(() => {
                 検索
               </span>
             </button>
-          </label>
+          </div>
         </div>
 
         {/* tokenの有無でアバターを表示するかログインや新規登録ボタンを表示するかを切り替える */}
         {isSignedIn && currentUser ? (
-          <div className="dropdown dropdown-end" onClick={showMenu}>
-            <div tabIndex={1} className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full">
-                <Image
-                  src={`https://hoteler-image.s3.ap-northeast-1.amazonaws.com/${currentUser?.image}`}
-                  alt="アバター"
-                  width={50}
-                  height={50}
-                  priority={true}
-                />
-              </div>
-            </div>
-            <div className="badge badge-secondary badge-xs absolute inline-block right-1 top-1"></div>
-            <ul
-              tabIndex={1}
-              style={{ display: displayMenuStyle }}
-              className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
-            >
-              <li className="justify-between">
-                <Link href="/user/notifications">
-                  通知
-                  <div className="badge badge-secondary badge-xs"></div>
-                </Link>
-              </li>
-              <li className="justify-between">
-                <Link href={`/users/${currentUser && currentUser.id}`}>
-                  プロフィール
-                </Link>
-              </li>
-              <li>
-                <Link href="/users/settings">設定</Link>
-              </li>
-              <li>
-                <button
-                  onClick={(event) => {
-                    handleSignOutSubmit(event);
-                  }}
+          <div className="navbar-end w-1/3">
+            {/* 通知 */}
+            {/* <button className="btn btn-ghost btn-circle">
+              <div className="indicator m-auto">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  ログアウト
-                </button>
-              </li>
-            </ul>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                  />
+                </svg>
+                <span className="badge badge-xs badge-primary indicator-item"></span>
+              </div>
+            </button> */}
+
+            {/* アイコン */}
+            <div className="dropdown dropdown-end" onClick={showMenu}>
+              <div tabIndex={1} className="btn btn-ghost btn-circle avatar">
+                <div className="w-10 rounded-full">
+                  <Image
+                    src={`https://hoteler-image.s3.ap-northeast-1.amazonaws.com/${currentUser?.image}`}
+                    alt="アバター"
+                    width={50}
+                    height={50}
+                    priority={true}
+                  />
+                </div>
+              </div>
+              <ul
+                tabIndex={1}
+                style={{ display: displayMenuStyle }}
+                className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
+              >
+                <li className="justify-between">
+                  <Link href={`/users/${currentUser && currentUser.id}`}>
+                    プロフィール
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/users/settings">設定</Link>
+                </li>
+                <li>
+                  <button
+                    onClick={(event) => {
+                      handleSignOutSubmit(event);
+                    }}
+                  >
+                    ログアウト
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         ) : (
           <>
