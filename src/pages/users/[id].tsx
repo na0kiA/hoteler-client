@@ -208,7 +208,6 @@ const UserDetail = ({
             </div>
           </div>
         </div>
-        {/* <div className="md:w-full md:ml-48"> */}
         <div className="tabs flex mt-5">
           <a className="tab tab-bordered tab-active pl-3">
             口コミ {reviewsCount}件

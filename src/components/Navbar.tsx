@@ -77,8 +77,9 @@ const Navbar = memo(() => {
         </div>
 
         {/* PCで表示する検索バー */}
-        <form className="invisible md:visible">
-          <div className="relative m-auto">
+        <form className="hidden md:block md:navbar-end">
+          {/* <form className="hidden md:block md:navbar-center"> 検索バー右寄せ */}
+          <div className="relative">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="absolute top-0 bottom-0 w-5 h-5 my-auto text-gray-400 left-1 "
@@ -102,8 +103,8 @@ const Navbar = memo(() => {
         </form>
 
         {/* スマホで表示する検索バー */}
-        <div className="visible md:invisible">
-          <div className="navbar-center relative m-auto" onClick={searchToggle}>
+        <div className="md:hidden">
+          <div className="relative m-auto" onClick={searchToggle}>
             <button className="btn btn-ghost btn-circle">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -128,9 +129,9 @@ const Navbar = memo(() => {
 
         {/* tokenの有無でアバターを表示するかログインや新規登録ボタンを表示するかを切り替える */}
         {isSignedIn && currentUser ? (
-          <div className="navbar-end w-1/3">
+          <div className="m-auto">
             {/* 通知 */}
-            {/* <button className="btn btn-ghost btn-circle">
+            <button className="btn btn-ghost btn-circle">
               <div className="indicator m-auto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -148,7 +149,7 @@ const Navbar = memo(() => {
                 </svg>
                 <span className="badge badge-xs badge-primary indicator-item"></span>
               </div>
-            </button> */}
+            </button>
 
             {/* アイコン */}
             <div className="dropdown dropdown-end" onClick={showMenu}>
@@ -215,7 +216,10 @@ const Navbar = memo(() => {
           </>
         )}
       </div>
-      <>
+      {/* </div> */}
+
+      {/* スマホ用の検索トグルバー */}
+      <div>
         {search ? (
           <></>
         ) : (
@@ -243,7 +247,7 @@ const Navbar = memo(() => {
             </div>
           </form>
         )}
-      </>
+      </div>
     </>
   );
 });

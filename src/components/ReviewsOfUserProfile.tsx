@@ -110,7 +110,7 @@ const ReviewsOfUserProfile = memo(({ props }: PROPS) => {
               height={300}
               priority={true}
             />
-            <div className="flex-1 text-lg">{props.hotelName}</div>
+            <div className="flex-1 text-lg font-bold">{props.hotelName}</div>
             <p className="text-xs m-auto">{props.hotelFullAddress}</p>
           </Link>
           <div className="m-auto">
@@ -145,7 +145,7 @@ const ReviewsOfUserProfile = memo(({ props }: PROPS) => {
               readonly={true}
               allowTitleTag={false}
             />
-            <span className="text-lg align-bottom">({props.fiveStarRate})</span>
+            <span className="text-xl align-middle">({props.fiveStarRate})</span>
           </div>
           <p className="text-base mt-1">
             <>{createdDateByJapanese}に作成</>
@@ -154,16 +154,16 @@ const ReviewsOfUserProfile = memo(({ props }: PROPS) => {
             {props.title}
           </h2>
           <p className="card-title text-base md:text-base">{props.content}</p>
-          <div className="justify-start">
+          <div className="justify-start mt-1">
             <Link
               href={`/reviews/${props.id}`}
-              className="text-base text-blue-link"
+              className="text-sm text-blue-link"
             >
-              口コミ全文を表示する
+              口コミ詳細を表示する
             </Link>
-            <p className="text-base">
-              <span className="text-sm"> {props.helpfulnessesCount}</span>
-              人が参考になった
+            <p className="text-sm mt-1">
+              <span className="text-base"> {props.helpfulnessesCount}</span>
+              人のお客様がこれが役に立ったと考えています
             </p>
           </div>
         </div>
