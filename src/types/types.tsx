@@ -122,23 +122,26 @@ export type SignInParams = {
   password: string;
 };
 
-export type UserFavorites = {
-  id: number;
-  hotelName: string;
-  hotelTopImage: string;
-  fiveStarRate: number;
-};
-
 export type UserDetailType = {
   id: number;
   name: string;
   image: string;
-  favorites: UserFavorites;
+  favorites: UserFavoritesType[];
   reviews: ReviewType[];
   myAccount: boolean;
   uid: string;
   hotelsCount: number;
   reviewsCount: number;
+};
+
+export type UserFavoritesType = {
+  id: number;
+  hotelName: string;
+  hotelId: number;
+  hotelFullAddress: string;
+  hotelReviewsCount: number;
+  hotelTopImage: string;
+  fiveStarRate: number;
 };
 
 export type CurrentUser = {

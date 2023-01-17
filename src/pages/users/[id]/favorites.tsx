@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import Link from "next/link";
 
-import { getUserFavorites, getUserShow, updateUserShow } from "lib/auth";
-import { ReviewType, UpdateUserShowParams, UserDetailType } from "types/types";
+import { getUserShow, updateUserShow } from "lib/auth";
+import {
+  UpdateUserShowParams,
+  UserDetailType,
+  UserFavoritesType,
+} from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import Layout from "components/Layout";
-import Link from "next/link";
-import ReviewsOfUserProfile from "components/ReviewsOfUserProfile";
 import { fetchSignedUrl } from "lib/image";
+import FavoritesOfUserProfile from "components/FavoritesOfUserProfile";
 
 const UserDetail = ({
   id,
@@ -16,13 +19,11 @@ const UserDetail = ({
   image,
   uid,
   hotelsCount,
-  reviews,
+  favorites,
   reviewsCount,
 }: UserDetailType) => {
-  const router = useRouter();
   const forSliceImageKeyNumber = 54;
-  const { currentUser, isSignedIn, loading, setIsSignedIn, setCurrentUser } =
-    useAuthStateContext();
+  const { currentUser } = useAuthStateContext();
   console.log("ユーザー詳細ページが呼ばれたよ");
 
   const [nameError, setNameError] = useState("");
@@ -209,9 +210,9 @@ const UserDetail = ({
           </div>
         </div>
         <div className="tabs flex mt-5">
-          <a className="tab tab-bordered tab-active pl-3">
-            口コミ {reviewsCount}件
-          </a>
+          <Link href={`/users/${id}`} className="tab tab-bordered pl-3">
+            口コミ<> {reviewsCount}件</>
+          </Link>
           {hotelsCount === 0 ? (
             <></>
           ) : (
@@ -228,7 +229,7 @@ const UserDetail = ({
             <>
               <Link
                 href={`/users/${id}/favorites`}
-                className="tab tab-bordered pl-3"
+                className="tab tab-bordered tab-active pl-3"
               >
                 お気に入り一覧
               </Link>
@@ -237,16 +238,16 @@ const UserDetail = ({
             <></>
           )}
         </div>
-        {typeof reviews === "string" ? (
-          <div className="mt-3 ml-3">{reviews}</div>
-        ) : (
+        {favorites ? (
           <>
-            {reviews.map((review: ReviewType) => (
-              <div key={review.id}>
-                <ReviewsOfUserProfile props={review} />
+            {favorites.map((favorite: UserFavoritesType) => (
+              <div key={favorite.id}>
+                <FavoritesOfUserProfile props={favorite} />
               </div>
             ))}
           </>
+        ) : (
+          <div className="mt-3 ml-3">お気に入りはまだありません。</div>
         )}
       </Layout>
     </>
@@ -262,6 +263,7 @@ export const getServerSideProps = async (ctx: any) => {
 
   const { id } = ctx.query;
   const apiResponse = await getUserShow(id);
+  console.log(ctx.res);
 
   const UserDetail: UserDetailType = apiResponse.data;
   console.log(UserDetail);
@@ -269,6 +271,15 @@ export const getServerSideProps = async (ctx: any) => {
   if (!UserDetail) {
     return {
       notFound: true,
+    };
+  }
+
+  if (UserDetail.uid !== ctx.req.cookies["_uid"]) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
     };
   }
 

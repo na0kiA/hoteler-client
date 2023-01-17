@@ -10,10 +10,9 @@ import { deleteReview } from "lib/reviews";
 
 type PROPS = {
   props: ReviewType;
-  uid: string;
 };
 
-const ReviewsOfUserProfile = memo(({ props, uid }: PROPS) => {
+const ReviewsOfUserProfile = memo(({ props }: PROPS) => {
   console.log("ユーザー詳細の口コミ一覧コンポーネントが呼ばれたよ");
 
   const createdDateByJapanese = useMemo(() => {

@@ -87,3 +87,24 @@ export const getCurrentUser = () => {
 export const getUserShow = (id: string | string[] | undefined) => {
   return client.get(`/users/${id}`);
 };
+
+// ユーザーのお気に入りホテル一覧取得
+export const getUserFavorites = (id: string | string[] | undefined) => {
+  return client.get(`/users/${id}/favorites`, {
+    headers: {
+      access_token: Cookies.get("_access_token"),
+      client: Cookies.get("_client"),
+      uid: Cookies.get("_uid"),
+    },
+  });
+};
+
+// export const updateUserShow = (params: UpdateUserShowParams) => {
+// return client.patch("/auth", params, {
+//   headers: {
+//     "access-token": Cookies.get("_access_token"),
+//     client: Cookies.get("_client"),
+//     uid: Cookies.get("_uid"),
+//   },
+// });
+// };
