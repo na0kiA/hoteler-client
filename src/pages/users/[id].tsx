@@ -208,6 +208,7 @@ const UserDetail = ({
             </div>
           </div>
         </div>
+        {/* <div className="md:w-full md:ml-48"> */}
         <div className="tabs flex mt-5">
           <a className="tab tab-bordered tab-active pl-3">
             口コミ {reviewsCount}件
@@ -240,14 +241,15 @@ const UserDetail = ({
         {typeof reviews === "string" ? (
           <div className="mt-3 ml-3">{reviews}</div>
         ) : (
-          <>
+          <div className="">
             {reviews.map((review: ReviewType) => (
               <div key={review.id}>
                 <ReviewsOfUserProfile props={review} />
               </div>
             ))}
-          </>
+          </div>
         )}
+        {/* </div> */}
       </Layout>
     </>
   );

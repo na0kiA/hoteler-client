@@ -10,8 +10,8 @@ type PROPS = {
 
 const FavoritesOfUserProfile = memo(({ props }: PROPS) => {
   return (
-    <div className="flex card card-side bg-base-100 shadow-xl">
-      <div className="flex-none m-auto pl-3 pt-5">
+    <div className="card card-side bg-base-100 shadow-xl">
+      <div className="m-auto pl-3 pt-5">
         <Link href={`/hotels/${props.hotelId}`}>
           <Image
             className="rounded-lg"
@@ -34,7 +34,15 @@ const FavoritesOfUserProfile = memo(({ props }: PROPS) => {
             readonly={true}
             allowTitleTag={false}
           />
-          <span className="align-bottom">({props.fiveStarRate})</span>
+          <span className="align-middle text-sm">
+            ({props.fiveStarRate}){" "}
+            <Link
+              href={`/hotel/${props.id}/reviews`}
+              className="text-blue-link"
+            >
+              {props.hotelReviewsCount}件
+            </Link>
+          </span>
         </div>
         <h2 className="card-title text-base mt-1 mb-1">{props.hotelName}</h2>
         <h3 className="text-ssm m-auto">{props.hotelFullAddress}</h3>
