@@ -166,7 +166,7 @@ const UserReviewShow = ({
   return (
     <>
       <Layout title={`${title}`}>
-        <div className="md:w-2/3 md:h-5/6 bg-base-100 shadow-xl p-5 ">
+        <div className="md:w-2/4 md:h-5/6 bg-base-100 shadow-xl p-5 ">
           <div className="flex">
             <Link href={`/users/${userId}`} className="flex">
               <Image
@@ -182,7 +182,7 @@ const UserReviewShow = ({
 
             {/* 編集と削除と保存ボタン */}
             {currentUser && currentUser.id === userId ? (
-              <div className="m-auto">
+              <div className="ml-auto">
                 <button
                   className="btn btn-primary btn-xs md:btn-sm   flex-none mr-2"
                   onClick={() => {
