@@ -1,4 +1,3 @@
-import { AuthProvider } from "context/AuthProvider";
 import Head from "next/head";
 import React, { memo } from "react";
 import Navbar from "./Navbar";

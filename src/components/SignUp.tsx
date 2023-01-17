@@ -1,19 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-// import fs from "node:timers/promises";
-// import { setTimeout } from "node:timers/promises";
-
 import { signUp } from "lib/auth";
 import { SignUpParams } from "types/types";
-import { useRouter } from "next/navigation";
-import { useAuthStateContext } from "context/AuthProvider";
-import { addingCountAtom, closeConfirmAlart, confirmAlartAtom } from "lib/atom";
-import { useAtom } from "jotai";
 import HomeIcon from "./HomeIcon";
 
 export const SignUp = () => {
-  const { setIsSignedIn, setCurrentUser, currentUser } = useAuthStateContext();
   const [invalidEmail, setInvalidEmail] = useState("");
   const [invalidPassword, setInvalidPassword] = useState("");
   const [invalidPasswordConfirmation, setInvalidPasswordConfirmation] =
@@ -21,10 +13,9 @@ export const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  // const [confirmAlart, setConfirmAlart] = useState(false);
-  const [confirmAlart, setConfirmAlart] = useAtom(closeConfirmAlart);
+  const [confirmAlart, setConfirmAlart] = useState(false);
+
   const confirmSuccessUrl = "http://localhost:3000/signin";
-  const router = useRouter();
 
   const generateParams = () => {
     const signUpParams = {
@@ -45,16 +36,9 @@ export const SignUp = () => {
 
     try {
       const res: SignUpParams = await signUp(params);
-      setConfirmAlart(
-        setTimeout(() => {
-          setConfirmAlart(false);
-        }, 5000)
-      );
-      console.log(res);
+      openAndCloseConfirmAlart();
     } catch (error: any) {
-      console.log(error);
       if (error.response.data) {
-        console.log(error.response.data.errors);
         setInvalidEmail(error.response.data.errors.email);
         setInvalidPassword(error.response.data.errors.password);
         setInvalidPasswordConfirmation(
@@ -66,12 +50,12 @@ export const SignUp = () => {
     }
   };
 
-  // const closeConfirmAlart = () => {
-  //   setConfirmAlart(true);
-  //   setTimeout(() => {
-  //     setConfirmAlart(false);
-  //   }, 5000);
-  // };
+  const openAndCloseConfirmAlart = () => {
+    setConfirmAlart(true);
+    setTimeout(() => {
+      setConfirmAlart(false);
+    }, 5000);
+  };
 
   return (
     <>

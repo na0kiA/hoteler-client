@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import GetServerSideProps from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import Cookies from "js-cookie";
 
-import { deleteAccount, getUserShow, updateUserShow } from "lib/auth";
+import { getUserShow, updateUserShow } from "lib/auth";
 import { ReviewType, UpdateUserShowParams, UserDetailType } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import Layout from "components/Layout";
@@ -18,10 +16,8 @@ const UserDetail = ({
   image,
   uid,
   hotelsCount,
-  favorites,
   reviews,
   reviewsCount,
-  myAccount,
 }: UserDetailType) => {
   const router = useRouter();
   const forSliceImageKeyNumber = 54;

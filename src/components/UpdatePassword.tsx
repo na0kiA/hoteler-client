@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { updatePassword } from "lib/auth";
 import { useRouter } from "next/router";
 import { UpdatePasswordParams } from "types/types";
@@ -6,7 +6,6 @@ import { useAuthStateContext } from "context/AuthProvider";
 import HomeIcon from "./HomeIcon";
 
 export const UpdatePassword = () => {
-  const { currentUser } = useAuthStateContext();
   const router = useRouter();
   const query = router.query;
 
@@ -59,13 +58,6 @@ export const UpdatePassword = () => {
       }
     }
   };
-
-  // useEffect(() => {
-  //   // currentUser && router.push("/");
-  //   if (currentUser?.uid != query.uid) {
-  //     router.push("/");
-  //   }
-  // }, [router]);
 
   return (
     <>

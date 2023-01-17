@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { GetServerSideProps } from "next";
 import { Rating } from "react-simple-star-rating";
 
 import {
@@ -15,10 +14,6 @@ import { ReviewEditParams, ReviewShowType } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import { useRouter } from "next/router";
 import Layout from "components/Layout";
-import axios from "axios";
-import postClient from "lib/postClient";
-import client from "lib/client";
-import { getCurrentUser } from "lib/auth";
 
 const UserReviewShow = ({
   title,
@@ -374,7 +369,7 @@ const UserReviewShow = ({
 
 export default UserReviewShow;
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps = async (ctx: any) => {
   ctx.res.setHeader(
     "Cache-Control",
     "public, s-maxage=1800, stale-while-revalidate=180"

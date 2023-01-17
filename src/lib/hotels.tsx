@@ -1,5 +1,4 @@
 import Cookies from "js-cookie";
-import { SignInParams } from "types/types";
 import client from "./client";
 
 // ホテル一覧

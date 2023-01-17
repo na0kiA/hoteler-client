@@ -13,8 +13,7 @@ export const SignIn = () => {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const { setIsSignedIn, setCurrentUser, currentUser, loading } =
-    useAuthStateContext();
+  const { setIsSignedIn, setCurrentUser, currentUser } = useAuthStateContext();
 
   const generateParams = () => {
     const signInParams: SignInParams = {
@@ -56,7 +55,6 @@ export const SignIn = () => {
   console.log(currentUser);
 
   useLayoutEffect(() => {
-    console.log("useEffectが実行されました");
     currentUser && router.push("/");
   }, [currentUser]);
 

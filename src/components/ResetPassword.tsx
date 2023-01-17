@@ -1,16 +1,9 @@
-import Cookies from "js-cookie";
-import React, { useLayoutEffect, useState } from "react";
-import Link from "next/link";
-import { postResetPassword, signIn } from "lib/auth";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { postResetPassword } from "lib/auth";
 import { PostResetPasswordParams } from "types/types";
-import { useAuthStateContext } from "context/AuthProvider";
 import HomeIcon from "./HomeIcon";
 
 export const ResetPassword = () => {
-  const { currentUser } = useAuthStateContext();
-  const router = useRouter();
-
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [confirmAlart, setConfirmAlart] = useState(false);
@@ -40,11 +33,7 @@ export const ResetPassword = () => {
     try {
       const res = await postResetPassword(params);
       closeConfirmAlart();
-
-      if (res.status === 200) {
-      }
     } catch (error: any) {
-      console.log(error);
       if (error.response?.data) {
         setError(error.response?.data.errors);
       } else {

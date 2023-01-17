@@ -3,22 +3,30 @@ import { atom, useAtom } from "jotai";
 const userNameAtom = atom<string>("");
 const confirmAlartAtom = atom<boolean>(false);
 
-export const closeConfirmAlart = atom(
-  (get) => get(confirmAlartAtom),
-  (get, set, setTime) => set(confirmAlartAtom, get(confirmAlartAtom) == setTime)
-);
+// Create your atoms and derivatives
+const textAtom = atom<string>("");
 
-// export const confirmAlart = atom(() => {
-//   const [alart, setAlart] = useAtom(closeConfirmAlart);
+// const setTextAtom = atom(
+//   (get) => get(textAtom),
+//   (get, set, message: string) => set(textAtom, message)
+// );
+
+// Use them anywhere in your app
+// export const ErrorMessage = (message: string) => {
+//   const [text, setText] = useAtom(setTextAtom);
+//   setText(message);
+//   return <p className="text-red-600 text-sm md:text-sm mt-2">{text}</p>;
+// };
+
+// export const isConfirmAlart = atom(
+//   (get) => get(confirmAlartAtom),
+//   (get, set, bool) => set(confirmAlartAtom, get(confirmAlartAtom) == bool)
+// );
+
+// export const confirmAlartToggle = () => {
+//   const [alart, setAlart] = useAtom(isConfirmAlart);
 //   setAlart(true);
 //   setTimeout(() => {
 //     setAlart(false);
 //   }, 5000);
-// });
-
-export const alart = (alart: boolean) => {
-  alart == true;
-  setTimeout(() => {
-    alart == false;
-  }, 5000);
-};
+// };

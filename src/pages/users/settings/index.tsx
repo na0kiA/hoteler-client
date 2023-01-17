@@ -1,5 +1,5 @@
 import { useAuthStateContext } from "context/AuthProvider";
-import { getCurrentUser, getUserShow, updateUserShow } from "lib/auth";
+import {  updateUserShow } from "lib/auth";
 import Link from "next/link";
 import React, { useState } from "react";
 import Layout from "components/Layout";
@@ -80,6 +80,7 @@ const Home = ({ name, image, uid }: UserDetailType) => {
     setImageUrl(locationOfImage);
     setUserImageKey(key);
   };
+  
   return (
     <Layout title={"設定"}>
       <div className="card w-full bg-base-100 shadow-xl pt-5">

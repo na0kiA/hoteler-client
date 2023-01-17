@@ -1,4 +1,3 @@
-import GetServerSideProps from "next/types";
 import Cookies from "js-cookie";
 import {
   PostResetPasswordParams,
@@ -10,17 +9,30 @@ import {
 import client from "./client";
 import { ParsedUrlQuery } from "querystring";
 
-// サインアップ
 export const signUp = (params: SignUpParams) => {
   return client.post("/auth", params);
 };
 
-// パスワード変更の申請
+export const signIn = (params: SignInParams) => {
+  return client.post("/auth/sign_in", params);
+};
+
+export const signOut = () => {
+  return client.delete("/auth/sign_out", {
+    headers: {
+      "access-token": Cookies.get("_access_token"),
+      client: Cookies.get("_client"),
+      uid: Cookies.get("_uid"),
+    },
+  });
+};
+
+// パスワード再設定のための申請
 export const postResetPassword = (params: PostResetPasswordParams) => {
   return client.post("/auth/password", params);
 };
 
-// パスワード変更
+// パスワード更新
 export const updatePassword = (
   params: UpdatePasswordParams,
   query: ParsedUrlQuery
@@ -30,21 +42,6 @@ export const updatePassword = (
       "access-token": query["access-token"],
       client: query["client"],
       uid: query["uid"],
-    },
-  });
-};
-
-export const signIn = (params: SignInParams) => {
-  return client.post("/auth/sign_in", params);
-};
-
-// サインアウト
-export const signOut = () => {
-  return client.delete("/auth/sign_out", {
-    headers: {
-      "access-token": Cookies.get("_access_token"),
-      client: Cookies.get("_client"),
-      uid: Cookies.get("_uid"),
     },
   });
 };
@@ -69,7 +66,6 @@ export const updateUserShow = (params: UpdateUserShowParams) => {
   });
 };
 
-// ログインユーザーの取得
 export const getCurrentUser = () => {
   if (
     !Cookies.get("_access_token") ||

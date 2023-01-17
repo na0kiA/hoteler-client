@@ -8,13 +8,14 @@ import { useAuthStateContext } from "context/AuthProvider";
 
 const Navbar = memo(() => {
   console.log("Navbarが呼ばれたよ");
-  const router = useRouter();
-  const { currentUser, isSignedIn, loading, setIsSignedIn, setCurrentUser } =
-    useAuthStateContext();
+
   const [menuDisplay, setmenuDisplay] = useState(true);
   const [displayMenuStyle, setdisplayMenuStyle] = useState("");
   const [search, setSearch] = useState(true);
-  console.log(currentUser);
+
+  const router = useRouter();
+  const { currentUser, isSignedIn, loading, setIsSignedIn, setCurrentUser } =
+    useAuthStateContext();
 
   const searchToggle = () => {
     setSearch(!search);
