@@ -1,14 +1,14 @@
 export type HotelFacilityType = {
-  wifiEnabled: boolean;
-  parkingEnabled: boolean;
-  creditCardEnabled: boolean;
-  phoneReservationEnabled: boolean;
-  netReservationEnabled: boolean;
-  tripleRoomsEnabled: boolean;
-  secretPaymentEnabled: boolean;
-  cookingEnabled: boolean;
-  breakfastEnabled: boolean;
-  couponEnabled: boolean;
+  wifiEnabled: string | undefined;
+  parkingEnabled: string | undefined;
+  creditCardEnabled: string | undefined;
+  phoneReservationEnabled: string | undefined;
+  netReservationEnabled: string | undefined;
+  tripleRoomsEnabled: string | undefined;
+  secretPaymentEnabled: string | undefined;
+  cookingEnabled: string | undefined;
+  breakfastEnabled: string | undefined;
+  couponEnabled: string | undefined;
 };
 
 export type ReviewType = {
@@ -61,6 +61,7 @@ export type HotelDetailType = {
   hotelImages: string;
   dayOfTheWeek: string;
   topFourReviews: ReviewType;
+  id: number;
 };
 
 export type ServiceRateType = {

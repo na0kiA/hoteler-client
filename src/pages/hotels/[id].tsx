@@ -1,30 +1,112 @@
 import React from "react";
-import { GetServerSideProps } from "next";
+import Image from "next/image";
 
 import { getHotelDetail } from "lib/hotels";
 import { HotelDetailType } from "types/types";
+import { Rating } from "react-simple-star-rating";
+import Link from "next/link";
 
-const HotelDetail: React.FC<HotelDetailType> = ({
-  name,
-  content,
-  full,
+const HotelDetail = ({
   favoritesCount,
-}) => {
+  content,
+  company,
+  phoneNumber,
+  postalCode,
+  fullAddress,
+  hotelFacilities,
+  full,
+  averageRating,
+  reviewsCount,
+  hotelImages,
+  dayOfTheWeek,
+  topFourReviews,
+  name,
+  id,
+}: HotelDetailType) => {
   return (
     <>
-      <h1>{name}</h1>
-      <h1>{content}</h1>
-      <h1>{full === true ? <p>満室</p> : <p>空室</p>}</h1>
-      <h1>{favoritesCount}</h1>
+      <div className="card w-96 bg-base-100 shadow-xl">
+        <figure>
+          <Image
+            className="rounded-lg  m-auto"
+            src="/hoteler_demo_photo.jpg"
+            alt="ホテル画像"
+            width={680}
+            height={4800}
+            priority={true}
+          />
+        </figure>
+        <div className="card-body">
+          <h2 className="card-title">
+            <p className="text-2xl">{name}</p>
+            <div
+              className={
+                full
+                  ? "badge badge-lg bg-pink-500 text-black rounded-lg  text-base"
+                  : "badge badge-lg bg-green-500 text-black rounded-lg  text-base"
+              }
+            >
+              {full ? "満室" : "空室"}
+            </div>
+          </h2>
+          <p>{fullAddress}</p>
+          <div className="">
+            <Rating
+              initialValue={averageRating}
+              transition
+              size={30}
+              allowFraction
+              allowHover={false}
+              readonly={true}
+              allowTitleTag={false}
+            />
+            <span className="text-xl align-middle">
+              ({averageRating}){" "}
+              <Link
+                href={`/hotel/${id}/reviews`}
+                className="text-blue-link text-lg"
+              >
+                {reviewsCount}件
+              </Link>
+            </span>
+          </div>
+          <div>{content}</div>
+        </div>
+      </div>
+
+      {/* コンテンツ */}
+      <div className="card w-96 bg-base-100 shadow-xl">
+        <div className="card-body">
+          <h2 className="card-title">提供されるアメニティ・設備</h2>
+          <div>
+            {hotelFacilities.wifiEnabled && hotelFacilities.wifiEnabled}
+            {hotelFacilities.couponEnabled && hotelFacilities.cookingEnabled}
+            {hotelFacilities.parkingEnabled && hotelFacilities.parkingEnabled}
+            {hotelFacilities.phoneReservationEnabled &&
+              hotelFacilities.phoneReservationEnabled}
+            {hotelFacilities.netReservationEnabled &&
+              hotelFacilities.netReservationEnabled}
+            {hotelFacilities.breakfastEnabled &&
+              hotelFacilities.breakfastEnabled}
+            {hotelFacilities.cookingEnabled && hotelFacilities.cookingEnabled}
+            {hotelFacilities.tripleRoomsEnabled &&
+              hotelFacilities.tripleRoomsEnabled}
+            {hotelFacilities.secretPaymentEnabled &&
+              hotelFacilities.secretPaymentEnabled}
+          </div>
+        </div>
+      </div>
     </>
   );
 };
 export default HotelDetail;
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps = async (ctx: any) => {
   const { id } = ctx.query;
   const res = await getHotelDetail(id);
   const hotelDetail: HotelDetailType = res.data;
+  console.log(hotelDetail);
+
   if (!hotelDetail) {
     return {
       notFound: true,
