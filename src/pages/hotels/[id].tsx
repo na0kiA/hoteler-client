@@ -78,7 +78,7 @@ const HotelDetail = ({
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body">
           <h2 className="card-title">提供されるアメニティ・設備</h2>
-          <div>
+          <div className="text-sm">
             {hotelFacilities.wifiEnabled && hotelFacilities.wifiEnabled}
             {hotelFacilities.couponEnabled && hotelFacilities.cookingEnabled}
             {hotelFacilities.parkingEnabled && hotelFacilities.parkingEnabled}
