@@ -77,8 +77,8 @@ const Navbar = memo(() => {
         </div>
 
         {/* PCで表示する検索バー */}
-        <form className="hidden md:block md:navbar-end">
-          {/* <form className="hidden md:block md:navbar-center"> 検索バー右寄せ */}
+        <form className="hidden md:block md:navbar-end m-auto">
+          {/* <form className="hidden md:block md:navbar-center"> */}
           <div className="relative">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -103,8 +103,8 @@ const Navbar = memo(() => {
         </form>
 
         {/* スマホで表示する検索バー */}
-        <div className="md:hidden">
-          <div className="relative m-auto" onClick={searchToggle}>
+        <div className="md:hidden navbar-center m-auto">
+          <div className="relative" onClick={searchToggle}>
             <button className="btn btn-ghost btn-circle">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -195,7 +195,7 @@ const Navbar = memo(() => {
               <></>
             ) : (
               <>
-                <div className="navbar-end flex-auto gap-3 ml-5">
+                <div className="gap-3">
                   <button className="btn btn-primary btn-xs">
                     <Link href="/signin">
                       <span className="text-ssm font-bold font-mono">
