@@ -1,5 +1,5 @@
 import { useAuthStateContext } from "context/AuthProvider";
-import {  updateUserShow } from "lib/auth";
+import { updateUserShow } from "lib/auth";
 import Link from "next/link";
 import React, { useState } from "react";
 import Layout from "components/Layout";
@@ -80,7 +80,7 @@ const Home = ({ name, image, uid }: UserDetailType) => {
     setImageUrl(locationOfImage);
     setUserImageKey(key);
   };
-  
+
   return (
     <Layout title={"設定"}>
       <div className="card w-full bg-base-100 shadow-xl pt-5">
@@ -238,13 +238,20 @@ export const getServerSideProps = async (ctx: any) => {
   const response = await client.get(`/auth/sessions`, {
     headers: {
       "Content-Type": "application/json",
-      uid: req.cookies["_uid"],
-      client: req.cookies["_client"],
-      "access-token": req.cookies["_access_token"],
+      uid: req?.cookies["_uid"] || null,
+      client: req?.cookies["_client"] || null,
+      "access-token": req?.cookies["_access_token"] || null,
     },
   });
 
-  console.log(response.data);
+  if (!response.data.is_login) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {

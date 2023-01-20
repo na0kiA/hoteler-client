@@ -1,7 +1,8 @@
 import Layout from "components/Layout";
 import { useAuthStateContext } from "context/AuthProvider";
 import Cookies from "js-cookie";
-import { deleteAccount } from "lib/auth";
+import { deleteAccount, withAuthServerSideProps } from "lib/auth";
+import client from "lib/client";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
@@ -44,12 +45,6 @@ const DeleteAccount = () => {
     }
   };
 
-  useEffect(() => {
-    if (loading === false && currentUser == undefined) {
-      router.push("/signin");
-    }
-  }, []);
-
   return (
     <>
       <Layout title={"設定"}>
@@ -86,3 +81,24 @@ const DeleteAccount = () => {
 };
 
 export default DeleteAccount;
+
+// export const getServerSideProps = async (ctx: any) => {
+//   const { req, res } = ctx;
+
+//   const response = await client.get(`/auth/sessions`, {
+//     headers: {
+//       "Content-Type": "application/json",
+//       uid: req.cookies["_uid"],
+//       client: req.cookies["_client"],
+//       "access-token": req.cookies["_access_token"],
+//     },
+//   });
+
+//   console.log(response);
+
+//   return {
+//     props: {
+//       ...response.data.data,
+//     },
+//   };
+// };

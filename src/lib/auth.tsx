@@ -108,3 +108,38 @@ export const getUserFavorites = (id: string | string[] | undefined) => {
 //   },
 // });
 // };
+
+export const withAuthServerSideProps = (
+  url: string,
+  onlyAuthenticated: boolean
+) => {
+  return async (context: any) => {
+    const { req, res } = context;
+    const response = await client.get(`${url}`, {
+      headers: {
+        "Content-Type": "application/json",
+        uid: req.cookies["_uid"] || null,
+        client: req.cookies["_client"] || null,
+        "access-token": req.cookies["_access_token"] || null,
+      },
+    });
+
+    if (onlyAuthenticated && !response.data.is_login) {
+      return {
+        redirect: {
+          destination: "/signin",
+          permanent: false,
+        },
+      };
+    }
+    // TODO: 他にも500エラーを考慮した分岐も必要
+    const auth = await response.data;
+    console.log(auth);
+
+    return {
+      props: {
+        ...auth,
+      },
+    };
+  };
+};
