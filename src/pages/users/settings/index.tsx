@@ -235,6 +235,8 @@ export default Home;
 export const getServerSideProps = async (ctx: any) => {
   const { req, res } = ctx;
 
+  console.log(req);
+
   const response = await client.get(`/auth/sessions`, {
     headers: {
       "Content-Type": "application/json",
@@ -243,6 +245,8 @@ export const getServerSideProps = async (ctx: any) => {
       "access-token": req?.cookies["_access_token"] || null,
     },
   });
+
+  console.log(response);
 
   if (!response.data.is_login) {
     return {
