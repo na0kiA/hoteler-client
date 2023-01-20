@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React from "react";
+import React, { memo } from "react";
 import Navbar from "./Navbar";
 
 type TITLE = {
@@ -7,20 +7,24 @@ type TITLE = {
   children: any;
 };
 
-const Layout = ({ children, title = "ホテラー" }: TITLE) => {
+const Layout = memo(({ children, title }: TITLE) => {
+  console.log("レイアウトが呼ばれたよ");
+
   return (
     <>
-      <Navbar />
       <Head>
-        <title>ホテラー</title>
-        <meta property="og:image" content={`/heartIcon.png`} />
+        <title>{`${title} - ホテラー`}</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta property="og:image" content={`/heartIcon.png`} />
+        <meta property="og:image:width" content={String(50)} />
+        <meta property="og:image:height" content={String(50)} />
       </Head>
 
       <main>
+        <Navbar />
         <div>{children}</div>
       </main>
     </>
   );
-};
+});
 export default Layout;

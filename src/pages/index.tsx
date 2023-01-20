@@ -1,19 +1,21 @@
-import React from "react";
+import React, { createContext, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import type { GetServerSideProps } from "next";
 
-import { getAllHotel } from "lib/allRequests";
+import { getAllHotel } from "lib/hotels";
 import { HotelListType } from "types/types";
 import Layout from "components/Layout";
-import ServiceList from "components/ServiceList";
 import StarsRating from "components/StarsRating";
+import ServiceList from "components/serviceList";
+import { useAuthStateContext } from "context/AuthProvider";
 
 type PROPS = {
   hotels: HotelListType[];
 };
 
 const Home = ({ hotels }: PROPS) => {
+  console.log("index.tsxが呼ばれたよ");
+
   const sliceNameOrNot = (name: string) => {
     if (name.length > 6) {
       return name.slice(0, 6).concat("…");
@@ -24,7 +26,7 @@ const Home = ({ hotels }: PROPS) => {
 
   return (
     <>
-      <Layout title={"ホテラー"}>
+      <Layout title={"ホテル一覧"}>
         <div className="md:grid grid-cols-4 gap-5 p-10 pt-5" id="home">
           {hotels &&
             hotels.map((hotel: HotelListType) => (
@@ -70,7 +72,7 @@ const Home = ({ hotels }: PROPS) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ res }) => {
+export const getServerSideProps = async ({ res }: any) => {
   res.setHeader(
     "Cache-Control",
     "public, s-maxage=60, stale-while-revalidate=10"
