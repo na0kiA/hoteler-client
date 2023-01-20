@@ -38,6 +38,7 @@ export type ReviewShowType = {
   userImage: string;
   userId: number;
   createdAt: Date;
+  isHelpful: boolean;
 };
 
 export type ReviewEditParams = {

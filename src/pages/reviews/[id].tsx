@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Rating } from "react-simple-star-rating";
@@ -14,6 +14,7 @@ import { ReviewEditParams, ReviewShowType } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import { useRouter } from "next/router";
 import Layout from "components/Layout";
+import client from "lib/client";
 
 const UserReviewShow = ({
   title,
@@ -25,16 +26,16 @@ const UserReviewShow = ({
   userId,
   createdAt,
   id,
+  isHelpful,
 }: ReviewShowType) => {
-  const { currentUser, isSignedIn } = useAuthStateContext();
+  const { currentUser } = useAuthStateContext();
   const [error, setError] = useState("");
-  const [submitHelpfulness, setSubmitHelpfulness] = useState<boolean>(false);
+  const [isHelpfulness, setIsHelpfulness] = useState<boolean>(isHelpful);
   const [editToggle, setEditToggle] = useState<boolean>(false);
   const [editReviewTitle, setEditReviewTitle] = useState<string>(title);
   const [editReviewContent, setEditReviewContent] = useState<string>(content);
   const [editReviewRating, setEditReviewRating] =
     useState<number>(fiveStarRate);
-  console.log(editToggle);
 
   const router = useRouter();
 
@@ -93,6 +94,8 @@ const UserReviewShow = ({
 
     try {
       const res = await updateReview(id, params);
+      console.log(res);
+
       if (res.status == 200) {
         console.log("口コミ編集に成功");
         router.push(`/reviews/${id}`);
@@ -118,6 +121,8 @@ const UserReviewShow = ({
 
     try {
       const res = await deleteHelpfulness(id);
+      console.log(res);
+
       if (res.status == 200) {
         console.log("参考になったの解除に成功");
         router.push(`/reviews/${id}`);
@@ -323,14 +328,27 @@ const UserReviewShow = ({
             <></>
           ) : (
             <>
-              {submitHelpfulness ? (
+              {/* {
+                <>
+                  <button
+                    type="submit"
+                    className="btn btn-outline btn-xs md:btn-sm"
+                    onClick={(e) => {
+                      handleCreateHelpfulness(e), setError("");
+                    }}
+                  >
+                    参考になった
+                  </button>
+                </>
+              } */}
+              {isHelpfulness ? (
                 <>
                   <button
                     type="submit"
                     className="btn btn-outline btn-active btn-xs md:btn-sm"
                     onClick={(e) => {
                       handleDeleteHelpfulness(e),
-                        setSubmitHelpfulness(!submitHelpfulness),
+                        setIsHelpfulness(false),
                         setError("");
                     }}
                   >
@@ -344,7 +362,7 @@ const UserReviewShow = ({
                     className="btn btn-outline btn-xs md:btn-sm"
                     onClick={(e) => {
                       handleCreateHelpfulness(e),
-                        setSubmitHelpfulness(!submitHelpfulness),
+                        setIsHelpfulness(true),
                         setError("");
                     }}
                   >
@@ -378,7 +396,21 @@ export const getServerSideProps = async (ctx: any) => {
   const { id } = ctx.query;
   const apiResponse = await getReviewShow(id);
 
+  const helpfulOrNot = await client.get(`/reviews/${id}/helpfulnesses`, {
+    headers: {
+      "Content-Type": "application/json",
+      uid: ctx.req.cookies["_uid"],
+      client: ctx.req.cookies["_client"],
+      "access-token": ctx.req.cookies["_access_token"],
+    },
+  });
+
+  console.log(helpfulOrNot);
+
   const ReviewDetail: ReviewShowType = apiResponse.data;
+  const isHelpful: boolean = helpfulOrNot.data.helpful;
+
+  console.log(isHelpful);
 
   if (!ReviewDetail) {
     return {
@@ -389,6 +421,7 @@ export const getServerSideProps = async (ctx: any) => {
   return {
     props: {
       ...ReviewDetail,
+      isHelpful,
     },
   };
 };
