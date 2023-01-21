@@ -110,8 +110,8 @@ const HotelUploadImages = memo(() => {
         <label htmlFor={inputId}>
           {imageList.length >= 1 && (
             <>
-              <>画像を追加できます</>
-              <>画像は最大10枚までです</>
+              <span>画像を追加できます</span>
+              <span>画像は最大10枚までです</span>
             </>
           )}
           <input
