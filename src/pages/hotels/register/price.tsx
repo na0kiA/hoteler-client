@@ -1,4 +1,4 @@
-import FormInput from "components/FormInput";
+import FormInput from "components/HotelFormInput";
 import Navbar from "components/Navbar";
 import { AuthContext } from "context/AuthProvider";
 import { HotelFormProvider } from "context/HotelFormProvider";
@@ -7,12 +7,12 @@ import { createHotel } from "lib/hotels";
 import React, { createContext, useState } from "react";
 import { HotelCreateType } from "types/types";
 
-// export const getServerSideProps = withAuthServerSideProps(
-//   "/auth/sessions",
-//   true
-// );
+export const getServerSideProps = withAuthServerSideProps(
+  "/auth/sessions",
+  true
+);
 
-const register = () => {
+const Price = () => {
   return (
     <>
       <Navbar />
@@ -23,4 +23,4 @@ const register = () => {
   );
 };
 
-export default register;
+export default Price;

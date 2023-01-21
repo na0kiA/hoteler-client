@@ -3,10 +3,11 @@ import {
   useHotelFormStateContext,
 } from "context/HotelFormProvider";
 import { createHotel } from "lib/hotels";
+import { useRouter } from "next/router";
 import React, { memo, useContext, useState } from "react";
 import { HotelCreateType } from "types/types";
 
-const FormInput = memo(() => {
+const HotelRateInput = memo(() => {
   console.log("FormInputがレンダリングされました");
   const {
     name,
@@ -42,6 +43,8 @@ const FormInput = memo(() => {
     invalidPostalCode,
     setInvalidPostalCode,
   } = useHotelFormStateContext();
+
+  const router = useRouter();
 
   const inputForm = (
     labelText: string,
@@ -97,16 +100,19 @@ const FormInput = memo(() => {
 
     try {
       const res: HotelCreateType = await createHotel(params);
+      router.push("/hotels/register/price");
     } catch (error: any) {
       if (error.response.data) {
-        setInvalidName(error.response.data.errors.name);
-        setInvalidContent(error.response.data.errors.content);
-        setInvalidCompany(error.response.data.errors.company);
-        setInvalidPhoneNumber(error.response.data.errors.phone_numnber);
-        setInvalidPostalCode(error.response.data.errors.postal_code);
-        setInvalidPrefecture(error.response.data.errors.prefecture);
-        setInvalidCity(error.response.data.errors.city);
-        setInvalidStreetAddress(error.response.data.errors.street_address);
+        console.log(error);
+
+        setInvalidName(error.response.data.name);
+        setInvalidContent(error.response.data.content);
+        setInvalidCompany(error.response.data.company);
+        setInvalidPhoneNumber(error.response.data.phone_number);
+        setInvalidPostalCode(error.response.data.postal_code);
+        setInvalidPrefecture(error.response.data.prefecture);
+        setInvalidCity(error.response.data.city);
+        setInvalidStreetAddress(error.response.data.street_address);
       } else {
         console.log(error);
       }
@@ -164,4 +170,4 @@ const FormInput = memo(() => {
   );
 });
 
-export default FormInput;
+export default HotelRateInput;

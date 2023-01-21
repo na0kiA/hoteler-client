@@ -37,10 +37,9 @@ export const AuthProvider = memo(({ children }: any) => {
         setIsSignedIn(true);
         setCurrentUser(res?.data.data);
 
-        // Cookies.set("_access_token", res.headers["access-token"]);
-        // Cookies.set("_client", res.headers["client"]);
-        // Cookies.set("_uid", res.headers["uid"]);
-        // Cookies.set("_x_csrf_token", res.headers["x-csrf-token"]);
+        Cookies.set("_access_token", res.headers["access-token"]);
+        Cookies.set("_client", res.headers["client"]);
+        Cookies.set("_uid", res.headers["uid"]);
       } else {
         setIsSignedIn(false);
       }
