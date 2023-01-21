@@ -32,10 +32,15 @@ export const AuthProvider = memo(({ children }: any) => {
   const handleGetCurrentUser = async () => {
     try {
       const res = await getCurrentUser();
-
+      console.log(res);
       if (res?.data.is_login === true) {
         setIsSignedIn(true);
         setCurrentUser(res?.data.data);
+
+        // Cookies.set("_access_token", res.headers["access-token"]);
+        // Cookies.set("_client", res.headers["client"]);
+        // Cookies.set("_uid", res.headers["uid"]);
+        // Cookies.set("_x_csrf_token", res.headers["x-csrf-token"]);
       } else {
         setIsSignedIn(false);
       }

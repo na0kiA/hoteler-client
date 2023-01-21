@@ -8,6 +8,7 @@ import {
   deleteHelpfulness,
   deleteReview,
   getReviewShow,
+  searchHelpfulness,
   updateReview,
 } from "lib/reviews";
 import { ReviewEditParams, ReviewShowType } from "types/types";
@@ -328,19 +329,6 @@ const UserReviewShow = ({
             <></>
           ) : (
             <>
-              {/* {
-                <>
-                  <button
-                    type="submit"
-                    className="btn btn-outline btn-xs md:btn-sm"
-                    onClick={(e) => {
-                      handleCreateHelpfulness(e), setError("");
-                    }}
-                  >
-                    参考になった
-                  </button>
-                </>
-              } */}
               {isHelpfulness ? (
                 <>
                   <button
@@ -394,8 +382,8 @@ export const getServerSideProps = async (ctx: any) => {
   );
 
   const { id } = ctx.query;
-  const apiResponse = await getReviewShow(id);
 
+  const apiResponse = await getReviewShow(id);
   const helpfulOrNot = await client.get(`/reviews/${id}/helpfulnesses`, {
     headers: {
       "Content-Type": "application/json",
@@ -405,12 +393,8 @@ export const getServerSideProps = async (ctx: any) => {
     },
   });
 
-  console.log(helpfulOrNot);
-
   const ReviewDetail: ReviewShowType = apiResponse.data;
   const isHelpful: boolean = helpfulOrNot.data.helpful;
-
-  console.log(isHelpful);
 
   if (!ReviewDetail) {
     return {

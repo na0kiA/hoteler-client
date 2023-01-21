@@ -177,6 +177,9 @@ const Navbar = memo(() => {
                 <li>
                   <Link href="/users/settings">設定</Link>
                 </li>
+                <li className="justify-between">
+                  <Link href={`/hotels/register`}>ホテルを掲載する</Link>
+                </li>
                 <li>
                   <button
                     onClick={(event) => {

@@ -85,7 +85,13 @@ export const getCurrentUser = () => {
 
 // ユーザー詳細を取得
 export const getUserShow = (id: string | string[] | undefined) => {
-  return client.get(`/users/${id}`);
+  return client.get(`/users/${id}`, {
+    headers: {
+      access_token: Cookies.get("_access_token"),
+      client: Cookies.get("_client"),
+      uid: Cookies.get("_uid"),
+    },
+  });
 };
 
 // ユーザーのお気に入りホテル一覧取得

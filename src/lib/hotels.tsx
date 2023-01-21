@@ -1,4 +1,5 @@
 import Cookies from "js-cookie";
+import { HotelCreateType } from "types/types";
 import client from "./client";
 
 // ホテル一覧
@@ -12,7 +13,7 @@ export const getHotelDetail = (id: string | string[] | undefined) => {
 };
 
 // ホテルを新規作成
-export const createHotel = (params: string) => {
+export const createHotel = (params: HotelCreateType) => {
   return client.post("/hotels", params, {
     headers: {
       "access-token": Cookies.get("_access_token"),

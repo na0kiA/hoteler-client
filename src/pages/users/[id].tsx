@@ -9,6 +9,7 @@ import Layout from "components/Layout";
 import Link from "next/link";
 import ReviewsOfUserProfile from "components/ReviewsOfUserProfile";
 import { fetchSignedUrl } from "lib/image";
+import client from "lib/client";
 
 const UserDetail = ({
   id,
@@ -262,10 +263,22 @@ export const getServerSideProps = async (ctx: any) => {
   );
 
   const { id } = ctx.query;
-  const apiResponse = await getUserShow(id);
+  // const apiResponse = await getUserShow(id);
 
-  const UserDetail: UserDetailType = apiResponse.data;
-  console.log(UserDetail);
+  // const UserDetail: UserDetailType = apiResponse.data;
+  console.log(ctx.req);
+
+  const response = await client.get(`/users/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      uid: ctx.req.cookies["_uid"],
+      client: ctx.req.cookies["_client"],
+      "access-token": ctx.req.cookies["_access_token"],
+      "X-CSRF-Token": ctx.req.cookies["_x_csrf_token"],
+    },
+  });
+
+  const UserDetail: UserDetailType = response.data;
 
   if (!UserDetail) {
     return {

@@ -6,10 +6,10 @@ const confirmAlartAtom = atom<boolean>(false);
 // Create your atoms and derivatives
 const textAtom = atom<string>("");
 
-// const setTextAtom = atom(
-//   (get) => get(textAtom),
-//   (get, set, message: string) => set(textAtom, message)
-// );
+const setTextAtom = atom(
+  (get) => get(textAtom),
+  (get, set, message: string) => set(textAtom, message)
+);
 
 // Use them anywhere in your app
 // export const ErrorMessage = (message: string) => {

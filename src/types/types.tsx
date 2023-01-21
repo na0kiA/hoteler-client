@@ -65,6 +65,17 @@ export type HotelDetailType = {
   id: number;
 };
 
+export type HotelCreateType = {
+  name: string;
+  content: string;
+  company: string;
+  prefecture: string;
+  city: string;
+  postalCode: string;
+  streetAddress: string;
+  phoneNumber: string;
+};
+
 export type ServiceRateType = {
   plan: string;
   rate: number;
