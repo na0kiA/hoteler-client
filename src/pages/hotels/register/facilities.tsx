@@ -1,5 +1,4 @@
 import FormInput from "components/HotelFormInput";
-import HotelRateInput from "components/HotelRateInput";
 import Navbar from "components/Navbar";
 import { AuthContext } from "context/AuthProvider";
 import { HotelFormProvider } from "context/HotelFormProvider";
@@ -13,15 +12,15 @@ export const getServerSideProps = withAuthServerSideProps(
   true
 );
 
-const Price = () => {
+const Facilities = () => {
   return (
     <>
       <Navbar />
       <HotelFormProvider>
-        <HotelRateInput />
+        <FormInput />
       </HotelFormProvider>
     </>
   );
 };
 
-export default Price;
+export default Facilities;

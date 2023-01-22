@@ -11,11 +11,9 @@ import { HotelCreateType } from "types/types";
 
 const HotelUploadImages = memo(() => {
   console.log("FormInputがレンダリングされました");
-  const [isCommentSending, setIsCommentSending] = useState(false);
   const [keyList, setKeyList] = useState<string[]>([]);
   const [imageList, setImageList] = useState<string[]>([]);
   const maxImagesUpload = 4;
-  const [commentText, setCommentText] = useState<string>("");
   const inputId = Math.random().toString(32).substring(2);
 
   const handleChangeImage = async (
@@ -56,10 +54,10 @@ const HotelUploadImages = memo(() => {
     setKeyList([...keyList, key]);
   };
 
-  const handleOnAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    setImageList([...imageList, ...e.target.files]);
-  };
+  // const handleOnAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (!e.target.files) return;
+  //   setImageList([...imageList, ...e.target.files]);
+  // };
 
   const handleOnRemoveImage = (index: number) => {
     const newImages = [...imageList];
@@ -67,6 +65,7 @@ const HotelUploadImages = memo(() => {
     setImageList(newImages);
   };
   console.log(imageList);
+  console.log(keyList);
 
   return (
     <>
@@ -79,7 +78,7 @@ const HotelUploadImages = memo(() => {
             return (
               <div key={i} className="mb-5 flex">
                 <button
-                  className="btn btn-square btn-outline"
+                  className="btn btn-square btn-outline btn-xs"
                   onClick={(e) => handleOnRemoveImage(i)}
                 >
                   <svg
@@ -110,8 +109,7 @@ const HotelUploadImages = memo(() => {
         <label htmlFor={inputId}>
           {imageList.length >= 1 && (
             <>
-              <span>画像を追加できます</span>
-              <span>画像は最大10枚までです</span>
+              <span>画像を追加できます。画像は最大10枚までです。</span>
             </>
           )}
           <input

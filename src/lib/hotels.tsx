@@ -2,17 +2,14 @@ import Cookies from "js-cookie";
 import { HotelCreateType } from "types/types";
 import client from "./client";
 
-// ホテル一覧
 export const getAllHotel = () => {
   return client.get("/hotels");
 };
 
-// ホテル詳細
 export const getHotelDetail = (id: string | string[] | undefined) => {
   return client.get(`/hotels/${id}`);
 };
 
-// ホテルを新規作成
 export const createHotel = (params: HotelCreateType) => {
   return client.post("/hotels", params, {
     headers: {
@@ -23,7 +20,6 @@ export const createHotel = (params: HotelCreateType) => {
   });
 };
 
-// ホテルを更新
 export const updateHotel = (id: number, params: string) => {
   return client.patch(`/hotel/${id}`, params, {
     headers: {
@@ -34,7 +30,6 @@ export const updateHotel = (id: number, params: string) => {
   });
 };
 
-// ホテルを削除
 export const deleteHotel = (id: number) => {
   return client.delete(`/hotel/${id}`, {
     headers: {
@@ -45,19 +40,8 @@ export const deleteHotel = (id: number) => {
   });
 };
 
-// S3のKeyをDBに送信
-export const postImageKeyOfHotel = (params: string) => {
-  return client.post("/hotels", params, {
-    headers: {
-      "access-token": Cookies.get("_access_token"),
-      client: Cookies.get("_client"),
-      uid: Cookies.get("_uid"),
-    },
-  });
-};
-
-export const fetchSignedUrl = (params: string) => {
-  return client.get("/hotels", {
+export const postImageKeyOfHotel = (params: string[], id: number) => {
+  return client.post(`/hotels/${id}/images`, params, {
     headers: {
       "access-token": Cookies.get("_access_token"),
       client: Cookies.get("_client"),

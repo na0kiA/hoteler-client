@@ -176,6 +176,13 @@ export type UpdateUserShowParams = {
   image: string;
 };
 
+export type HotelRateParams = {
+  plan: string;
+  rate: string;
+  startTime: string;
+  endTime: string;
+};
+
 export type AuthContextType = {
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;

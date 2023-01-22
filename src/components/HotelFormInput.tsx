@@ -57,13 +57,13 @@ const HotelFormInput = memo(() => {
       <>
         <div className="form-control">
           <label className="label">
-            <span className="label-text">{labelText}</span>
+            <span className="label-text text-sm">{labelText}</span>
           </label>
           <input
             type="text"
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            className="input input-bordered"
+            className="input input-bordered input-sm"
           />
           {errorText(errorValue)}
         </div>
@@ -122,14 +122,22 @@ const HotelFormInput = memo(() => {
 
   return (
     <>
-      <ul className="steps steps-horizontal">
-        <li className="step step-primary">ホテル詳細の設定</li>
-        <li className="step">料金の設定</li>
-        <li className="step">仮登録</li>
+      <ul className="steps steps-horizontal flex justify-center text-lg">
+        <li className="step step-primary">
+          <span className="text-xs">詳細設定</span>
+        </li>
+        <li className="step">
+          <span className="text-xs">料金設定</span>
+        </li>
+        <li className="step">
+          <span className="text-xs">設備設定</span>
+        </li>
+        <li className="step">
+          <span className="text-xs">仮登録</span>
+        </li>
       </ul>
       <div className="card card-compact	flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
         <div className="card-body">
-          <HotelUploadImages />
           {inputForm("ホテル名", name, setName, invalidName)}
           {inputForm("会社", company, setCompany, invalidCompany)}
           {inputForm(
@@ -147,7 +155,19 @@ const HotelFormInput = memo(() => {
             invalidStreetAddress
           )}
           {inputForm("郵便番号", postalCode, setPostalCode, invalidPostalCode)}
-          {inputForm("ホテルの説明", content, setContent, invalidContent)}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">ホテルの説明</span>
+            </label>
+            <textarea
+              className="textarea textarea-bordered w-full max-h-full text-xs"
+              value={content}
+              onChange={(event) => {
+                setContent(event.target.value);
+              }}
+            ></textarea>
+            {errorText(invalidContent)}
+          </div>
           <div className="form-control mt-6">
             <button
               className="btn btn-primary"
