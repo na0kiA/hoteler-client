@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { getCurrentUser } from "lib/auth";
+import { getCurrentUser, withAuthServerSideProps } from "lib/auth";
 import {
   useContext,
   useState,
@@ -22,7 +22,7 @@ type AuthContextType = {
 
 export const AuthContext = createContext({} as AuthContextType);
 
-export const AuthProvider = memo(({ children }: any) => {
+export const AuthProvider = memo(({ children, props }: any) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<CurrentUser>();
@@ -32,7 +32,7 @@ export const AuthProvider = memo(({ children }: any) => {
   const handleGetCurrentUser = async () => {
     try {
       const res = await getCurrentUser();
-      console.log(res);
+      // console.log(res);
       if (res?.data.is_login === true) {
         setIsSignedIn(true);
         setCurrentUser(res?.data.data);

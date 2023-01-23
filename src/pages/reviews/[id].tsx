@@ -383,15 +383,17 @@ export const getServerSideProps = async (ctx: any) => {
 
   const { id } = ctx.query;
 
-  const apiResponse = await getReviewShow(id);
-  const helpfulOrNot = await client.get(`/reviews/${id}/helpfulnesses`, {
-    headers: {
-      "Content-Type": "application/json",
-      uid: ctx.req.cookies["_uid"],
-      client: ctx.req.cookies["_client"],
-      "access-token": ctx.req.cookies["_access_token"],
-    },
-  });
+  const [apiResponse, helpfulOrNot]: any = await Promise.allSettled([
+    getReviewShow(id),
+    client.get(`/reviews/${id}/helpfulnesses`, {
+      headers: {
+        "Content-Type": "application/json",
+        uid: ctx.req.cookies["_uid"],
+        client: ctx.req.cookies["_client"],
+        "access-token": ctx.req.cookies["_access_token"],
+      },
+    }),
+  ]);
 
   const ReviewDetail: ReviewShowType = apiResponse.data;
   const isHelpful: boolean = helpfulOrNot.data.helpful;
