@@ -12,6 +12,7 @@ import { useAuthStateContext } from "context/AuthProvider";
 import Layout from "components/Layout";
 import { fetchSignedUrl } from "lib/image";
 import FavoritesOfUserProfile from "components/FavoritesOfUserProfile";
+import client from "lib/client";
 
 const UserDetail = ({
   id,
@@ -262,8 +263,15 @@ export const getServerSideProps = async (ctx: any) => {
   );
 
   const { id } = ctx.query;
-  const apiResponse = await getUserShow(id);
-  console.log(ctx.res);
+  // const apiResponse = await getUserShow(id);
+  const apiResponse = await client.get(`/users/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      uid: ctx.req.cookies["_uid"],
+      client: ctx.req.cookies["_client"],
+      "access-token": ctx.req.cookies["_access_token"],
+    },
+  });
 
   const UserDetail: UserDetailType = apiResponse.data;
   console.log(UserDetail);

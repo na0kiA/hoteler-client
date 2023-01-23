@@ -87,12 +87,11 @@ const UserDetail = ({
     const resText = await ret.text();
     const parseXML = (text: string) =>
       new DOMParser().parseFromString(text, "application/xml");
-    const resXML = await parseXML(resText);
+    const resXML = parseXML(resText);
     const locationOfImage =
       resXML.getElementsByTagName("Location")[0].childNodes[0].nodeValue;
     if (!locationOfImage) return;
-    const key = await resXML.getElementsByTagName("Key")[0].childNodes[0]
-      .nodeValue;
+    const key = resXML.getElementsByTagName("Key")[0].childNodes[0].nodeValue;
     if (!key) return;
 
     setImageUrl(locationOfImage);
@@ -263,10 +262,6 @@ export const getServerSideProps = async (ctx: any) => {
   );
 
   const { id } = ctx.query;
-  // const apiResponse = await getUserShow(id);
-
-  // const UserDetail: UserDetailType = apiResponse.data;
-  console.log(ctx.req);
 
   const response = await client.get(`/users/${id}`, {
     headers: {
