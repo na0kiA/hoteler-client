@@ -24,7 +24,7 @@ const UserReviewShow = ({
   userName,
   userImage,
   userId,
-  createdAt,
+  createdDate,
   id,
   isHelpful,
 }: ReviewShowType) => {
@@ -43,14 +43,7 @@ const UserReviewShow = ({
   const handleRating = (rate: number) => {
     setEditReviewRating(rate);
   };
-
-  const createdDateByJapanese = useCallback((date: Date) => {
-    const yearAndMonthAndDays = date.toString().slice(0, 10);
-    return `${yearAndMonthAndDays.slice(0, 4)}年${yearAndMonthAndDays.slice(
-      6,
-      7
-    )}月${yearAndMonthAndDays.slice(8, 10)}日`;
-  }, []);
+  console.log(createdDate);
 
   const handleDeleteReviews = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -283,11 +276,7 @@ const UserReviewShow = ({
               )}
             </div>
             <p className="text-xs italic mt-1 mb-1">
-              {editToggle ? (
-                <></>
-              ) : (
-                <>{createdDateByJapanese(createdAt)}に口コミを投稿</>
-              )}
+              {editToggle ? <></> : <>{createdDate}に口コミを投稿</>}
             </p>
 
             {/* 口コミの内容 */}
@@ -395,10 +384,9 @@ export const getServerSideProps = async (ctx: any) => {
     }),
   ]);
 
-  console.log(helpfulOrNot.value.data.helpful);
-
   const ReviewDetail: ReviewShowType = apiResponse.value.data;
   const isHelpful: boolean = helpfulOrNot.value.data.helpful;
+  console.log(ReviewDetail);
 
   if (!ReviewDetail) {
     return {

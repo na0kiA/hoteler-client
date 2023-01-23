@@ -25,7 +25,7 @@ export type ReviewType = {
   hotelReviewsCount: number;
   hotelAverageRating: number;
   hotelFullAddress: string;
-  createdAt: Date;
+  createdDate: string;
 };
 
 export type ReviewShowType = {
@@ -37,7 +37,7 @@ export type ReviewShowType = {
   userName: string;
   userImage: string;
   userId: number;
-  createdAt: Date;
+  createdDate: string;
   isHelpful: boolean;
 };
 

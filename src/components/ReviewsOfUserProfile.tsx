@@ -15,14 +15,6 @@ type PROPS = {
 const ReviewsOfUserProfile = memo(({ props }: PROPS) => {
   console.log("ユーザー詳細の口コミ一覧コンポーネントが呼ばれたよ");
 
-  const createdDateByJapanese = useMemo(() => {
-    const yearAndMonthAndDays = props.createdAt.toString().slice(0, 10);
-    return `${yearAndMonthAndDays.slice(0, 4)}年${yearAndMonthAndDays.slice(
-      6,
-      7
-    )}月${yearAndMonthAndDays.slice(8, 10)}日`;
-  }, [props.createdAt]);
-
   const sliceReviewContent = useCallback((content: string) => {
     if (content.length > 15) {
       return content.slice(0, 15).concat("…");
@@ -75,7 +67,7 @@ const ReviewsOfUserProfile = memo(({ props }: PROPS) => {
             <span className="align-bottom">({props.fiveStarRate})</span>
           </div>
           <p className="text-xs mt-1">
-            <>{createdDateByJapanese}に作成</>
+            <>{props.createdDate}に作成</>
           </p>
           <h2 className="card-title text-base mt-1 mb-1 md:text-xl">
             {props.title}
@@ -148,7 +140,7 @@ const ReviewsOfUserProfile = memo(({ props }: PROPS) => {
             <span className="text-xl align-middle">({props.fiveStarRate})</span>
           </div>
           <p className="text-base mt-1">
-            <>{createdDateByJapanese}に作成</>
+            <>{props.createdDate}に作成</>
           </p>
           <h2 className="card-title text-base mt-1 mb-1 md:text-xl">
             {props.title}
