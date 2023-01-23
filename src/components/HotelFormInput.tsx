@@ -11,6 +11,8 @@ import HotelUploadImages from "./HotelUploadImages";
 const HotelFormInput = memo(() => {
   console.log("FormInputがレンダリングされました");
   const {
+    id,
+    setId,
     name,
     setName,
     invalidName,
@@ -100,7 +102,8 @@ const HotelFormInput = memo(() => {
     const params = generateParams();
 
     try {
-      const res: HotelCreateType = await createHotel(params);
+      const res = await createHotel(params);
+      setId(res.id);
       router.push("/hotels/register/price");
     } catch (error: any) {
       if (error.response.data) {

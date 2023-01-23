@@ -1,3 +1,4 @@
+import { HotelFormProvider } from "context/HotelFormProvider";
 import React from "react";
 import HotelRestRateTable from "./HotelRestRateTable";
 
@@ -11,7 +12,9 @@ type RateType = {
 const HotelRateInput = () => {
   return (
     <>
-      <HotelRestRateTable />
+      <HotelFormProvider>
+        <HotelRestRateTable />
+      </HotelFormProvider>
     </>
   );
 };

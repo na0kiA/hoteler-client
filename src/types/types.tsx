@@ -178,7 +178,7 @@ export type UpdateUserShowParams = {
 
 export type HotelRateParams = {
   plan: string;
-  rate: string;
+  rate: number;
   startTime: string;
   endTime: string;
 };

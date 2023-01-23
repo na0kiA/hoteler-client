@@ -1,6 +1,8 @@
 import { useContext, useState, createContext, memo } from "react";
 
 type HotelFormContextType = {
+  id: number;
+  setId: React.Dispatch<React.SetStateAction<number>>;
   name: string;
   setName: React.Dispatch<React.SetStateAction<string>>;
   content: string;
@@ -39,6 +41,7 @@ type HotelFormContextType = {
 export const HotelFormContext = createContext({} as HotelFormContextType);
 
 export const HotelFormProvider = memo(({ children }: any) => {
+  const [id, setId] = useState(0);
   const [name, setName] = useState("");
   const [invalidName, setInvalidName] = useState("");
   const [content, setContent] = useState("");
@@ -61,6 +64,8 @@ export const HotelFormProvider = memo(({ children }: any) => {
   return (
     <HotelFormContext.Provider
       value={{
+        id,
+        setId,
         name,
         setName,
         invalidName,
