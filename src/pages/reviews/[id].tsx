@@ -8,7 +8,6 @@ import {
   deleteHelpfulness,
   deleteReview,
   getReviewShow,
-  searchHelpfulness,
   updateReview,
 } from "lib/reviews";
 import { ReviewEditParams, ReviewShowType } from "types/types";
@@ -32,6 +31,7 @@ const UserReviewShow = ({
   const { currentUser } = useAuthStateContext();
   const [error, setError] = useState("");
   const [isHelpfulness, setIsHelpfulness] = useState<boolean>(isHelpful);
+  const [helpfulness, setHelpfulness] = useState<number>(helpfulnessesCount);
   const [editToggle, setEditToggle] = useState<boolean>(false);
   const [editReviewTitle, setEditReviewTitle] = useState<string>(title);
   const [editReviewContent, setEditReviewContent] = useState<string>(content);
@@ -126,7 +126,7 @@ const UserReviewShow = ({
 
       if (res.status == 200) {
         console.log("参考になったの解除に成功");
-        router.push(`/reviews/${id}`);
+        setHelpfulness(helpfulness - 1);
       } else {
         throw new Error(
           "参考になったの解除に失敗しました。画面をご確認の上もう一度実行してください。"
@@ -153,7 +153,7 @@ const UserReviewShow = ({
 
       if (res.status == 200) {
         console.log("参考になったの登録に成功");
-        router.push(`/reviews/${id}`);
+        setHelpfulness(helpfulness + 1);
       } else {
         throw new Error(
           "参考になったの登録に失敗しました。画面をご確認の上もう一度実行してください。"
@@ -318,7 +318,7 @@ const UserReviewShow = ({
                 <></>
               ) : (
                 <>
-                  <span className="text-sm"> {helpfulnessesCount}</span>
+                  <span className="text-sm"> {helpfulness}</span>
                   人のお客様がこれが役に立ったと考えています
                 </>
               )}
@@ -395,8 +395,10 @@ export const getServerSideProps = async (ctx: any) => {
     }),
   ]);
 
-  const ReviewDetail: ReviewShowType = apiResponse.data;
-  const isHelpful: boolean = helpfulOrNot.data.helpful;
+  console.log(helpfulOrNot.value.data.helpful);
+
+  const ReviewDetail: ReviewShowType = apiResponse.value.data;
+  const isHelpful: boolean = helpfulOrNot.value.data.helpful;
 
   if (!ReviewDetail) {
     return {
