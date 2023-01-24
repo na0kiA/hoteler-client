@@ -6,53 +6,41 @@ import { createHotel } from "lib/hotels";
 import { useRouter } from "next/router";
 import React, { memo, useContext, useState } from "react";
 import { HotelCreateType } from "types/types";
-import HotelUploadImages from "./HotelUploadImages";
+import { useForm } from "react-hook-form";
+import { useAuthStateContext } from "context/AuthProvider";
 
 const HotelFormInput = memo(() => {
   console.log("FormInputがレンダリングされました");
-  const {
-    id,
-    setId,
-    name,
-    setName,
-    invalidName,
-    setInvalidName,
-    content,
-    setContent,
-    invalidContent,
-    setInvalidContent,
-    company,
-    setCompany,
-    invalidCompany,
-    setInvalidCompany,
-    prefecture,
-    setPrefecture,
-    invalidPrefecture,
-    setInvalidPrefecture,
-    city,
-    setCity,
-    invalidCity,
-    setInvalidCity,
-    streetAddress,
-    setStreetAddress,
-    invalidStreetAddress,
-    setInvalidStreetAddress,
-    phoneNumber,
-    setPhoneNumber,
-    invalidPhoneNumber,
-    setInvalidPhoneNumber,
-    postalCode,
-    setPostalCode,
-    invalidPostalCode,
-    setInvalidPostalCode,
-  } = useHotelFormStateContext();
-
+  const [invalidName, setInvalidName] = useState("");
+  const [invalidContent, setInvalidContent] = useState("");
+  const [invalidCompany, setInvalidCompany] = useState("");
+  const [invalidPrefecture, setInvalidPrefecture] = useState("");
+  const [invalidCity, setInvalidCity] = useState("");
+  const [invalidPostalCode, setInvalidPostalCode] = useState("");
+  const [invalidStreetAddress, setInvalidStreetAddress] = useState("");
+  const [invalidPhoneNumber, setInvalidPhoneNumber] = useState("");
+  const { id, setId } = useAuthStateContext();
   const router = useRouter();
+  const { register, handleSubmit, getValues } = useForm({
+    defaultValues: {
+      name: "",
+      content: "",
+      company: "",
+      prefecture: "",
+      city: "",
+      postal_code: "",
+      street_address: "",
+      phone_number: "",
+    },
+  });
+
+  const getHotelFormValue = getValues();
+
+  type HotelFormKeys = keyof typeof getHotelFormValue;
 
   const inputForm = (
     labelText: string,
-    value: string,
-    setValue: React.Dispatch<React.SetStateAction<string>>,
+    value: HotelFormKeys,
     errorValue = ""
   ) => {
     return (
@@ -63,9 +51,11 @@ const HotelFormInput = memo(() => {
           </label>
           <input
             type="text"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
             className="input input-bordered input-sm"
+            {...register(value, {
+              required: true,
+              // required: "必須項目です",
+            })}
           />
           {errorText(errorValue)}
         </div>
@@ -81,36 +71,16 @@ const HotelFormInput = memo(() => {
     );
   };
 
-  const generateParams = () => {
-    const createHotelParams = {
-      name: name,
-      content: content,
-      company: company,
-      prefecture: prefecture,
-      phone_number: phoneNumber,
-      city: city,
-      postal_code: postalCode,
-      street_address: streetAddress,
-    };
-    return createHotelParams;
-  };
-
-  const handleCreateHotel = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-    const params: HotelCreateType = generateParams();
-
+  const onSubmit = async (data: HotelCreateType) => {
     try {
-      const res = await createHotel(params);
-      console.log(res.data.id);
-
-      setId(res.data.id);
-      router.push("/hotels/register/price");
+      const res = await createHotel(data);
+      console.log(res.data);
+      if (res.status == 200) {
+        setId(res.data.id);
+        router.push(`/hotels/register/price`);
+      }
     } catch (error: any) {
       if (error.response.data) {
-        console.log(error);
-
         setInvalidName(error.response.data.name);
         setInvalidContent(error.response.data.content);
         setInvalidCompany(error.response.data.company);
@@ -125,60 +95,51 @@ const HotelFormInput = memo(() => {
     }
   };
 
+  console.log(getHotelFormValue);
+
   return (
     <>
-      <div className="card card-compact	flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-        <div className="card-body">
-          {inputForm("ホテル名", name, setName, invalidName)}
-          {inputForm("会社", company, setCompany, invalidCompany)}
-          {inputForm(
-            "ホテルの電話番号",
-            phoneNumber,
-            setPhoneNumber,
-            invalidPhoneNumber
-          )}
-          {inputForm("都道府県", prefecture, setPrefecture, invalidPrefecture)}
-          {inputForm("市区町村", city, setCity, invalidCity)}
-          {inputForm(
-            "番地",
-            streetAddress,
-            setStreetAddress,
-            invalidStreetAddress
-          )}
-          {inputForm("郵便番号", postalCode, setPostalCode, invalidPostalCode)}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">ホテルの説明</span>
-            </label>
-            <textarea
-              className="textarea textarea-bordered w-full max-h-full text-xs"
-              value={content}
-              onChange={(event) => {
-                setContent(event.target.value);
-              }}
-            ></textarea>
-            {errorText(invalidContent)}
-          </div>
-          <div className="form-control mt-6">
-            <button
-              className="btn btn-primary"
-              onClick={(e) => {
-                handleCreateHotel(e);
-                setInvalidName("");
-                setInvalidContent("");
-                setInvalidCompany("");
-                setInvalidPhoneNumber("");
-                setInvalidPostalCode("");
-                setInvalidPrefecture("");
-                setInvalidCity("");
-                setInvalidStreetAddress("");
-              }}
-            >
-              次に進む
-            </button>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="card card-compact	flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+          <div className="card-body">
+            {inputForm("ホテル名", "name", invalidName)}
+            {inputForm("会社", "company", invalidCompany)}
+            {inputForm("ホテルの電話番号", "phone_number", invalidPhoneNumber)}
+            {inputForm("都道府県", "prefecture", invalidPrefecture)}
+            {inputForm("市区町村", "city", invalidCity)}
+            {inputForm("番地", "street_address", invalidStreetAddress)}
+            {inputForm("郵便番号", "postal_code", invalidPostalCode)}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">ホテルの説明</span>
+              </label>
+              <textarea
+                className="textarea textarea-bordered w-full max-h-full text-xs"
+                {...register("content", { required: true })}
+              ></textarea>
+              {errorText(invalidContent)}
+            </div>
+            <div className="form-control mt-6">
+              <button
+                className="btn btn-primary"
+                type="submit"
+                onClick={(e) => {
+                  setInvalidName("");
+                  setInvalidContent("");
+                  setInvalidCompany("");
+                  setInvalidPhoneNumber("");
+                  setInvalidPostalCode("");
+                  setInvalidPrefecture("");
+                  setInvalidCity("");
+                  setInvalidStreetAddress("");
+                }}
+              >
+                次に進む
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </form>
     </>
   );
 });

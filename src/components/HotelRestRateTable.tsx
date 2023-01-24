@@ -1,3 +1,4 @@
+import { useAuthStateContext } from "context/AuthProvider";
 import { useHotelFormStateContext } from "context/HotelFormProvider";
 import { createRestRate } from "lib/hotelRate";
 import { getDays } from "lib/hotels";
@@ -7,8 +8,9 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { HotelRateParams } from "types/types";
 
 const HotelRestRateTable = memo(() => {
-  const { id, setId, name } = useHotelFormStateContext();
+  const { id } = useAuthStateContext();
   const router = useRouter();
+  console.log(id);
 
   const {
     register,

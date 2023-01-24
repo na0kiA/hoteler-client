@@ -18,6 +18,8 @@ type AuthContextType = {
   setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
   currentUser: CurrentUser | undefined;
   setCurrentUser: React.Dispatch<React.SetStateAction<CurrentUser | undefined>>;
+  id: number;
+  setId: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const AuthContext = createContext({} as AuthContextType);
@@ -26,6 +28,7 @@ export const AuthProvider = memo(({ children, props }: any) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<CurrentUser>();
+  const [id, setId] = useState<number>(0);
 
   console.log("AuthProviderが呼ばれたよ");
 
@@ -56,6 +59,8 @@ export const AuthProvider = memo(({ children, props }: any) => {
   return (
     <AuthContext.Provider
       value={{
+        id,
+        setId,
         loading,
         setLoading,
         isSignedIn,
