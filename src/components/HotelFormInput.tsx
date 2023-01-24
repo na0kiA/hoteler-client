@@ -87,10 +87,10 @@ const HotelFormInput = memo(() => {
       content: content,
       company: company,
       prefecture: prefecture,
+      phone_number: phoneNumber,
       city: city,
-      postalCode: postalCode,
-      streetAddress: streetAddress,
-      phoneNumber: phoneNumber,
+      postal_code: postalCode,
+      street_address: streetAddress,
     };
     return createHotelParams;
   };
@@ -99,11 +99,13 @@ const HotelFormInput = memo(() => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
-    const params = generateParams();
+    const params: HotelCreateType = generateParams();
 
     try {
       const res = await createHotel(params);
-      setId(res.id);
+      console.log(res.data.id);
+
+      setId(res.data.id);
       router.push("/hotels/register/price");
     } catch (error: any) {
       if (error.response.data) {

@@ -71,9 +71,9 @@ export type HotelCreateType = {
   company: string;
   prefecture: string;
   city: string;
-  postalCode: string;
-  streetAddress: string;
-  phoneNumber: string;
+  postal_code: string;
+  street_address: string;
+  phone_number: string;
 };
 
 export type ServiceRateType = {
@@ -181,6 +181,7 @@ export type HotelRateParams = {
   rate: number;
   startTime: string;
   endTime: string;
+  day?: string;
 };
 
 export type AuthContextType = {

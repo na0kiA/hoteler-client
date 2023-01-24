@@ -1,12 +1,15 @@
 import { useHotelFormStateContext } from "context/HotelFormProvider";
 import { createRestRate } from "lib/hotelRate";
 import { getDays } from "lib/hotels";
-import React, { memo, useEffect } from "react";
+import { useRouter } from "next/router";
+import React, { memo } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { HotelRateParams } from "types/types";
 
 const HotelRestRateTable = memo(() => {
-  const { id, setId } = useHotelFormStateContext();
+  const { id, setId, name } = useHotelFormStateContext();
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -15,7 +18,9 @@ const HotelRestRateTable = memo(() => {
     formState: { errors, isDirty },
   } = useForm({
     defaultValues: {
-      rates: [{ plan: "休憩90分", rate: 5980, startTime: 0, endTime: 24 }],
+      rates: [
+        { plan: "休憩90分", rate: 5980, startTime: 0, endTime: 24, day: "" },
+      ],
     },
   });
   const filedArrayName = "rates";
@@ -33,36 +38,47 @@ const HotelRestRateTable = memo(() => {
       rate: service.rate,
       startTime: `${service.startTime}:00`,
       endTime: `${service.endTime}:00`,
+      day: service.day,
     };
 
     return restRateParams;
   });
 
-  const handlePostRestRate = async () => {
+  const handleCreateRestRates = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+
     try {
       const hotelDays = await getDays(id);
-      const mondayThroughThursday = hotelDays[0].id;
+      const mondayThroughThursday = hotelDays.data?.[0].id;
+      const friday = hotelDays.data?.[1].id;
       const [postAllRestRate]: any = await Promise.all([
-        generateEachParams.map((service) => {
-          createRestRate(service, mondayThroughThursday);
+        generateEachParams.map((service: HotelRateParams) => {
+          if (service.day == "月曜から木曜") {
+            createRestRate(service, mondayThroughThursday);
+          } else if (service.day == "金曜") {
+            createRestRate(service, friday);
+          }
         }),
       ]);
+      if (postAllRestRate.status == 200) {
+        router.push("/hotels/register/facilities");
+      }
     } catch (error: any) {
       console.log(error);
     }
   };
 
-  const onSubmit = (data: any) => console.log(data);
-
   const addRestRate = () => {
-    append({ plan: "", rate: 0, startTime: 0, endTime: 24 });
+    append({ plan: "", rate: 0, startTime: 0, endTime: 24, day: "" });
   };
 
   const removeRestRate = (index: number) => {
     remove(index);
   };
 
-  useEffect(() => {}, []);
+  const onSubmit = (data: any) => console.log(data);
 
   return (
     <>
@@ -72,6 +88,7 @@ const HotelRestRateTable = memo(() => {
             <thead>
               <tr>
                 <th></th>
+                <th>曜日</th>
                 <th>プラン名</th>
                 <th>料金</th>
                 <th>開始時刻</th>
@@ -81,9 +98,23 @@ const HotelRestRateTable = memo(() => {
             </thead>
             {fields.map((field, index) => (
               <>
-                <tbody>
+                <tbody key={field.id}>
                   <tr>
                     <th>{index + 1}</th>
+                    <td>
+                      <div>
+                        <select
+                          {...register(`rates.${index}.day`)}
+                          className="select w-full max-w-xs"
+                        >
+                          <option disabled selected>
+                            曜日を選択
+                          </option>
+                          <option value="月曜から木曜">月曜から木曜</option>
+                          <option value="金曜">金曜</option>
+                        </select>
+                      </div>
+                    </td>
                     <td>
                       <div>
                         <input
@@ -174,7 +205,11 @@ const HotelRestRateTable = memo(() => {
           <button className="btn" onClick={addRestRate}>
             休憩料金を追加
           </button>
-          <button type="submit" disabled={!isDirty} className="btn btn-primary">
+          <button
+            disabled={!isDirty}
+            className="btn btn-primary"
+            onClick={(e) => handleCreateRestRates(e)}
+          >
             登録
           </button>
         </div>
@@ -182,4 +217,5 @@ const HotelRestRateTable = memo(() => {
     </>
   );
 });
+
 export default HotelRestRateTable;

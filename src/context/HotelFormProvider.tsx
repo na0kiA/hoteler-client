@@ -43,7 +43,7 @@ type HotelFormContextType = {
 export const HotelFormContext = createContext({} as HotelFormContextType);
 
 export const HotelFormProvider = memo(({ children }: any) => {
-  const [id, setId] = useState(0);
+  const [id, setId] = useState<number>(0);
   const [name, setName] = useState("");
   const [keyList, setKeyList] = useState<string[]>([]);
   const [invalidName, setInvalidName] = useState("");
