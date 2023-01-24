@@ -14,6 +14,17 @@ const Price = () => {
   return (
     <>
       <Navbar />
+      <ul className="steps steps-horizontal flex justify-center text-lg">
+        <li className="step">
+          <span className="text-xs">詳細設定</span>
+        </li>
+        <li className="step step-primary">
+          <span className="text-xs">料金設定</span>
+        </li>
+        <li className="step">
+          <span className="text-xs">設備設定</span>
+        </li>
+      </ul>
       <HotelFormProvider>
         <HotelRestRateTable />
       </HotelFormProvider>

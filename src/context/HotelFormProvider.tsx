@@ -5,6 +5,8 @@ type HotelFormContextType = {
   setId: React.Dispatch<React.SetStateAction<number>>;
   name: string;
   setName: React.Dispatch<React.SetStateAction<string>>;
+  keyList: string[];
+  setKeyList: React.Dispatch<React.SetStateAction<string[]>>;
   content: string;
   setContent: React.Dispatch<React.SetStateAction<string>>;
   company: string;
@@ -43,6 +45,7 @@ export const HotelFormContext = createContext({} as HotelFormContextType);
 export const HotelFormProvider = memo(({ children }: any) => {
   const [id, setId] = useState(0);
   const [name, setName] = useState("");
+  const [keyList, setKeyList] = useState<string[]>([]);
   const [invalidName, setInvalidName] = useState("");
   const [content, setContent] = useState("");
   const [invalidContent, setInvalidContent] = useState("");
@@ -68,6 +71,8 @@ export const HotelFormProvider = memo(({ children }: any) => {
         setId,
         name,
         setName,
+        keyList,
+        setKeyList,
         invalidName,
         setInvalidName,
         content,

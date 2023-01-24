@@ -3,15 +3,13 @@ import {
   HotelFormProvider,
   useHotelFormStateContext,
 } from "context/HotelFormProvider";
-import { createHotel } from "lib/hotels";
 import { fetchSignedUrl } from "lib/image";
-import { useRouter } from "next/router";
 import React, { memo, useContext, useState } from "react";
-import { HotelCreateType } from "types/types";
 
 const HotelUploadImages = memo(() => {
+  const { keyList, setKeyList } = useHotelFormStateContext();
   console.log("FormInputがレンダリングされました");
-  const [keyList, setKeyList] = useState<string[]>([]);
+
   const [imageList, setImageList] = useState<string[]>([]);
   const maxImagesUpload = 4;
   const inputId = Math.random().toString(32).substring(2);
@@ -63,6 +61,10 @@ const HotelUploadImages = memo(() => {
     const newImages = [...imageList];
     newImages.splice(index, 1);
     setImageList(newImages);
+
+    const newKeyList = [...keyList];
+    newKeyList.splice(index, 1);
+    setKeyList(newKeyList);
   };
   console.log(imageList);
   console.log(keyList);
