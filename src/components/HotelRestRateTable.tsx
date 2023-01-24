@@ -15,7 +15,7 @@ const HotelRestRateTable = memo(() => {
     formState: { errors, isDirty },
   } = useForm({
     defaultValues: {
-      rates: [{ plan: "", rate: 5980, startTime: 0, endTime: 24 }],
+      rates: [{ plan: "休憩90分", rate: 5980, startTime: 0, endTime: 24 }],
     },
   });
   const filedArrayName = "rates";

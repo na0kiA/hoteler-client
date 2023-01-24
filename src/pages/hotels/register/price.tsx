@@ -1,12 +1,9 @@
-import FormInput from "components/HotelFormInput";
-import HotelRateInput from "components/HotelRateInput";
+import React, { createContext, useState } from "react";
+import Link from "next/link";
+import HotelRestRateTable from "components/HotelRestRateTable";
 import Navbar from "components/Navbar";
-import { AuthContext } from "context/AuthProvider";
 import { HotelFormProvider } from "context/HotelFormProvider";
 import { withAuthServerSideProps } from "lib/auth";
-import { createHotel } from "lib/hotels";
-import React, { createContext, useState } from "react";
-import { HotelCreateType } from "types/types";
 
 export const getServerSideProps = withAuthServerSideProps(
   "/auth/sessions",
@@ -18,8 +15,11 @@ const Price = () => {
     <>
       <Navbar />
       <HotelFormProvider>
-        <HotelRateInput />
+        <HotelRestRateTable />
       </HotelFormProvider>
+      <Link href={"/hotels/register/facilities"} className="link md:text-lg">
+        今はスキップ
+      </Link>
     </>
   );
 };

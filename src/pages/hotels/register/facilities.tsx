@@ -1,11 +1,13 @@
-import FormInput from "components/HotelFormInput";
+import React from "react";
+import FacilitiesForm from "components/FacilitiesForm";
 import Navbar from "components/Navbar";
-import { AuthContext } from "context/AuthProvider";
-import { HotelFormProvider } from "context/HotelFormProvider";
+import {
+  HotelFormProvider,
+  useHotelFormStateContext,
+} from "context/HotelFormProvider";
 import { withAuthServerSideProps } from "lib/auth";
-import { createHotel } from "lib/hotels";
-import React, { createContext, useState } from "react";
-import { HotelCreateType } from "types/types";
+import HotelUploadImages from "components/HotelUploadImages";
+import Link from "next/link";
 
 export const getServerSideProps = withAuthServerSideProps(
   "/auth/sessions",
@@ -13,11 +15,16 @@ export const getServerSideProps = withAuthServerSideProps(
 );
 
 const Facilities = () => {
+  const { id } = useHotelFormStateContext();
   return (
     <>
       <Navbar />
+      <HotelUploadImages />
       <HotelFormProvider>
-        <FormInput />
+        <FacilitiesForm />
+        <Link href={`/hotels/${id}`} className="link md:text-lg">
+          今はスキップ
+        </Link>
       </HotelFormProvider>
     </>
   );

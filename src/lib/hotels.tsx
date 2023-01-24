@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { HotelCreateType } from "types/types";
+import { HotelCreateType, HotelFacilityType } from "types/types";
 import client from "./client";
 
 export const getAllHotel = () => {
@@ -52,6 +52,16 @@ export const postImageKeyOfHotel = (params: string[], id: number) => {
 
 export const getDays = (id: number) => {
   return client.get(`/hotels/${id}/days`, {
+    headers: {
+      "access-token": Cookies.get("_access_token"),
+      client: Cookies.get("_client"),
+      uid: Cookies.get("_uid"),
+    },
+  });
+};
+
+export const updateFacilities = (id: number, params: HotelFacilityType) => {
+  return client.patch(`/hotels/${id}/hotel_facilities`, params, {
     headers: {
       "access-token": Cookies.get("_access_token"),
       client: Cookies.get("_client"),

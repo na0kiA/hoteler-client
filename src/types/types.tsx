@@ -1,14 +1,14 @@
 export type HotelFacilityType = {
-  wifiEnabled: string | undefined;
-  parkingEnabled: string | undefined;
-  creditCardEnabled: string | undefined;
-  phoneReservationEnabled: string | undefined;
-  netReservationEnabled: string | undefined;
-  tripleRoomsEnabled: string | undefined;
-  secretPaymentEnabled: string | undefined;
-  cookingEnabled: string | undefined;
-  breakfastEnabled: string | undefined;
-  couponEnabled: string | undefined;
+  wifiEnabled: boolean;
+  parkingEnabled: boolean;
+  creditCardEnabled: boolean;
+  phoneReservationEnabled: boolean;
+  netReservationEnabled: boolean;
+  tripleRoomsEnabled: boolean;
+  secretPaymentEnabled: boolean;
+  cookingEnabled: boolean;
+  breakfastEnabled: boolean;
+  couponEnabled: boolean;
 };
 
 export type ReviewType = {
