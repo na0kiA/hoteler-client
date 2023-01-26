@@ -8,6 +8,7 @@ import React, { memo, useContext, useState } from "react";
 import { HotelCreateType } from "types/types";
 import { useForm } from "react-hook-form";
 import { useAuthStateContext } from "context/AuthProvider";
+import Cookies from "js-cookie";
 
 const HotelFormInput = memo(() => {
   console.log("FormInputがレンダリングされました");
@@ -28,9 +29,9 @@ const HotelFormInput = memo(() => {
       company: "",
       prefecture: "",
       city: "",
-      postal_code: "",
-      street_address: "",
-      phone_number: "",
+      postalCode: "",
+      streetAddress: "",
+      phoneNumber: "",
     },
   });
 
@@ -74,9 +75,9 @@ const HotelFormInput = memo(() => {
   const onSubmit = async (data: HotelCreateType) => {
     try {
       const res = await createHotel(data);
-      console.log(res.data);
+      console.log(res);
       if (res.status == 200) {
-        setId(res.data.id);
+        Cookies.set("_hotel_id", res.data.id);
         router.push(`/hotels/register/price`);
       }
     } catch (error: any) {
@@ -104,11 +105,11 @@ const HotelFormInput = memo(() => {
           <div className="card-body">
             {inputForm("ホテル名", "name", invalidName)}
             {inputForm("会社", "company", invalidCompany)}
-            {inputForm("ホテルの電話番号", "phone_number", invalidPhoneNumber)}
+            {inputForm("ホテルの電話番号", "phoneNumber", invalidPhoneNumber)}
             {inputForm("都道府県", "prefecture", invalidPrefecture)}
             {inputForm("市区町村", "city", invalidCity)}
-            {inputForm("番地", "street_address", invalidStreetAddress)}
-            {inputForm("郵便番号", "postal_code", invalidPostalCode)}
+            {inputForm("番地", "streetAddress", invalidStreetAddress)}
+            {inputForm("郵便番号", "postalCode", invalidPostalCode)}
             <div className="form-control">
               <label className="label">
                 <span className="label-text">ホテルの説明</span>

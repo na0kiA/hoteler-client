@@ -11,13 +11,17 @@ export const getHotelDetail = (id: string | string[] | undefined) => {
 };
 
 export const createHotel = (params: HotelCreateType) => {
-  return client.post("/hotels", params, {
-    headers: {
-      "access-token": Cookies.get("_access_token"),
-      client: Cookies.get("_client"),
-      uid: Cookies.get("_uid"),
-    },
-  });
+  return client.post(
+    "/hotels",
+    { hotel: params },
+    {
+      headers: {
+        "access-token": Cookies.get("_access_token"),
+        client: Cookies.get("_client"),
+        uid: Cookies.get("_uid"),
+      },
+    }
+  );
 };
 
 export const updateHotel = (id: number, params: string) => {
@@ -50,7 +54,7 @@ export const postImageKeyOfHotel = (params: string[], id: number) => {
   });
 };
 
-export const getDays = (id: number) => {
+export const getDays = (id: string | string[] | undefined) => {
   return client.get(`/hotels/${id}/days`, {
     headers: {
       "access-token": Cookies.get("_access_token"),

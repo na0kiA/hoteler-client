@@ -1,5 +1,6 @@
 import { useAuthStateContext } from "context/AuthProvider";
 import { useHotelFormStateContext } from "context/HotelFormProvider";
+import Cookies from "js-cookie";
 import { createRestRate } from "lib/hotelRate";
 import { getDays } from "lib/hotels";
 import { useRouter } from "next/router";
@@ -8,9 +9,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { HotelRateParams } from "types/types";
 
 const HotelRestRateTable = memo(() => {
-  const { id } = useAuthStateContext();
   const router = useRouter();
-  console.log(id);
 
   const {
     register,
@@ -21,7 +20,13 @@ const HotelRestRateTable = memo(() => {
   } = useForm({
     defaultValues: {
       rates: [
-        { plan: "休憩90分", rate: 5980, startTime: 0, endTime: 24, day: "" },
+        {
+          plan: "休憩90分",
+          rate: 5980,
+          start_time: 3,
+          end_time: 21,
+          day: "月曜から木曜",
+        },
       ],
     },
   });
@@ -35,11 +40,13 @@ const HotelRestRateTable = memo(() => {
   const getFieldArray = getValues("rates");
 
   const generateEachParams = getFieldArray.map((service) => {
+    console.log(service);
+
     const restRateParams: HotelRateParams = {
       plan: service.plan,
       rate: service.rate,
-      startTime: `${service.startTime}:00`,
-      endTime: `${service.endTime}:00`,
+      start_time: `${service.start_time}:00`,
+      end_time: `${service.end_time}:00`,
       day: service.day,
     };
 
@@ -52,11 +59,12 @@ const HotelRestRateTable = memo(() => {
     e.preventDefault();
 
     try {
-      const hotelDays = await getDays(id);
+      const hotelId = Cookies.get("_hotel_id");
+      const hotelDays = await getDays(hotelId);
       const mondayThroughThursday = hotelDays.data?.[0].id;
       const friday = hotelDays.data?.[1].id;
-      const [postAllRestRate]: any = await Promise.all([
-        generateEachParams.map((service: HotelRateParams) => {
+      await Promise.all([
+        generateEachParams.map((service) => {
           if (service.day == "月曜から木曜") {
             createRestRate(service, mondayThroughThursday);
           } else if (service.day == "金曜") {
@@ -64,16 +72,18 @@ const HotelRestRateTable = memo(() => {
           }
         }),
       ]);
-      if (postAllRestRate.status == 200) {
-        router.push("/hotels/register/facilities");
-      }
+      // console.log([postAllRestRate]);
+
+      // if (postAllRestRate.status == 200) {
+      //   router.push("/hotels/register/facilities");
+      // }
     } catch (error: any) {
       console.log(error);
     }
   };
 
   const addRestRate = () => {
-    append({ plan: "", rate: 0, startTime: 0, endTime: 24, day: "" });
+    append({ plan: "", rate: 0, start_time: 0, end_time: 24, day: "" });
   };
 
   const removeRestRate = (index: number) => {
@@ -158,7 +168,7 @@ const HotelRestRateTable = memo(() => {
                         <input
                           key={field.id}
                           className="input input-bordered input-sm"
-                          {...register(`rates.${index}.startTime`, {
+                          {...register(`rates.${index}.start_time`, {
                             required: true,
                             min: 0,
                             max: 24,
@@ -166,7 +176,7 @@ const HotelRestRateTable = memo(() => {
                           })}
                         />
                       </div>
-                      {errors.rates?.[index]?.startTime && (
+                      {errors.rates?.[index]?.start_time && (
                         <span className="text-red-600 text-ssm md:text-sm mt-2">
                           0時から24時の半角数字で入力してください。
                         </span>
@@ -177,7 +187,7 @@ const HotelRestRateTable = memo(() => {
                         <input
                           key={field.id}
                           className="input input-bordered input-sm"
-                          {...register(`rates.${index}.endTime`, {
+                          {...register(`rates.${index}.end_time`, {
                             required: true,
                             min: 0,
                             max: 24,
@@ -185,7 +195,7 @@ const HotelRestRateTable = memo(() => {
                           })}
                         />
                       </div>
-                      {errors.rates?.[index]?.endTime && (
+                      {errors.rates?.[index]?.end_time && (
                         <span className="text-red-600 text-ssm md:text-sm mt-2">
                           0時から24時の半角数字で入力してください。
                         </span>
