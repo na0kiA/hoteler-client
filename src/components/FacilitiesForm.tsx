@@ -1,15 +1,19 @@
 import { useHotelFormStateContext } from "context/HotelFormProvider";
 import { postImageKeyOfHotel, updateFacilities } from "lib/hotels";
 import Link from "next/link";
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { HotelFacilityType } from "types/types";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
 // type FacilitiesKey = keyof typeof HotelFacilityType;
+type PROPS = {
+  id: string | undefined;
+};
 
-const FacilitiesForm = memo(() => {
-  const { id, keyList } = useHotelFormStateContext();
+const FacilitiesForm = memo(({ id }: PROPS) => {
+  const [error, setError] = useState("");
+  const { keyList } = useHotelFormStateContext();
   const router = useRouter();
 
   const { register, handleSubmit, getValues } = useForm({
@@ -33,17 +37,22 @@ const FacilitiesForm = memo(() => {
   console.log(getFacilitiesValue);
 
   const onSubmit = async (data: HotelFacilityType) => {
+    console.log(data);
+
     try {
       const [results]: any = await Promise.all([
-        postImageKeyOfHotel(keyList, id),
+        postImageKeyOfHotel(id, keyList),
         updateFacilities(id, data),
       ]);
+      console.log([results]);
+
       if (results.status == 200) {
         router.push(`/hotels/${id}`);
       }
     } catch (error: any) {
       if (error.response.data) {
         console.log(error);
+        setError(error.response.data);
       } else {
         console.log(error);
       }
@@ -52,7 +61,7 @@ const FacilitiesForm = memo(() => {
 
   const toggleOfFacilities = (label: string, value: FacilitiesKey) => {
     return (
-      <div className="form-control w-52">
+      <div className="form-control w-3/4 md:w-1/4 m-auto">
         <label className="cursor-pointer label">
           <span className="label-text">{label}</span>
           <input
@@ -66,8 +75,11 @@ const FacilitiesForm = memo(() => {
   };
 
   return (
-    <>
-      ホテル設備の設定
+    <div className="text-center p-10">
+      <div className="text-xl font-bold  mb-1">ホテル設備の設定</div>
+      {error && (
+        <div className="text-red-600 text-ssm md:text-sm my-auto">{error}</div>
+      )}
       <form onSubmit={handleSubmit(onSubmit)}>
         {toggleOfFacilities("WiFiの有無", "wifiEnabled")}
         {toggleOfFacilities("駐車場の有無", "parkingEnabled")}
@@ -79,14 +91,19 @@ const FacilitiesForm = memo(() => {
         {toggleOfFacilities("朝食の提供の有無", "breakfastEnabled")}
         {toggleOfFacilities("クーポンの有無", "couponEnabled")}
         {toggleOfFacilities(
-          "フロントと会わずに精算ができるかどうか",
+          "フロントと会わずに精算ができる",
           "secretPaymentEnabled"
         )}
-        <button type="submit" className="btn btn-primary">
-          仮登録
-        </button>
+        <div className="mt-5">
+          <Link href={`/hotels/${id}`} className="link md:text-lg mr-10">
+            今はスキップ
+          </Link>
+          <button type="submit" className="btn btn-primary">
+            仮登録
+          </button>
+        </div>
       </form>
-    </>
+    </div>
   );
 });
 

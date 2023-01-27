@@ -8,6 +8,7 @@ import {
 import { withAuthServerSideProps } from "lib/auth";
 import HotelUploadImages from "components/HotelUploadImages";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 export const getServerSideProps = withAuthServerSideProps(
   "/auth/sessions",
@@ -15,7 +16,7 @@ export const getServerSideProps = withAuthServerSideProps(
 );
 
 const Facilities = () => {
-  const { id } = useHotelFormStateContext();
+  const id = Cookies.get("_hotel_id");
   return (
     <>
       <Navbar />
@@ -30,13 +31,12 @@ const Facilities = () => {
           <span className="text-xs">設備設定</span>
         </li>
       </ul>
+      {/* <div className="m-auto"> */}
       <HotelFormProvider>
         <HotelUploadImages />
-        <FacilitiesForm />
-        <Link href={`/hotels/${id}`} className="link md:text-lg">
-          今はスキップ
-        </Link>
+        <FacilitiesForm id={id} />
       </HotelFormProvider>
+      {/* </div> */}
     </>
   );
 };

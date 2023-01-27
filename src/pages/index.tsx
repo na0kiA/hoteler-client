@@ -78,7 +78,6 @@ export const getServerSideProps = async ({ res }: any) => {
 
   const apiResponse = await getAllHotel();
   const hotels = await apiResponse.data;
-  console.log(hotels);
 
   return {
     props: {

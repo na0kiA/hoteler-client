@@ -71,14 +71,14 @@ const HotelUploadImages = memo(() => {
 
   return (
     <>
-      <div className="form-control">
-        <label className="label">
-          <span className="label-text">ホテル画像</span>
+      <div className="form-control text-center mb-5 mt-5">
+        <label className="label m-auto">
+          <span className="text-xl font-bold">ホテル画像の設定</span>
         </label>
         {imageList &&
           imageList.map((item, i) => {
             return (
-              <div key={i} className="mb-5 flex">
+              <div key={i} className="mb-5 flex justify-center">
                 <button
                   className="btn btn-square btn-outline btn-xs"
                   onClick={(e) => handleOnRemoveImage(i)}
@@ -101,8 +101,8 @@ const HotelUploadImages = memo(() => {
                 <Image
                   className=""
                   src={item}
-                  width={100}
-                  height={100}
+                  width={300}
+                  height={300}
                   alt="ホテル画像"
                 />
               </div>
@@ -111,14 +111,16 @@ const HotelUploadImages = memo(() => {
         <label htmlFor={inputId}>
           {imageList.length >= 1 && (
             <>
-              <span>画像を追加できます。画像は最大10枚までです。</span>
+              <span className="underline align-bottom">
+                画像を追加できます。画像は最大10枚までです。
+              </span>
             </>
           )}
           <input
             id={inputId}
             type="file"
             disabled={imageList.length >= maxImagesUpload}
-            className="file-input file-input-bordered file-input-xs w-5/6 max-w-xs m-auto"
+            className="file-input file-input-bordered file-input-xs w-5/6 max-w-xs m-auto ml-1"
             multiple
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleChangeImage(e)

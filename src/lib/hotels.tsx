@@ -44,14 +44,22 @@ export const deleteHotel = (id: number) => {
   });
 };
 
-export const postImageKeyOfHotel = (params: string[], id: number) => {
-  return client.post(`/hotels/${id}/images`, params, {
-    headers: {
-      "access-token": Cookies.get("_access_token"),
-      client: Cookies.get("_client"),
-      uid: Cookies.get("_uid"),
-    },
-  });
+export const postImageKeyOfHotel = (
+  id: string | string[] | undefined,
+  // params: string[]
+  params: string[]
+) => {
+  return client.post(
+    `/hotels/${id}/images`,
+    { key: params },
+    {
+      headers: {
+        "access-token": Cookies.get("_access_token"),
+        client: Cookies.get("_client"),
+        uid: Cookies.get("_uid"),
+      },
+    }
+  );
 };
 
 export const getDays = (id: string | string[] | undefined) => {
@@ -64,12 +72,19 @@ export const getDays = (id: string | string[] | undefined) => {
   });
 };
 
-export const updateFacilities = (id: number, params: HotelFacilityType) => {
-  return client.patch(`/hotels/${id}/hotel_facilities`, params, {
-    headers: {
-      "access-token": Cookies.get("_access_token"),
-      client: Cookies.get("_client"),
-      uid: Cookies.get("_uid"),
-    },
-  });
+export const updateFacilities = (
+  id: string | string[] | undefined,
+  params: HotelFacilityType
+) => {
+  return client.patch(
+    `/hotels/${id}/hotel_facilities`,
+    { hotel_facilities: params },
+    {
+      headers: {
+        "access-token": Cookies.get("_access_token"),
+        client: Cookies.get("_client"),
+        uid: Cookies.get("_uid"),
+      },
+    }
+  );
 };

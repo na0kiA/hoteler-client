@@ -64,8 +64,7 @@ const HotelFormInput = memo(() => {
           />
           {errors?.[value] && errors?.[value]?.message}
         </div>
-        {/* {errorText(errorValue)} */}
-        {console.log(errors)}
+        {errorText(errorValue)}
       </>
     );
   };

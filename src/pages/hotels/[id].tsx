@@ -5,6 +5,7 @@ import { getHotelDetail } from "lib/hotels";
 import { HotelDetailType } from "types/types";
 import { Rating } from "react-simple-star-rating";
 import Link from "next/link";
+import client from "lib/client";
 
 const HotelDetail = ({
   favoritesCount,
@@ -103,19 +104,31 @@ export default HotelDetail;
 
 export const getServerSideProps = async (ctx: any) => {
   const { id } = ctx.query;
-  const res = await getHotelDetail(id);
-  const hotelDetail: HotelDetailType = res.data;
-  console.log(hotelDetail);
 
-  if (!hotelDetail) {
+  try {
+    const res = await client.get(`/hotels/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        uid: ctx.req.cookies["_uid"],
+        client: ctx.req.cookies["_client"],
+        "access-token": ctx.req.cookies["_access_token"],
+      },
+    });
+    const hotelDetail: HotelDetailType = await res.data;
+    return {
+      props: {
+        ...hotelDetail,
+      },
+    };
+  } catch (error) {
     return {
       notFound: true,
     };
   }
 
-  return {
-    props: {
-      ...hotelDetail,
-    },
-  };
+  // return {
+  //   props: {
+  //     ...hotelDetail,
+  //   },
+  // };
 };
