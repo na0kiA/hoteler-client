@@ -6,6 +6,7 @@ import { HotelDetailType } from "types/types";
 import { Rating } from "react-simple-star-rating";
 import Link from "next/link";
 import client from "lib/client";
+import Layout from "components/Layout";
 
 const HotelDetail = ({
   favoritesCount,
@@ -25,7 +26,7 @@ const HotelDetail = ({
   id,
 }: HotelDetailType) => {
   return (
-    <>
+    <Layout title={`${name}のホテル詳細ページ`}>
       <div className="card w-96 bg-base-100 shadow-xl">
         <figure>
           <Image
@@ -80,24 +81,19 @@ const HotelDetail = ({
         <div className="card-body">
           <h2 className="card-title">提供されるアメニティ・設備</h2>
           <div className="text-sm">
-            {hotelFacilities.wifiEnabled && hotelFacilities.wifiEnabled}
-            {hotelFacilities.couponEnabled && hotelFacilities.cookingEnabled}
-            {hotelFacilities.parkingEnabled && hotelFacilities.parkingEnabled}
-            {hotelFacilities.phoneReservationEnabled &&
-              hotelFacilities.phoneReservationEnabled}
-            {hotelFacilities.netReservationEnabled &&
-              hotelFacilities.netReservationEnabled}
-            {hotelFacilities.breakfastEnabled &&
-              hotelFacilities.breakfastEnabled}
-            {hotelFacilities.cookingEnabled && hotelFacilities.cookingEnabled}
-            {hotelFacilities.tripleRoomsEnabled &&
-              hotelFacilities.tripleRoomsEnabled}
+            {hotelFacilities.wifiEnabled && "Wi-FI"}
+            {hotelFacilities.parkingEnabled && "駐車場"}
+            {hotelFacilities.phoneReservationEnabled && "電話予約可能"}
+            {hotelFacilities.netReservationEnabled && "ネット予約可能"}
+            {hotelFacilities.breakfastEnabled && "朝食"}
+            {hotelFacilities.cookingEnabled && "料理"}
+            {hotelFacilities.tripleRoomsEnabled && "3人以上"}
             {hotelFacilities.secretPaymentEnabled &&
-              hotelFacilities.secretPaymentEnabled}
+              "入室から退室までフロントと会わない"}
           </div>
         </div>
       </div>
-    </>
+    </Layout>
   );
 };
 export default HotelDetail;
@@ -125,10 +121,4 @@ export const getServerSideProps = async (ctx: any) => {
       notFound: true,
     };
   }
-
-  // return {
-  //   props: {
-  //     ...hotelDetail,
-  //   },
-  // };
 };

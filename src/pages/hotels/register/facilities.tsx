@@ -9,6 +9,7 @@ import { withAuthServerSideProps } from "lib/auth";
 import HotelUploadImages from "components/HotelUploadImages";
 import Link from "next/link";
 import Cookies from "js-cookie";
+import Layout from "components/Layout";
 
 export const getServerSideProps = withAuthServerSideProps(
   "/auth/sessions",
@@ -18,8 +19,7 @@ export const getServerSideProps = withAuthServerSideProps(
 const Facilities = () => {
   const id = Cookies.get("_hotel_id");
   return (
-    <>
-      <Navbar />
+    <Layout title="ホテル設備設定ページ">
       <ul className="steps steps-horizontal flex justify-center text-lg">
         <li className="step">
           <span className="text-xs">詳細設定</span>
@@ -31,13 +31,11 @@ const Facilities = () => {
           <span className="text-xs">設備設定</span>
         </li>
       </ul>
-      {/* <div className="m-auto"> */}
       <HotelFormProvider>
         <HotelUploadImages />
         <FacilitiesForm id={id} />
       </HotelFormProvider>
-      {/* </div> */}
-    </>
+    </Layout>
   );
 };
 

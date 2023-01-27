@@ -4,6 +4,7 @@ import HotelRestRateTable from "components/HotelRestRateTable";
 import Navbar from "components/Navbar";
 import { HotelFormProvider } from "context/HotelFormProvider";
 import { withAuthServerSideProps } from "lib/auth";
+import Layout from "components/Layout";
 
 export const getServerSideProps = withAuthServerSideProps(
   "/auth/sessions",
@@ -12,8 +13,7 @@ export const getServerSideProps = withAuthServerSideProps(
 
 const Price = () => {
   return (
-    <>
-      <Navbar />
+    <Layout title="ホテル料金設定ページ">
       <ul className="steps steps-horizontal flex justify-center text-lg">
         <li className="step">
           <span className="text-xs">詳細設定</span>
@@ -31,7 +31,7 @@ const Price = () => {
       <Link href={"/hotels/register/facilities"} className="link md:text-lg">
         今はスキップ
       </Link>
-    </>
+    </Layout>
   );
 };
 

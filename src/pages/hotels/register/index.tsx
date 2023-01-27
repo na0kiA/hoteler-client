@@ -1,4 +1,5 @@
 import HotelFormInput from "components/HotelFormInput";
+import Layout from "components/Layout";
 import Navbar from "components/Navbar";
 import { AuthContext } from "context/AuthProvider";
 import { HotelFormProvider } from "context/HotelFormProvider";
@@ -14,8 +15,7 @@ export const getServerSideProps = withAuthServerSideProps(
 
 const Home = () => {
   return (
-    <>
-      <Navbar />
+    <Layout title="ホテル登録ページ">
       <ul className="steps steps-horizontal flex justify-center text-lg">
         <li className="step step-primary">
           <span className="text-xs">詳細設定</span>
@@ -30,7 +30,7 @@ const Home = () => {
       <HotelFormProvider>
         <HotelFormInput />
       </HotelFormProvider>
-    </>
+    </Layout>
   );
 };
 

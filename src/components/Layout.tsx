@@ -1,6 +1,8 @@
 import Head from "next/head";
+import Link from "next/link";
 import React, { memo } from "react";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 type TITLE = {
   title: string;
@@ -23,6 +25,7 @@ const Layout = memo(({ children, title }: TITLE) => {
         <Navbar />
         <>{children}</>
       </main>
+      <Footer />
     </>
   );
 });
