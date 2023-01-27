@@ -1,13 +1,9 @@
-import {
-  HotelFormProvider,
-  useHotelFormStateContext,
-} from "context/HotelFormProvider";
-import { createHotel } from "lib/hotels";
-import { useRouter } from "next/router";
 import React, { memo, useContext, useState } from "react";
+import { useRouter } from "next/router";
+
+import { createHotel } from "lib/hotels";
 import { HotelCreateType } from "types/types";
-import { useForm } from "react-hook-form";
-import { useAuthStateContext } from "context/AuthProvider";
+import { useForm, useFormState } from "react-hook-form";
 import Cookies from "js-cookie";
 
 const HotelFormInput = memo(() => {
@@ -20,9 +16,14 @@ const HotelFormInput = memo(() => {
   const [invalidPostalCode, setInvalidPostalCode] = useState("");
   const [invalidStreetAddress, setInvalidStreetAddress] = useState("");
   const [invalidPhoneNumber, setInvalidPhoneNumber] = useState("");
-  const { id, setId } = useAuthStateContext();
   const router = useRouter();
-  const { register, handleSubmit, getValues } = useForm({
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    control,
+    formState: { errors, isDirty },
+  } = useForm({
     defaultValues: {
       name: "",
       content: "",
@@ -34,10 +35,14 @@ const HotelFormInput = memo(() => {
       phoneNumber: "",
     },
   });
+  const { dirtyFields } = useFormState({
+    control,
+  });
 
   const getHotelFormValue = getValues();
 
   type HotelFormKeys = keyof typeof getHotelFormValue;
+  console.log(errors.content?.message);
 
   const inputForm = (
     labelText: string,
@@ -54,12 +59,13 @@ const HotelFormInput = memo(() => {
             type="text"
             className="input input-bordered input-sm"
             {...register(value, {
-              required: true,
-              // required: "必須項目です",
+              required: "必須項目です",
             })}
           />
-          {errorText(errorValue)}
+          {errors?.[value] && errors?.[value]?.message}
         </div>
+        {/* {errorText(errorValue)} */}
+        {console.log(errors)}
       </>
     );
   };
@@ -101,7 +107,7 @@ const HotelFormInput = memo(() => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="card card-compact	flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+        <div className="card card-compact	flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 m-auto">
           <div className="card-body">
             {inputForm("ホテル名", "name", invalidName)}
             {inputForm("会社", "company", invalidCompany)}
@@ -116,14 +122,28 @@ const HotelFormInput = memo(() => {
               </label>
               <textarea
                 className="textarea textarea-bordered w-full max-h-full text-xs"
-                {...register("content", { required: true })}
+                {...register("content", {
+                  required: "コンテンツは10文字以上入力してください",
+                })}
               ></textarea>
-              {errorText(invalidContent)}
+              {errors.content?.message && errors.content.message}
             </div>
             <div className="form-control mt-6">
               <button
                 className="btn btn-primary"
                 type="submit"
+                disabled={
+                  !(
+                    dirtyFields.name &&
+                    dirtyFields.city &&
+                    dirtyFields.company &&
+                    dirtyFields.content &&
+                    dirtyFields.phoneNumber &&
+                    dirtyFields.postalCode &&
+                    dirtyFields.prefecture &&
+                    dirtyFields.streetAddress
+                  )
+                }
                 onClick={(e) => {
                   setInvalidName("");
                   setInvalidContent("");

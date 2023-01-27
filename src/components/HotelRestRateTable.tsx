@@ -55,18 +55,29 @@ const HotelRestRateTable = memo(() => {
     remove(index);
   };
 
-  const onSubmit = async (data: any) => {
-    console.log(data.rates);
+  type DATA = {
+    rates: ServiceParams[];
+  };
 
-    const rest = data.rates.map((service: HotelRateParams) => {
-      const restRateParams: HotelRateParams = {
+  type ServiceParams = {
+    plan: string;
+    rate: number;
+    start_time: number;
+    end_time: number;
+    day?: string | undefined;
+    service?: string | undefined;
+  };
+
+  const onSubmit = async (data: DATA) => {
+    const services = data.rates.map((service: ServiceParams) => {
+      const converNumberToDate: HotelRateParams = {
         plan: service.plan,
         rate: service.rate,
         start_time: `${service.start_time}:00`,
         end_time: `${service.end_time}:00`,
         day: service.day,
       };
-      return restRateParams;
+      return converNumberToDate;
     });
     try {
       const hotelId = Cookies.get("_hotel_id");
@@ -74,8 +85,8 @@ const HotelRestRateTable = memo(() => {
       console.log(hotelDays);
 
       await Promise.all([
-        rest.map((service: HotelRateParams) => {
-          postServiceList(service, hotelDays.data);
+        services.map((service: HotelRateParams) => {
+          postServiceListByWeekdays(service, hotelDays.data);
         }),
       ]);
     } catch (error: any) {
@@ -83,7 +94,10 @@ const HotelRestRateTable = memo(() => {
     }
   };
 
-  const postServiceList = (service: HotelRateParams, hotelDays: any) => {
+  const postServiceListByWeekdays = (
+    service: HotelRateParams,
+    hotelDays: any
+  ) => {
     if (service.service == "休憩") {
       switch (service.day) {
         case "月曜から木曜":

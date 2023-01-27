@@ -8,6 +8,7 @@ import { useAuthStateContext } from "context/AuthProvider";
 
 const Navbar = memo(() => {
   console.log("Navbarが呼ばれたよ");
+  const router = useRouter();
 
   const [menuDisplay, setmenuDisplay] = useState(true);
   const [displayMenuStyle, setdisplayMenuStyle] = useState("");
