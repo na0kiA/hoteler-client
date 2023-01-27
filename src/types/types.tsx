@@ -79,9 +79,9 @@ export type HotelCreateType = {
 export type ServiceRateType = {
   plan: string;
   rate: number;
-  startTime: Date;
-  endTime: Date;
-  restRates: string;
+  startTime: number;
+  endTime: number;
+  restRates?: string;
 };
 
 export type AfterBusinessHour = {
@@ -97,7 +97,7 @@ export type HotelListType = {
   averageRating: number;
   reviewsCount: number;
   hotelImages: string;
-  dayOfTheWeek: string;
+  dayOfTheWeek?: string;
   restRates: ServiceRateType;
   stayRates: ServiceRateType;
 };
@@ -182,6 +182,7 @@ export type HotelRateParams = {
   start_time: string;
   end_time: string;
   day?: string;
+  service?: string;
 };
 
 export type AuthContextType = {

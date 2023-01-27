@@ -19,10 +19,9 @@ const Layout = memo(({ children, title }: TITLE) => {
         <meta property="og:image:width" content={String(50)} />
         <meta property="og:image:height" content={String(50)} />
       </Head>
-
       <main>
         <Navbar />
-        <div>{children}</div>
+        <>{children}</>
       </main>
     </>
   );

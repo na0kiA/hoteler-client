@@ -1,7 +1,7 @@
 import { useAuthStateContext } from "context/AuthProvider";
 import { useHotelFormStateContext } from "context/HotelFormProvider";
 import Cookies from "js-cookie";
-import { createRestRate } from "lib/hotelRate";
+import { createRestRate, createStayRate } from "lib/hotelRate";
 import { getDays } from "lib/hotels";
 import { useRouter } from "next/router";
 import React, { memo } from "react";
@@ -23,9 +23,10 @@ const HotelRestRateTable = memo(() => {
         {
           plan: "休憩90分",
           rate: 5980,
-          start_time: 3,
-          end_time: 21,
+          start_time: 6,
+          end_time: 23,
           day: "月曜から木曜",
+          service: "",
         },
       ],
     },
@@ -39,68 +40,116 @@ const HotelRestRateTable = memo(() => {
 
   const getFieldArray = getValues("rates");
 
-  const generateEachParams = getFieldArray.map((service) => {
-    console.log(service);
-
-    const restRateParams: HotelRateParams = {
-      plan: service.plan,
-      rate: service.rate,
-      start_time: `${service.start_time}:00`,
-      end_time: `${service.end_time}:00`,
-      day: service.day,
-    };
-
-    return restRateParams;
-  });
-
-  const handleCreateRestRates = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-
-    try {
-      const hotelId = Cookies.get("_hotel_id");
-      const hotelDays = await getDays(hotelId);
-      const mondayThroughThursday = hotelDays.data?.[0].id;
-      const friday = hotelDays.data?.[1].id;
-      await Promise.all([
-        generateEachParams.map((service) => {
-          if (service.day == "月曜から木曜") {
-            createRestRate(service, mondayThroughThursday);
-          } else if (service.day == "金曜") {
-            createRestRate(service, friday);
-          }
-        }),
-      ]);
-      // console.log([postAllRestRate]);
-
-      // if (postAllRestRate.status == 200) {
-      //   router.push("/hotels/register/facilities");
-      // }
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
-
   const addRestRate = () => {
-    append({ plan: "", rate: 0, start_time: 0, end_time: 24, day: "" });
+    append({
+      plan: "休憩90分",
+      rate: 0,
+      start_time: 0,
+      end_time: 24,
+      day: "",
+      service: "",
+    });
   };
 
   const removeRestRate = (index: number) => {
     remove(index);
   };
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = async (data: any) => {
+    console.log(data.rates);
+
+    const rest = data.rates.map((service: HotelRateParams) => {
+      const restRateParams: HotelRateParams = {
+        plan: service.plan,
+        rate: service.rate,
+        start_time: `${service.start_time}:00`,
+        end_time: `${service.end_time}:00`,
+        day: service.day,
+      };
+      return restRateParams;
+    });
+    try {
+      const hotelId = Cookies.get("_hotel_id");
+      const hotelDays = await getDays(hotelId);
+      console.log(hotelDays);
+
+      await Promise.all([
+        rest.map((service: HotelRateParams) => {
+          postServiceList(service, hotelDays.data);
+        }),
+      ]);
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
+  const postServiceList = (service: HotelRateParams, hotelDays: any) => {
+    if (service.service == "休憩") {
+      switch (service.day) {
+        case "月曜から木曜":
+          createRestRate(service, hotelDays[0].id);
+          break;
+        case "金曜":
+          createRestRate(service, hotelDays[1].id);
+          break;
+        case "土曜":
+          createRestRate(service, hotelDays[2].id);
+          break;
+        case "日曜":
+          createRestRate(service, hotelDays[3].id);
+          break;
+        case "祝日":
+          createRestRate(service, hotelDays[4].id);
+          break;
+        case "祝前日":
+          createRestRate(service, hotelDays[5].id);
+          break;
+        case "特別期間":
+          createRestRate(service, hotelDays[6].id);
+          break;
+        default:
+          console.log("不一致");
+      }
+    } else {
+      switch (service.day) {
+        case "月曜から木曜":
+          createStayRate(service, hotelDays[0].id);
+          break;
+        case "金曜":
+          createStayRate(service, hotelDays[1].id);
+          break;
+        case "土曜":
+          createStayRate(service, hotelDays[2].id);
+          break;
+        case "日曜":
+          createStayRate(service, hotelDays[3].id);
+          break;
+        case "祝日":
+          createStayRate(service, hotelDays[4].id);
+          break;
+        case "祝前日":
+          createStayRate(service, hotelDays[5].id);
+          break;
+        case "特別期間":
+          createStayRate(service, hotelDays[6].id);
+          break;
+        default:
+          console.log("不一致");
+      }
+    }
+  };
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
+        {/* <h1 className="text-2xl">休憩料金の設定</h1> */}
         <div className="overflow-x-auto">
           <table className="table table-compact w-full">
             <thead>
               <tr>
                 <th></th>
                 <th>曜日</th>
+                <th>サービス</th>
                 <th>プラン名</th>
                 <th>料金</th>
                 <th>開始時刻</th>
@@ -117,22 +166,39 @@ const HotelRestRateTable = memo(() => {
                       <div>
                         <select
                           {...register(`rates.${index}.day`)}
-                          className="select w-full max-w-xs"
+                          className="select select-bordered select-sm max-w-xs"
                         >
                           <option disabled selected>
                             曜日を選択
                           </option>
                           <option value="月曜から木曜">月曜から木曜</option>
                           <option value="金曜">金曜</option>
+                          <option value="土曜">土曜</option>
+                          <option value="日曜">日曜</option>
+                          <option value="祝日">祝日</option>
+                          <option value="祝前日">祝前日</option>
+                          <option value="特別期間">特別期間</option>
                         </select>
                       </div>
+                    </td>
+                    <td>
+                      <select
+                        {...register(`rates.${index}.service`)}
+                        className="select select-bordered select-sm max-w-xs"
+                      >
+                        <option disabled selected>
+                          サービスを選択
+                        </option>
+                        <option value="休憩">休憩</option>
+                        <option value="宿泊">宿泊</option>
+                      </select>
                     </td>
                     <td>
                       <div>
                         <input
                           key={field.id}
                           type="text"
-                          className="input input-bordered input-sm md:input-md"
+                          className="input input-bordered input-sm"
                           {...register(`rates.${index}.plan`, {
                             required: "必須項目です",
                             maxLength: 10,
@@ -214,17 +280,17 @@ const HotelRestRateTable = memo(() => {
               </>
             ))}
           </table>
-          <button className="btn" onClick={addRestRate}>
-            休憩料金を追加
-          </button>
-          <button
-            disabled={!isDirty}
-            className="btn btn-primary"
-            onClick={(e) => handleCreateRestRates(e)}
-          >
-            登録
+          <button className="btn btn-sm mb-5 mt-1" onClick={addRestRate}>
+            プランを追加
           </button>
         </div>
+        <button
+          disabled={!isDirty}
+          className="btn btn-primary btn-sm mb-5"
+          type="submit"
+        >
+          この内容で登録する
+        </button>
       </form>
     </>
   );

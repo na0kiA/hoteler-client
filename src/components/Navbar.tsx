@@ -1,9 +1,9 @@
 import React, { memo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { signOut } from "lib/auth";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import { signOut } from "lib/auth";
 import { useAuthStateContext } from "context/AuthProvider";
 
 const Navbar = memo(() => {
@@ -13,7 +13,6 @@ const Navbar = memo(() => {
   const [displayMenuStyle, setdisplayMenuStyle] = useState("");
   const [search, setSearch] = useState(true);
 
-  const router = useRouter();
   const { currentUser, isSignedIn, loading, setIsSignedIn, setCurrentUser } =
     useAuthStateContext();
 
@@ -35,6 +34,7 @@ const Navbar = memo(() => {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
+    const router = useRouter();
 
     try {
       const res = await signOut();

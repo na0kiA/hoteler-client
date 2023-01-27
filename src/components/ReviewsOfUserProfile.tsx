@@ -2,7 +2,6 @@ import React, { memo, useCallback, useMemo } from "react";
 import { Rating } from "react-simple-star-rating";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 import { useAuthStateContext } from "context/AuthProvider";
 import { ReviewType } from "types/types";

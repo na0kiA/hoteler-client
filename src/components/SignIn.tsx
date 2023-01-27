@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import React, { useLayoutEffect, useState } from "react";
 import Link from "next/link";
 import { signIn } from "lib/auth";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { SignInParams } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import HomeIcon from "./HomeIcon";
