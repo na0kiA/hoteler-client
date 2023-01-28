@@ -5,6 +5,7 @@ import React, { memo, useState } from "react";
 import { HotelFacilityType } from "types/types";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 // type FacilitiesKey = keyof typeof HotelFacilityType;
 type PROPS = {
@@ -34,11 +35,8 @@ const FacilitiesForm = memo(({ id }: PROPS) => {
   const getFacilitiesValue = getValues();
 
   type FacilitiesKey = keyof typeof getFacilitiesValue;
-  console.log(getFacilitiesValue);
 
   const onSubmit = async (data: HotelFacilityType) => {
-    console.log(data);
-
     try {
       const [results]: any = await Promise.all([
         postImageKeyOfHotel(id, keyList),
@@ -47,6 +45,7 @@ const FacilitiesForm = memo(({ id }: PROPS) => {
       console.log([results]);
 
       if (results.status == 200) {
+        Cookies.remove("_hotel_id");
         router.push(`/hotels/${id}`);
       }
     } catch (error: any) {

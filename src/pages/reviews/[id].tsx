@@ -15,6 +15,8 @@ import { useAuthStateContext } from "context/AuthProvider";
 import { useRouter } from "next/router";
 import Layout from "components/Layout";
 import client from "lib/client";
+import { getCurrentUser } from "lib/auth";
+import axios from "axios";
 
 const UserReviewShow = ({
   title,
@@ -384,11 +386,10 @@ export const getServerSideProps = async (ctx: any) => {
     }),
   ]);
 
-  const ReviewDetail: ReviewShowType = apiResponse.value.data;
-  const isHelpful: boolean = helpfulOrNot.value.data.helpful;
-  console.log(ReviewDetail);
+  const ReviewDetail: ReviewShowType = apiResponse.value?.data;
+  const isHelpful: boolean = helpfulOrNot.value?.data?.helpful;
 
-  if (!ReviewDetail) {
+  if (!ReviewDetail || !isHelpful) {
     return {
       notFound: true,
     };

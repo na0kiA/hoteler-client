@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import { getCurrentUser, withAuthServerSideProps } from "lib/auth";
+import client from "lib/client";
 import {
   useContext,
   useState,
@@ -35,7 +36,10 @@ export const AuthProvider = memo(({ children, props }: any) => {
   const handleGetCurrentUser = async () => {
     try {
       const res = await getCurrentUser();
-      // console.log(res);
+      console.log(res);
+
+      client.defaults.headers.common["X-CSRF-Token"] =
+        res.headers["x-csrf-token"];
       if (res?.data.is_login === true) {
         setIsSignedIn(true);
         setCurrentUser(res?.data.data);

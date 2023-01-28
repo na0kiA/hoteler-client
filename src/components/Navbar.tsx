@@ -35,7 +35,6 @@ const Navbar = memo(() => {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
-    const router = useRouter();
 
     try {
       const res = await signOut();

@@ -269,7 +269,6 @@ export const getServerSideProps = async (ctx: any) => {
       uid: ctx.req.cookies["_uid"],
       client: ctx.req.cookies["_client"],
       "access-token": ctx.req.cookies["_access_token"],
-      "X-CSRF-Token": ctx.req.cookies["_x_csrf_token"],
     },
   });
 
