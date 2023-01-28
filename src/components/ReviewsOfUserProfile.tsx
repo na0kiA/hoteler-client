@@ -39,7 +39,7 @@ const ReviewsOfUserProfile = memo(({ props }: PROPS) => {
             <p className="m-auto">{props.hotelName}</p>
             <p className="text-ssm m-auto">{props.hotelFullAddress}</p>
           </Link>
-          <div>
+          <span className="align-bottom">
             <Rating
               initialValue={props.hotelAverageRating}
               transition
@@ -49,8 +49,10 @@ const ReviewsOfUserProfile = memo(({ props }: PROPS) => {
               readonly={true}
               allowTitleTag={false}
             />
-            <span className="text-ssm">{props.hotelReviewsCount}件</span>
-          </div>
+          </span>
+          <span className="text-ssm align-middle">
+            {props.hotelReviewsCount}件
+          </span>
         </div>
         <div className="flex-1 p-5 pb-1">
           <div className="">

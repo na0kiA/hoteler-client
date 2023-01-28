@@ -35,17 +35,22 @@ const FavoritesOfUserProfile = memo(({ props }: PROPS) => {
               readonly={true}
               allowTitleTag={false}
             />
-            <span className="align-middle text-sm">
+            <span className="align-bottom text-sm">
               ({props.fiveStarRate}){" "}
               <Link
                 href={`/hotel/${props.id}/reviews`}
-                className="text-blue-link"
+                className="text-blue-link text-xs"
               >
                 {props.hotelReviewsCount}件
               </Link>
             </span>
           </div>
-          <h2 className="card-title text-base mt-1 mb-1">{props.hotelName}</h2>
+          <h2 className="text-ssm mt-1 italic">
+            {props.createdDate}に登録済み
+          </h2>
+          <h2 className="card-title text-xl mt-1 mb-1 font-bold">
+            {props.hotelName}
+          </h2>
           <h3 className="text-ssm m-auto">{props.hotelFullAddress}</h3>
         </div>
       </div>
@@ -57,8 +62,8 @@ const FavoritesOfUserProfile = memo(({ props }: PROPS) => {
               className="rounded-lg"
               src="/hoteler_demo_photo.jpg"
               alt="ホテル画像"
-              width={500}
-              height={500}
+              width={300}
+              height={300}
               priority={true}
             />
           </Link>
@@ -77,13 +82,16 @@ const FavoritesOfUserProfile = memo(({ props }: PROPS) => {
                 ({props.fiveStarRate}){" "}
                 <Link
                   href={`/hotel/${props.id}/reviews`}
-                  className="text-blue-link"
+                  className="text-blue-link text-xs"
                 >
                   {props.hotelReviewsCount}件
                 </Link>
               </span>
             </div>
-            <h2 className="card-title text-base mt-1 mb-1">
+            <h2 className="text-sm italic mt-1">
+              {props.createdDate}に登録済み
+            </h2>
+            <h2 className="card-title text-xl mt-1 mb-1 font-bold">
               {props.hotelName}
             </h2>
             <h3 className="text-ssm m-auto">{props.hotelFullAddress}</h3>

@@ -155,6 +155,7 @@ export type UserFavoritesType = {
   hotelReviewsCount: number;
   hotelTopImage: string;
   fiveStarRate: number;
+  createdDate: string;
 };
 
 export type CurrentUser = {

@@ -25,7 +25,6 @@ const Layout = memo(({ children, title }: TITLE) => {
         <Navbar />
         <>{children}</>
       </main>
-      <Footer />
     </>
   );
 });
