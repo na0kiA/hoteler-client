@@ -145,6 +145,7 @@ export type UserDetailType = {
   uid: string;
   hotelsCount: number;
   reviewsCount: number;
+  hotels: HotelDetailType[];
 };
 
 export type UserFavoritesType = {

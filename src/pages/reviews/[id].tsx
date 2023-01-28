@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Rating } from "react-simple-star-rating";
@@ -15,8 +15,6 @@ import { useAuthStateContext } from "context/AuthProvider";
 import { useRouter } from "next/router";
 import Layout from "components/Layout";
 import client from "lib/client";
-import { getCurrentUser } from "lib/auth";
-import axios from "axios";
 
 const UserReviewShow = ({
   title,
