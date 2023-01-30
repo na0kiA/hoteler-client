@@ -25,19 +25,100 @@ const HotelDetail = ({
   name,
   id,
 }: HotelDetailType) => {
+  const facilityBadge = (
+    facility: boolean,
+    property: string,
+    imageSrc: string
+  ) => {
+    return facility ? (
+      <div className="flex text-base">
+        <Image src={imageSrc} width={24} height={24} alt="アイコン" />
+        <div className="ml-3">{property}</div>
+      </div>
+    ) : (
+      <div className="text-base">アメニティや設備はありません。</div>
+    );
+  };
+
   return (
     <Layout title={`${name}のホテル詳細ページ`}>
-      <div className="card w-96 bg-base-100 shadow-xl">
-        <figure>
+      <div className="card w-96 md:w-full md:h-full md:p-20 bg-base-100 shadow-xl">
+        <figure className="md:hidden max-w-xs h-3/4 m-auto mt-3">
           <Image
-            className="rounded-lg  m-auto"
+            className="md:hidden rounded-lg"
             src="/hoteler_demo_photo.jpg"
-            alt="ホテル画像"
-            width={680}
-            height={4800}
+            alt="トップ画像"
+            width={1280}
+            height={720}
             priority={true}
           />
         </figure>
+
+        <div className="hidden md:flex">
+          <Image
+            className="flex-1 max-w-sm max-h-sm rounded-lg p-1"
+            src="/hoteler_demo_photo.jpg"
+            alt="トップ画像"
+            width={1280}
+            height={720}
+            priority={true}
+            style={{ objectFit: "cover" }}
+          />
+          <div className="flex flex-wrap items-stretch">
+            <Image
+              className="w-1/2 h-1/2 rounded-lg p-1"
+              src="/hoteler_demo_photo.jpg"
+              alt="セカンド画像"
+              width={1280}
+              height={720}
+              priority={true}
+              style={{ objectFit: "cover" }}
+            />
+            <Image
+              className="w-1/2 h-1/2 rounded-lg p-1"
+              src="/hoteler_demo_photo.jpg"
+              alt="セカンド画像"
+              width={1280}
+              height={720}
+              priority={true}
+              style={{ objectFit: "cover" }}
+            />
+            <Image
+              className="w-1/2 h-1/2 rounded-lg p-1"
+              src="/hoteler_demo_photo.jpg"
+              alt="セカンド画像"
+              width={1280}
+              height={720}
+              priority={true}
+              style={{ objectFit: "cover" }}
+            />
+            <Image
+              className="w-1/2 h-1/2 rounded-lg p-1"
+              src="/hoteler_demo_photo.jpg"
+              alt="セカンド画像"
+              width={1280}
+              height={720}
+              priority={true}
+              style={{ objectFit: "cover" }}
+            />
+          </div>
+        </div>
+        {/* <div className="md:ml-auto text-right">
+          <Link
+            className="link underline w-1/4 text-sm text-end"
+            href={`/hotels/${id}/images`}
+          >
+            全ての写真を表示
+          </Link>
+        </div> */}
+        {/* <div className="flex"> */}
+        <Link
+          className="link ml-auto mr-10 md:mr-0"
+          href={`/hotels/${id}/images`}
+        >
+          全ての写真を表示
+        </Link>
+        {/* </div> */}
         <div className="card-body">
           <h2 className="card-title">
             <p className="text-2xl">{name}</p>
@@ -80,17 +161,41 @@ const HotelDetail = ({
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body">
           <h2 className="card-title">提供されるアメニティ・設備</h2>
-          <div className="text-sm">
-            {hotelFacilities.wifiEnabled && "Wi-FI"}
-            {hotelFacilities.parkingEnabled && "駐車場"}
-            {hotelFacilities.phoneReservationEnabled && "電話予約可能"}
-            {hotelFacilities.netReservationEnabled && "ネット予約可能"}
-            {hotelFacilities.breakfastEnabled && "朝食"}
-            {hotelFacilities.cookingEnabled && "料理"}
-            {hotelFacilities.tripleRoomsEnabled && "3人以上"}
-            {hotelFacilities.secretPaymentEnabled &&
-              "入室から退室までフロントと会わない"}
+          {/* <div className="flex text-base"> */}
+          {/* {facilityBadge(hotelFacilities.wifiEnabled, "Wi-Fi")} */}
+          {facilityBadge(
+            hotelFacilities.parkingEnabled,
+            "駐車場あり",
+            "/かわいい車の線画アイコン.svg"
+          )}
+          {/* </div> */}
+          {/* <div className="flex text-base">
+            {facilityBadge(
+              hotelFacilities.phoneReservationEnabled,
+              "電話予約可能"
+            )}
+            {facilityBadge(
+              hotelFacilities.netReservationEnabled,
+              "ネット予約可能"
+            )}
           </div>
+          <div className="flex text-base">
+            {facilityBadge(hotelFacilities.breakfastEnabled, "朝食")}
+            {facilityBadge(hotelFacilities.cookingEnabled, "料理")}
+          </div>
+          <div className="flex text-base">
+            {facilityBadge(hotelFacilities.breakfastEnabled, "朝食")}
+            {facilityBadge(hotelFacilities.cookingEnabled, "料理")}
+          </div>
+          <div className="flex text-base">
+            {facilityBadge(hotelFacilities.tripleRoomsEnabled, "3人以上")}
+          </div>
+          <div className="flex text-base">
+            {facilityBadge(
+              hotelFacilities.secretPaymentEnabled,
+              "入室から退室までフロントと会わない"
+            )}
+          </div> */}
         </div>
       </div>
     </Layout>
