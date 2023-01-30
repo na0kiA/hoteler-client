@@ -17,7 +17,7 @@ const HotelOfUserProfile = ({ props }: PROPS) => {
   return (
     <>
       <div className="md:hidden card card-side bg-base-100 shadow-xl">
-        <div className="m-auto pl-3 pt-5">
+        <div className="pl-3 pt-5">
           <Link href={`/hotels/${props.id}`}>
             <Image
               className="rounded-lg"
@@ -29,8 +29,8 @@ const HotelOfUserProfile = ({ props }: PROPS) => {
             />
           </Link>
         </div>
-        <div className="flex-1 p-5 pb-1">
-          <div className="">
+        <div className="p-1 pb-1">
+          <div className="flex">
             <Rating
               initialValue={props.averageRating}
               transition
@@ -40,27 +40,31 @@ const HotelOfUserProfile = ({ props }: PROPS) => {
               readonly={true}
               allowTitleTag={false}
             />
-            <span className="align-bottom text-sm">
-              ({props.averageRating}){" "}
-              <Link
-                href={`/hotel/${props.id}/reviews`}
-                className="text-blue-link text-xs"
-              >
-                {props.reviewsCount}件
-              </Link>
-            </span>
-            {currentUser && props.userId === currentUser.id ? (
-              <div className="ml-auto">
+            <div className="mt-auto">
+              <span className="text-sm">
+                ({props.averageRating}){" "}
+                <Link
+                  href={`/hotel/${props.id}/reviews`}
+                  className="text-blue-link text-xs"
+                >
+                  {props.reviewsCount}件
+                </Link>
+              </span>
+            </div>
+            <div className="ml-3 mt-auto">
+              {currentUser && props.userId === currentUser.id ? (
                 <button
-                  className="btn btn-primary btn-xs md:btn-sm   flex-none mr-2"
+                  className="btn btn-primary btn-xs"
                   onClick={() => {
                     router.push(`/hotels/${props.id}/edit`);
                   }}
-                ></button>
-              </div>
-            ) : (
-              <></>
-            )}
+                >
+                  編集
+                </button>
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
           <h2 className="card-title text-xl mt-1 mb-1 font-bold">
             {props.name}
