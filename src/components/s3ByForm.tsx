@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { updateUserShow } from "lib/auth";
 import { fetchSignedUrl } from "lib/image";
-import { updateUserShowParams } from "types/types";
 
 // export const OnUploadImage = ({ name, email, image }: any) => {
 // const [imageUrl, setImageUrl] = useState("");
