@@ -63,6 +63,7 @@ export type HotelDetailType = {
   dayOfTheWeek: string;
   topFourReviews: ReviewType;
   id: number;
+  userId: number;
 };
 
 export type HotelCreateType = {

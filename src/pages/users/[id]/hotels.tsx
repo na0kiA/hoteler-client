@@ -38,7 +38,7 @@ const UserHotels = ({
             <>
               <Link
                 href={`/users/${id}/hotels`}
-                className="tab tab-bordered pl-3"
+                className="tab tab-bordered tab-active pl-3"
               >
                 掲載ホテル<> {hotelsCount}件</>
               </Link>
@@ -48,7 +48,7 @@ const UserHotels = ({
             <>
               <Link
                 href={`/users/${id}/favorites`}
-                className="tab tab-bordered tab-active pl-3"
+                className="tab tab-bordered pl-3"
               >
                 お気に入り一覧
               </Link>
