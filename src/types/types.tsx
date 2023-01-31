@@ -48,6 +48,12 @@ export type ReviewEditParams = {
   fiveStarRate: number;
 };
 
+export type PostReviewParams = {
+  title: string;
+  content: string;
+  five_star_rate: number;
+};
+
 export type HotelDetailType = {
   name: string;
   favoritesCount: number;

@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 
-import { HotelDetailType, ReviewType } from "types/types";
+import { HotelDetailType, ReviewEditParams, ReviewType } from "types/types";
 import { Rating } from "react-simple-star-rating";
 import Link from "next/link";
 import client from "lib/client";
 import Layout from "components/Layout";
+import { useForm, useFormState } from "react-hook-form";
+import { useRouter } from "next/router";
+import { createReview } from "lib/reviews";
+import PostReviewForm from "components/PostReviewForm";
 
 const HotelDetail = ({
   favoritesCount,
@@ -24,6 +28,7 @@ const HotelDetail = ({
   name,
   id,
 }: HotelDetailType) => {
+  const [postReviewToggle, setPostReviewToggle] = useState(false);
   const facilityBadge = (
     facility: boolean,
     property: string,
@@ -49,7 +54,7 @@ const HotelDetail = ({
 
   return (
     <Layout title={`${name}のホテル詳細ページ`}>
-      <div className="card p-5 md:w-full md:h-full md:py-5 md:px-20 bg-base-100 shadow-xl">
+      <div className="card p-8 md:w-full md:h-full md:py-5 md:px-20 bg-base-100 shadow-xl">
         <figure className="md:hidden h-3/4 mt-3">
           <Image
             className="md:hidden rounded-lg"
@@ -63,7 +68,7 @@ const HotelDetail = ({
 
         <div className="hidden md:flex">
           <Image
-            className="flex-1 max-w-sm max-h-sm rounded-lg p-1"
+            className="flex-1 lg:max-w-lg lg:max-h-lg md:max-w-sm md:max-h-sm rounded-lg p-1"
             src="/hoteler_demo_photo.jpg"
             alt="トップ画像"
             width={1280}
@@ -127,12 +132,12 @@ const HotelDetail = ({
         </h1>
         <h3 className="italic mb-1">{fullAddress}</h3>
         <div className="">{content}</div>
-        <hr className="mt-5 border-t border-gray-500" />
+        <hr className="mt-10 border-t border-gray-500" />
       </div>
 
       {/* アメニティと設備 */}
-      <div className="card w-full md:px-10 md:py-5 bg-base-100 shadow-xl">
-        <div className="card-body">
+      <div className="card w-full md:px-10  bg-base-100 shadow-xl">
+        <div className="card-body md:pb-3">
           <div className="card-title md:ml-3 underline">
             提供されるアメニティ・設備
           </div>
@@ -180,34 +185,44 @@ const HotelDetail = ({
               "/シークレットペイメント.svg"
             )}
           </div>
+          <hr className="mt-5 border-t border-gray-500" />
         </div>
-        <hr className="mb-5 border-t border-gray-500" />
       </div>
-      <div className="card w-full md:px-10 md:py-5 bg-base-100 shadow-xl">
-        <div className="card-body pb-3">
-          <div className="card-title ml-1 md:text-2xl underline">
-            レビューと評価
+      <div className="card w-full md:px-10  bg-base-100 shadow-xl">
+        <div className="card-body pb-3 pt-3">
+          <div className="card-title ml-1 md:text-xl mb-2">
+            <span className="underline">レビューと評価</span>
+            <button
+              className="inline btn btn-xs btn-active ml-auto"
+              onClick={() => setPostReviewToggle(!postReviewToggle)}
+            >
+              {postReviewToggle ? "キャンセル" : "口コミを投稿する"}
+            </button>
           </div>
-          <div className="flex">
-            <Rating
-              initialValue={averageRating}
-              transition
-              size={30}
-              allowFraction
-              allowHover={false}
-              readonly={true}
-              allowTitleTag={false}
-            />
-            <span className="text-xl align-middle">
-              ({averageRating}){" "}
-              <Link
-                href={`/hotel/${id}/reviews`}
-                className="text-blue-link text-lg"
-              >
-                {reviewsCount}件
-              </Link>
-            </span>
-          </div>
+          {postReviewToggle ? (
+            <PostReviewForm id={id} />
+          ) : (
+            <div className="flex md:mb-2">
+              <Rating
+                initialValue={averageRating}
+                transition
+                size={28}
+                allowFraction
+                allowHover={false}
+                readonly={true}
+                allowTitleTag={false}
+              />
+              <span className="text-xl align-middle">
+                ({averageRating}){" "}
+                <Link
+                  href={`/hotel/${id}/reviews`}
+                  className="text-blue-link text-lg"
+                >
+                  {reviewsCount}件
+                </Link>
+              </span>
+            </div>
+          )}
         </div>
         {topFourReviews.map((review: ReviewType) => (
           <div key={review.id} className="px-8 py-2">

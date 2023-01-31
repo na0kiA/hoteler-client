@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { ReviewEditParams } from "types/types";
+import { PostReviewParams, ReviewEditParams } from "types/types";
 import client from "./client";
 
 // ホテルの口コミ一覧を取得
@@ -24,7 +24,7 @@ export const deleteReview = (id: number) => {
 };
 
 // 口コミを新規作成
-export const createReview = (hotelId: number, params: ReviewEditParams) => {
+export const createReview = (hotelId: number, params: PostReviewParams) => {
   return client.post(`/hotels/${hotelId}/reviews`, params, {
     headers: {
       "access-token": Cookies.get("_access_token"),
