@@ -72,6 +72,10 @@ export const getDays = (id: string | string[] | undefined) => {
   });
 };
 
+export const getHotelImages = (id: string | string[] | undefined) => {
+  return client.get(`/hotels/${id}/images`);
+};
+
 export const updateFacilities = (
   id: string | string[] | undefined,
   params: HotelFacilityType

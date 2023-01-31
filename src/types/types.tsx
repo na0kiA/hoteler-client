@@ -19,6 +19,7 @@ export type ReviewType = {
   helpfulnessesCount: number;
   userName: string;
   userImage: string;
+  userId: number;
   hotelName: string;
   hotelImage: string;
   hotelId: number;
@@ -61,7 +62,7 @@ export type HotelDetailType = {
   reviewsCount: number;
   hotelImages: string;
   dayOfTheWeek: string;
-  topFourReviews: ReviewType;
+  topFourReviews: ReviewType[];
   id: number;
   userId: number;
 };
@@ -186,6 +187,11 @@ export type HotelRateParams = {
   end_time: string;
   day?: string;
   service?: string;
+};
+
+export type HotelImagesType = {
+  id: number;
+  fileUrl: string;
 };
 
 export type AuthContextType = {

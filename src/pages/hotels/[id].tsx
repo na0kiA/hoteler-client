@@ -1,8 +1,7 @@
 import React from "react";
 import Image from "next/image";
 
-import { getHotelDetail } from "lib/hotels";
-import { HotelDetailType } from "types/types";
+import { HotelDetailType, ReviewType } from "types/types";
 import { Rating } from "react-simple-star-rating";
 import Link from "next/link";
 import client from "lib/client";
@@ -38,6 +37,14 @@ const HotelDetail = ({
     ) : (
       <div className="text-base">アメニティや設備はありません。</div>
     );
+  };
+
+  const sliceString = (content: string, point: number) => {
+    if (content.length > point) {
+      return content.slice(0, point).concat("…");
+    } else {
+      return content;
+    }
   };
 
   return (
@@ -123,7 +130,7 @@ const HotelDetail = ({
         <hr className="mt-5 border-t border-gray-500" />
       </div>
 
-      {/* コンテンツ */}
+      {/* アメニティと設備 */}
       <div className="card w-full md:px-10 md:py-5 bg-base-100 shadow-xl">
         <div className="card-body">
           <div className="card-title md:ml-3 underline">
@@ -133,23 +140,23 @@ const HotelDetail = ({
             {facilityBadge(hotelFacilities.wifiEnabled, "Wi-Fi", "/Wi-Fi.svg")}
             {facilityBadge(
               hotelFacilities.parkingEnabled,
-              "駐車場あり",
+              "駐車場",
               "/駐車場.svg"
             )}
             {facilityBadge(
+              hotelFacilities.couponEnabled,
+              "クーポン",
+              "/クーポン.svg"
+            )}
+            {facilityBadge(
               hotelFacilities.phoneReservationEnabled,
-              "電話予約可能",
+              "電話予約",
               "/電話予約.svg"
             )}
             {facilityBadge(
               hotelFacilities.netReservationEnabled,
-              "ネット予約可能",
+              "ネット予約",
               "/ネット予約.svg"
-            )}
-            {facilityBadge(
-              hotelFacilities.couponEnabled,
-              "クーポン有り",
-              "/クーポン.svg"
             )}
             {facilityBadge(
               hotelFacilities.creditCardEnabled,
@@ -158,17 +165,13 @@ const HotelDetail = ({
             )}
             {facilityBadge(
               hotelFacilities.breakfastEnabled,
-              "朝食あり",
+              "朝食",
               "/朝食.svg"
             )}
-            {facilityBadge(
-              hotelFacilities.cookingEnabled,
-              "料理あり",
-              "/料理.svg"
-            )}
+            {facilityBadge(hotelFacilities.cookingEnabled, "料理", "/料理.svg")}
             {facilityBadge(
               hotelFacilities.tripleRoomsEnabled,
-              "3人以上利用可能",
+              "3人以上の利用",
               "/3人以上.svg"
             )}
             {facilityBadge(
@@ -178,26 +181,90 @@ const HotelDetail = ({
             )}
           </div>
         </div>
+        <hr className="mb-5 border-t border-gray-500" />
       </div>
-      <div className="">
-        <Rating
-          initialValue={averageRating}
-          transition
-          size={30}
-          allowFraction
-          allowHover={false}
-          readonly={true}
-          allowTitleTag={false}
-        />
-        <span className="text-xl align-middle">
-          ({averageRating}){" "}
-          <Link
-            href={`/hotel/${id}/reviews`}
-            className="text-blue-link text-lg"
-          >
-            {reviewsCount}件
+      <div className="card w-full md:px-10 md:py-5 bg-base-100 shadow-xl">
+        <div className="card-body pb-3">
+          <div className="card-title ml-1 md:text-2xl underline">
+            レビューと評価
+          </div>
+          <div className="flex">
+            <Rating
+              initialValue={averageRating}
+              transition
+              size={30}
+              allowFraction
+              allowHover={false}
+              readonly={true}
+              allowTitleTag={false}
+            />
+            <span className="text-xl align-middle">
+              ({averageRating}){" "}
+              <Link
+                href={`/hotel/${id}/reviews`}
+                className="text-blue-link text-lg"
+              >
+                {reviewsCount}件
+              </Link>
+            </span>
+          </div>
+        </div>
+        {topFourReviews.map((review: ReviewType) => (
+          <div key={review.id} className="px-8 py-2">
+            {review ? (
+              <>
+                <div className="flex flex-wrap">
+                  <Link href={`/users/${review.userId}`} className="flex">
+                    <Image
+                      className="rounded-full"
+                      src={review.userImage}
+                      alt="アバター"
+                      width={40}
+                      height={40}
+                      priority={true}
+                    />
+                    <span className="flex-none ml-2 mt-2">
+                      {sliceString(`${review.userName}`, 10)}
+                    </span>
+                  </Link>
+                </div>
+                <div className="flex my-1">
+                  <Link href={`/reivews/${review.id}`}>
+                    <span className="align-middle">
+                      <Rating
+                        initialValue={review.fiveStarRate}
+                        transition
+                        size={20}
+                        allowFraction
+                        allowHover={false}
+                        readonly={true}
+                        allowTitleTag={false}
+                      />{" "}
+                      <span className="align-bottom">
+                        {sliceString(`${review.title}`, 10)}
+                      </span>
+                    </span>
+                  </Link>
+                </div>
+                <div className="italic text-sm my-1">
+                  {review.createdDate}に口コミを投稿
+                </div>
+                <div className="max-x-sm">
+                  <Link href={`/reivews/${review.id}`}>
+                    {sliceString(`${review.content}`, 50)}
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <div className="mt-3">口コミはまだありません</div>
+            )}
+          </div>
+        ))}
+        <div className="btn  btn-ghost btn-active btn-wide btn-sm  m-auto">
+          <Link href={`/hotels/${id}/reviews`}>
+            {reviewsCount}件の口コミを全て表示する
           </Link>
-        </span>
+        </div>
       </div>
     </Layout>
   );

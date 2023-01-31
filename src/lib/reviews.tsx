@@ -3,8 +3,8 @@ import { ReviewEditParams } from "types/types";
 import client from "./client";
 
 // ホテルの口コミ一覧を取得
-export const getReviewIndex = (hotelId: string | string[] | undefined) => {
-  return client.get(`/hotels/${hotelId}/reviews`);
+export const getHotelReviews = (id: string | string[] | undefined) => {
+  return client.get(`/hotels/${id}/reviews`);
 };
 
 // 口コミ詳細を取得

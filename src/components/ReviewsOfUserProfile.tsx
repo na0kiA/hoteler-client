@@ -93,7 +93,7 @@ const ReviewsOfUserProfile = memo(({ props }: PROPS) => {
 
       {/* PC */}
       <div className="hidden md:block md:card md:card-side md:bg-base-100 md:shadow-xl">
-        <div className="m-auto pl-3 pt-5">
+        <div className="m-auto pl-3 pt-5 mb-3">
           <Link href={`/hotels/${props.hotelId}`}>
             <Image
               className="rounded-lg  m-auto"
