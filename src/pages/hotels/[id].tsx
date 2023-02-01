@@ -10,6 +10,7 @@ import { useForm, useFormState } from "react-hook-form";
 import { useRouter } from "next/router";
 import { createReview } from "lib/reviews";
 import PostReviewForm from "components/PostReviewForm";
+import { useAuthStateContext } from "context/AuthProvider";
 
 const HotelDetail = ({
   favoritesCount,
@@ -27,20 +28,23 @@ const HotelDetail = ({
   topFourReviews,
   name,
   id,
+  userId,
 }: HotelDetailType) => {
+  const { currentUser } = useAuthStateContext();
+  const router = useRouter();
   const [postReviewToggle, setPostReviewToggle] = useState(false);
   const facilityBadge = (
     facility: boolean,
     property: string,
     imageSrc: string
   ) => {
-    return facility ? (
-      <div className="flex text-base w-full my-1 md:w-1/2 md:p-3 md:m-auto">
-        <Image src={imageSrc} width={24} height={24} alt="アイコン" />
-        <div className="ml-3">{property}</div>
-      </div>
-    ) : (
-      <div className="text-base">アメニティや設備はありません。</div>
+    return (
+      facility && (
+        <div className="flex text-base w-full my-1 md:w-1/2 md:p-3 md:m-auto">
+          <Image src={imageSrc} width={24} height={24} alt="アイコン" />
+          <div className="ml-3">{property}</div>
+        </div>
+      )
     );
   };
 
@@ -192,14 +196,22 @@ const HotelDetail = ({
         <div className="card-body pb-3 pt-3">
           <div className="card-title ml-1 md:text-xl mb-2">
             <span className="underline">レビューと評価</span>
-            <button
-              className="inline btn btn-xs btn-active ml-auto"
-              onClick={() => setPostReviewToggle(!postReviewToggle)}
-            >
-              {postReviewToggle ? "キャンセル" : "口コミを投稿する"}
-            </button>
+            {currentUser?.id === userId ? (
+              <></>
+            ) : (
+              <>
+                <button
+                  className="inline btn btn-xs btn-primary btn-active ml-auto"
+                  onClick={() => setPostReviewToggle(!postReviewToggle)}
+                >
+                  {currentUser && postReviewToggle
+                    ? "キャンセル"
+                    : "口コミを投稿する"}
+                </button>
+              </>
+            )}
           </div>
-          {postReviewToggle ? (
+          {currentUser && postReviewToggle ? (
             <PostReviewForm id={id} />
           ) : (
             <div className="flex md:mb-2">
@@ -224,62 +236,69 @@ const HotelDetail = ({
             </div>
           )}
         </div>
-        {topFourReviews.map((review: ReviewType) => (
-          <div key={review.id} className="px-8 py-2">
-            {review ? (
-              <>
-                <div className="flex flex-wrap">
-                  <Link href={`/users/${review.userId}`} className="flex">
-                    <Image
-                      className="rounded-full"
-                      src={review.userImage}
-                      alt="アバター"
-                      width={40}
-                      height={40}
-                      priority={true}
-                    />
-                    <span className="flex-none ml-2 mt-2">
-                      {sliceString(`${review.userName}`, 10)}
-                    </span>
-                  </Link>
-                </div>
-                <div className="flex my-1">
-                  <Link href={`/reivews/${review.id}`}>
-                    <span className="align-middle">
-                      <Rating
-                        initialValue={review.fiveStarRate}
-                        transition
-                        size={20}
-                        allowFraction
-                        allowHover={false}
-                        readonly={true}
-                        allowTitleTag={false}
-                      />{" "}
-                      <span className="align-bottom">
-                        {sliceString(`${review.title}`, 10)}
+        {topFourReviews &&
+          topFourReviews.map((review: ReviewType) => (
+            <div key={review.id} className="px-8 py-2">
+              {review ? (
+                <>
+                  <div className="flex flex-wrap">
+                    <Link href={`/users/${review.userId}`} className="flex">
+                      <Image
+                        className="rounded-full"
+                        src={review.userImage}
+                        alt="アバター"
+                        width={40}
+                        height={40}
+                        priority={true}
+                      />
+                      <span className="flex-none ml-2 mt-2">
+                        {sliceString(`${review.userName}`, 10)}
                       </span>
-                    </span>
-                  </Link>
-                </div>
-                <div className="italic text-sm my-1">
-                  {review.createdDate}に口コミを投稿
-                </div>
-                <div className="max-x-sm">
-                  <Link href={`/reivews/${review.id}`}>
-                    {sliceString(`${review.content}`, 50)}
-                  </Link>
-                </div>
-              </>
-            ) : (
-              <div className="mt-3">口コミはまだありません</div>
-            )}
-          </div>
-        ))}
-        <div className="btn  btn-ghost btn-active btn-wide btn-sm  m-auto">
-          <Link href={`/hotels/${id}/reviews`}>
-            {reviewsCount}件の口コミを全て表示する
-          </Link>
-        </div>
+                    </Link>
+                  </div>
+                  <div className="flex my-1">
+                    <Link href={`/reivews/${review.id}`}>
+                      <span className="align-middle">
+                        <Rating
+                          initialValue={review.fiveStarRate}
+                          transition
+                          size={20}
+                          allowFraction
+                          allowHover={false}
+                          readonly={true}
+                          allowTitleTag={false}
+                        />{" "}
+                        <span className="align-bottom">
+                          {sliceString(`${review.title}`, 10)}
+                        </span>
+                      </span>
+                    </Link>
+                  </div>
+                  <div className="italic text-sm my-1">
+                    {review.createdDate}に口コミを投稿
+                  </div>
+                  <div className="max-x-sm">
+                    <Link href={`/reivews/${review.id}`}>
+                      {sliceString(`${review.content}`, 50)}
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                <div className="mt-3">口コミはまだありません</div>
+              )}
+            </div>
+          ))}
+        {reviewsCount === 0 ? (
+          <></>
+        ) : (
+          <>
+            <div className="btn  btn-ghost btn-active btn-wide btn-sm  m-auto">
+              <Link href={`/hotels/${id}/reviews`}>
+                {reviewsCount}件の口コミを全て表示する
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </Layout>
   );
@@ -290,14 +309,7 @@ export const getServerSideProps = async (ctx: any) => {
   const { id } = ctx.query;
 
   try {
-    const res = await client.get(`/hotels/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        uid: ctx.req.cookies["_uid"],
-        client: ctx.req.cookies["_client"],
-        "access-token": ctx.req.cookies["_access_token"],
-      },
-    });
+    const res = await client.get(`/hotels/${id}`);
     const hotelDetail: HotelDetailType = await res.data;
     return {
       props: {
