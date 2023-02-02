@@ -1,3 +1,4 @@
+import HotelEdit from "components/HotelEdit";
 import Layout from "components/Layout";
 import client from "lib/client";
 import { getHotelDetail } from "lib/hotels";
@@ -21,7 +22,11 @@ const edit = ({
   name,
   id,
 }: HotelDetailType) => {
-  return <Layout title={`${name}の編集ページ`}>edit</Layout>;
+  return (
+    <Layout title={`${name}の編集ページ`}>
+      <HotelEdit />
+    </Layout>
+  );
 };
 
 export default edit;

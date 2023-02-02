@@ -6,7 +6,7 @@ import { HotelCreateType } from "types/types";
 import { useForm, useFormState } from "react-hook-form";
 import Cookies from "js-cookie";
 
-const HotelFormInput = memo(({ name = "" }: any) => {
+const HotelEdit = memo(() => {
   console.log("FormInputがレンダリングされました");
   const [invalidName, setInvalidName] = useState("");
   const [invalidContent, setInvalidContent] = useState("");
@@ -25,7 +25,7 @@ const HotelFormInput = memo(({ name = "" }: any) => {
     formState: { errors, isDirty },
   } = useForm({
     defaultValues: {
-      name: name,
+      name: "",
       content: "",
       company: "",
       prefecture: "",
@@ -52,19 +52,17 @@ const HotelFormInput = memo(({ name = "" }: any) => {
     return (
       <>
         <div className="form-control">
-          <>
-            <label className="label">
-              <span className="label-text text-sm">{labelText}</span>
-            </label>
-            <input
-              type="text"
-              className="input input-bordered input-sm"
-              {...register(value, {
-                required: "必須項目です",
-              })}
-            />
-            {errors?.[value] && errors?.[value]?.message}
-          </>
+          <label className="label">
+            <span className="label-text text-sm">{labelText}</span>
+          </label>
+          <input
+            type="text"
+            className="input input-bordered input-sm"
+            {...register(value, {
+              required: "必須項目です",
+            })}
+          />
+          {errors?.[value] && errors?.[value]?.message}
         </div>
         {errorText(errorValue)}
       </>
@@ -166,4 +164,4 @@ const HotelFormInput = memo(({ name = "" }: any) => {
   );
 });
 
-export default HotelFormInput;
+export default HotelEdit;

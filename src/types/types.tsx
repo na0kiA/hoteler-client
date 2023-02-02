@@ -71,6 +71,7 @@ export type HotelDetailType = {
   topFourReviews: ReviewType[];
   id: number;
   userId: number;
+  accepted: boolean;
 };
 
 export type HotelCreateType = {

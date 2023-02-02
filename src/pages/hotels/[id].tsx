@@ -202,11 +202,13 @@ const HotelDetail = ({
               <>
                 <button
                   className="inline btn btn-xs btn-primary btn-active ml-auto"
-                  onClick={() => setPostReviewToggle(!postReviewToggle)}
+                  onClick={() =>
+                    currentUser
+                      ? setPostReviewToggle(!postReviewToggle)
+                      : router.push("/signin")
+                  }
                 >
-                  {currentUser && postReviewToggle
-                    ? "キャンセル"
-                    : "口コミを投稿する"}
+                  {postReviewToggle ? "キャンセル" : "口コミを投稿する"}
                 </button>
               </>
             )}
