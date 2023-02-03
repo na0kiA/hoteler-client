@@ -1,10 +1,7 @@
+import React, { memo, useState } from "react";
 import Image from "next/image";
-import {
-  HotelFormProvider,
-  useHotelFormStateContext,
-} from "context/HotelFormProvider";
+import { useHotelFormStateContext } from "context/HotelFormProvider";
 import { fetchSignedUrl } from "lib/image";
-import React, { memo, useContext, useState } from "react";
 
 const HotelUploadImages = memo(() => {
   const { keyList, setKeyList } = useHotelFormStateContext();

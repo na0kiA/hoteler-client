@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useAuthStateContext } from "context/AuthProvider";
 import { updateUserShow } from "lib/auth";
 import { fetchSignedUrl } from "lib/image";
-import { UpdateUserShowParams, UserDetailType } from "types/types";
+import { UpdateUserShowParams } from "types/types";
 
 type UpdateUserProfileType = {
   name: string;

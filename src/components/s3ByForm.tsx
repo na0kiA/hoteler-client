@@ -1,10 +1,6 @@
-import React, { useState } from "react";
-import { updateUserShow } from "lib/auth";
+import React from "react";
 import { fetchSignedUrl } from "lib/image";
 
-// export const OnUploadImage = ({ name, email, image }: any) => {
-// const [imageUrl, setImageUrl] = useState("");
-// const [error, setError] = useState("");
 export const handleChangeImage = async (
   event: React.ChangeEvent<HTMLInputElement>
 ) => {
@@ -44,54 +40,6 @@ export const handleChangeImage = async (
   if (!key) return;
   console.log(key);
   return key;
-
-  // const generateParams = () => {
-  //   const editProfileParams: updateUserShowParams = {
-  //     name: name,
-  //     email: email,
-  //     image: key,
-  //   };
-  //   return editProfileParams;
-  // };
-  // console.log(name);
-  // console.log(email);
-  // console.log(key);
-
-  // const params = generateParams();
-  // const postResponse = await updateUserShow(params);
-
-  // try {
-  //   if (postResponse.status == 200) {
-  //     console.log("画像投稿に成功");
-  //   } else {
-  //     throw new Error(
-  //       "アカウント編集に失敗しました。画面をご確認の上もう一度実行してください。"
-  //     );
-  //   }
-  // } catch (error: any) {
-  //   console.log(error);
-  //   if (error?.response.data) {
-  //     setError(error.response.data.errors);
-  //   } else {
-  //     console.log(error);
-  //   }
-  // }
 };
-
-// return (
-//   <>
-//     <input
-//       type="file"
-//       className="file-input file-input-bordered file-input-xs w-5/6 max-w-xs m-auto mt-3"
-//       onChange={handleChangeImage}
-//     />
-//     {error && (
-//       <p className="whitespace-pre-wrap mt-5 text-red-600">{error}</p>
-//     )}
-//   </>
-// );
-// };
 const parseXML = (text: string) =>
   new DOMParser().parseFromString(text, "application/xml");
-
-// export default OnUploadImage;

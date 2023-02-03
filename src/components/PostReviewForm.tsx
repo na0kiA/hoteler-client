@@ -1,9 +1,9 @@
-import { createReview } from "lib/reviews";
-import { useRouter } from "next/router";
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 import { useForm, useFormState } from "react-hook-form";
 import { Rating } from "react-simple-star-rating";
-import { PostReviewParams, ReviewEditParams } from "types/types";
+import { createReview } from "lib/reviews";
+import { PostReviewParams } from "types/types";
 
 const PostReviewForm = ({ id }: any) => {
   const [invalidTitle, setInvalidTitle] = useState("");

@@ -1,14 +1,11 @@
-import React, { useState } from "react";
-import Image from "next/image";
+import React from "react";
+import Link from "next/link";
 
-import { updateUserShow } from "lib/auth";
-import { ReviewType, UpdateUserShowParams, UserDetailType } from "types/types";
+import client from "lib/client";
+import { ReviewType, UserDetailType } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import Layout from "components/Layout";
-import Link from "next/link";
 import ReviewsOfUserProfile from "components/ReviewsOfUserProfile";
-import { fetchSignedUrl } from "lib/image";
-import client from "lib/client";
 import UpdateUserProfile from "components/UpdateUserProfile";
 
 const UserDetail = ({

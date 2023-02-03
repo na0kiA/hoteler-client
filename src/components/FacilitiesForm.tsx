@@ -1,13 +1,12 @@
-import { useHotelFormStateContext } from "context/HotelFormProvider";
-import { postImageKeyOfHotel, updateFacilities } from "lib/hotels";
-import Link from "next/link";
 import React, { memo, useState } from "react";
-import { HotelFacilityType } from "types/types";
-import { useForm } from "react-hook-form";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import { useForm } from "react-hook-form";
+import { postImageKeyOfHotel, updateFacilities } from "lib/hotels";
+import { useHotelFormStateContext } from "context/HotelFormProvider";
+import { HotelFacilityType } from "types/types";
 
-// type FacilitiesKey = keyof typeof HotelFacilityType;
 type PROPS = {
   id: string | undefined;
 };

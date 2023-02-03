@@ -1,7 +1,7 @@
 import React, { memo } from "react";
-import { Rating } from "react-simple-star-rating";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
+import { Rating } from "react-simple-star-rating";
 import { UserFavoritesType } from "types/types";
 
 type PROPS = {

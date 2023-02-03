@@ -1,12 +1,12 @@
-import HotelEdit from "components/HotelEdit";
+import React from "react";
+import Link from "next/link";
+import { getServiceList } from "lib/hotelRate";
+import HotelFormInput from "components/HotelFormInput";
 import Layout from "components/Layout";
 import client from "lib/client";
-import { getRestRates, getServiceList, getStayRates } from "lib/hotelRate";
-import { getDays, getHotelDetail } from "lib/hotels";
-import React, { useState } from "react";
-import { HotelDetailType, HotelEditType, ServiceRateType } from "types/types";
+import { HotelEditType } from "types/types";
 
-const edit = ({
+const Edit = ({
   name,
   content,
   company,
@@ -15,11 +15,31 @@ const edit = ({
   postalCode,
   streetAddress,
   phoneNumber,
+  id,
   serviceList,
 }: HotelEditType) => {
   return (
     <Layout title={`${name}の編集ページ`}>
-      <HotelEdit
+      <div className="flex justify-center mt-3">
+        <div className="tabs">
+          <div className="tab tab-md md:tab-lg tab-bordered tab-active">
+            詳細
+          </div>
+          <Link
+            href={`/hotels/${id}/rate`}
+            className="tab tab-md md:tab-lg  tab-bordered"
+          >
+            料金
+          </Link>
+          <Link
+            href={`/hotels/${id}/facilities`}
+            className="tab tab-md md:tab-lg  tab-bordered"
+          >
+            設備
+          </Link>
+        </div>
+      </div>
+      <HotelFormInput
         name={name}
         content={content}
         company={company}
@@ -33,7 +53,7 @@ const edit = ({
   );
 };
 
-export default edit;
+export default Edit;
 
 export const getServerSideProps = async (ctx: any) => {
   const { id } = ctx.query;

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { updatePassword } from "lib/auth";
 import { useRouter } from "next/router";
+import { updatePassword } from "lib/auth";
 import { UpdatePasswordParams } from "types/types";
-import { useAuthStateContext } from "context/AuthProvider";
 import HomeIcon from "./HomeIcon";
 
 export const UpdatePassword = () => {

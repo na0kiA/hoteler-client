@@ -2,10 +2,7 @@ import React, { memo, useCallback, useMemo } from "react";
 import { Rating } from "react-simple-star-rating";
 import Image from "next/image";
 import Link from "next/link";
-
-import { useAuthStateContext } from "context/AuthProvider";
 import { ReviewType } from "types/types";
-import { deleteReview } from "lib/reviews";
 
 type PROPS = {
   props: ReviewType;

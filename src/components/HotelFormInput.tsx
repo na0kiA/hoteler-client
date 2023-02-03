@@ -1,6 +1,5 @@
-import React, { memo, useContext, useState } from "react";
+import React, { memo, useState } from "react";
 import { useRouter } from "next/router";
-
 import { createHotel } from "lib/hotels";
 import { HotelCreateType } from "types/types";
 import { useForm, useFormState } from "react-hook-form";
@@ -52,7 +51,6 @@ const HotelFormInput = memo(
     const getHotelFormValue = getValues();
 
     type HotelFormKeys = keyof typeof getHotelFormValue;
-    console.log(errors.content?.message);
 
     const inputForm = (
       labelText: string,
@@ -135,7 +133,7 @@ const HotelFormInput = memo(
                     <span className="label-text">ホテルの説明</span>
                   </label>
                   <textarea
-                    rows={30}
+                    rows={20}
                     className="textarea textarea-lg	textarea-bordered w-full  text-xs"
                     {...register("content", {
                       required: "コンテンツは10文字以上入力してください",

@@ -1,9 +1,8 @@
-import React, { memo, useEffect } from "react";
+import React, { memo } from "react";
 import Cookies from "js-cookie";
-import { useRouter } from "next/router";
+import { useFieldArray, useForm } from "react-hook-form";
 import { createRestRate, createStayRate } from "lib/hotelRate";
 import { getDays } from "lib/hotels";
-import { useFieldArray, useForm, useFormState } from "react-hook-form";
 import { HotelRateParams } from "types/types";
 
 const HotelRateTable = memo(({ id, serviceList }: any) => {

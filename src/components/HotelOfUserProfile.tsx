@@ -1,8 +1,8 @@
-import { useAuthStateContext } from "context/AuthProvider";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import { useAuthStateContext } from "context/AuthProvider";
 import { Rating } from "react-simple-star-rating";
 import { HotelDetailType } from "types/types";
 
