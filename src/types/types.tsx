@@ -59,6 +59,9 @@ export type HotelDetailType = {
   favoritesCount: number;
   content: string;
   company: string;
+  city: string;
+  prefecture: string;
+  streetAddress: string;
   phoneNumber: string;
   postalCode: string;
   fullAddress: string;
@@ -72,6 +75,24 @@ export type HotelDetailType = {
   id: number;
   userId: number;
   accepted: boolean;
+};
+export type HotelEditType = {
+  name: string;
+  content: string;
+  company: string;
+  city: string;
+  prefecture: string;
+  streetAddress: string;
+  phoneNumber: string;
+  postalCode: string;
+  fullAddress: string;
+  hotelFacilities: HotelFacilityType;
+  full: boolean;
+  hotelImages: string;
+  id: number;
+  userId: number;
+  accepted: boolean;
+  serviceList: ServiceRateType[];
 };
 
 export type HotelCreateType = {

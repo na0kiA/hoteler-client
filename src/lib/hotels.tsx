@@ -62,7 +62,7 @@ export const postImageKeyOfHotel = (
   );
 };
 
-export const getDays = (id: string | string[] | undefined) => {
+export const getDays = (id: string | string[] | undefined | number) => {
   return client.get(`/hotels/${id}/days`, {
     headers: {
       "access-token": Cookies.get("_access_token"),

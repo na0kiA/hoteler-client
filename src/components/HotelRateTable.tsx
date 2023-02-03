@@ -1,21 +1,21 @@
-import { useAuthStateContext } from "context/AuthProvider";
-import { useHotelFormStateContext } from "context/HotelFormProvider";
+import React, { memo, useEffect } from "react";
 import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 import { createRestRate, createStayRate } from "lib/hotelRate";
 import { getDays } from "lib/hotels";
-import { useRouter } from "next/router";
-import React, { memo } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, useFormState } from "react-hook-form";
 import { HotelRateParams } from "types/types";
 
-const HotelRestRateTable = memo(() => {
-  const router = useRouter();
+const HotelRateTable = memo(({ id, serviceList }: any) => {
+  console.log(serviceList);
 
   const {
     register,
     handleSubmit,
     getValues,
+    setValue,
     control,
+    reset,
     formState: { errors, isDirty },
   } = useForm({
     defaultValues: {
@@ -33,23 +33,10 @@ const HotelRestRateTable = memo(() => {
   });
   const filedArrayName = "rates";
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace, update } = useFieldArray({
     control,
     name: filedArrayName,
   });
-
-  const getFieldArray = getValues("rates");
-
-  const addRestRate = () => {
-    append({
-      plan: "休憩90分",
-      rate: 0,
-      start_time: 0,
-      end_time: 24,
-      day: "",
-      service: "",
-    });
-  };
 
   const removeRestRate = (index: number) => {
     remove(index);
@@ -76,13 +63,14 @@ const HotelRestRateTable = memo(() => {
         start_time: `${service.start_time}:00`,
         end_time: `${service.end_time}:00`,
         day: service.day,
+        service: service.service,
       };
       return converNumberToDate;
     });
+
     try {
-      const hotelId = Cookies.get("_hotel_id");
+      const hotelId = Cookies.get("_hotel_id") || id;
       const hotelDays = await getDays(hotelId);
-      console.log(hotelDays);
 
       await Promise.all([
         services.map((service: HotelRateParams) => {
@@ -294,10 +282,22 @@ const HotelRestRateTable = memo(() => {
               </>
             ))}
           </table>
-          <button className="btn btn-sm mb-5 mt-1" onClick={addRestRate}>
-            プランを追加
-          </button>
         </div>
+        <button
+          className="inline btn btn-sm "
+          onClick={(e) => {
+            append({
+              plan: "休憩90分",
+              rate: 0,
+              start_time: 0,
+              end_time: 24,
+              day: "",
+              service: "",
+            });
+          }}
+        >
+          プランを追加
+        </button>
         <button
           disabled={!isDirty}
           className="btn btn-primary btn-sm mb-5"
@@ -310,4 +310,4 @@ const HotelRestRateTable = memo(() => {
   );
 });
 
-export default HotelRestRateTable;
+export default HotelRateTable;

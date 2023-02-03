@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { createReview } from "lib/reviews";
 import PostReviewForm from "components/PostReviewForm";
 import { useAuthStateContext } from "context/AuthProvider";
+import { log } from "console";
 
 const HotelDetail = ({
   favoritesCount,
@@ -311,14 +312,26 @@ export const getServerSideProps = async (ctx: any) => {
   const { id } = ctx.query;
 
   try {
-    const res = await client.get(`/hotels/${id}`);
+    const res = await client.get(`/hotels/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        uid: ctx.req.cookies["_uid"] || undefined,
+        client: ctx.req.cookies["_client"] || undefined,
+        "access-token": ctx.req.cookies["_access_token"] || undefined,
+      },
+    });
+    console.log(res);
+
     const hotelDetail: HotelDetailType = await res.data;
+    console.log(hotelDetail);
+
     return {
       props: {
         ...hotelDetail,
       },
     };
   } catch (error) {
+    console.log(error);
     return {
       notFound: true,
     };
