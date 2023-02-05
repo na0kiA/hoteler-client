@@ -1,5 +1,9 @@
 import Cookies from "js-cookie";
-import { HotelCreateType, HotelFacilityType } from "types/types";
+import {
+  HotelCreateType,
+  HotelFacilityType,
+  HotelUpdateType,
+} from "types/types";
 import client from "./client";
 
 export const getAllHotel = () => {
@@ -24,8 +28,8 @@ export const createHotel = (params: HotelCreateType) => {
   );
 };
 
-export const updateHotel = (id: number, params: string) => {
-  return client.patch(`/hotel/${id}`, params, {
+export const updateHotel = (id: number, params: HotelUpdateType) => {
+  return client.patch(`/hotels/${id}`, params, {
     headers: {
       "access-token": Cookies.get("_access_token"),
       client: Cookies.get("_client"),
@@ -35,7 +39,7 @@ export const updateHotel = (id: number, params: string) => {
 };
 
 export const deleteHotel = (id: number) => {
-  return client.delete(`/hotel/${id}`, {
+  return client.delete(`/hotels/${id}`, {
     headers: {
       "access-token": Cookies.get("_access_token"),
       client: Cookies.get("_client"),

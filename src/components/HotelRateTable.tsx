@@ -7,6 +7,7 @@ import { HotelRateParams } from "types/types";
 
 const HotelRateTable = memo(({ id, serviceList }: any) => {
   console.log(serviceList);
+  const tes = serviceList[0]?.plan;
 
   const {
     register,
@@ -24,6 +25,14 @@ const HotelRateTable = memo(({ id, serviceList }: any) => {
           rate: 5980,
           start_time: 6,
           end_time: 23,
+          day: "月曜から木曜",
+          service: "",
+        },
+        {
+          plan: tes,
+          rate: 5980,
+          startTime: 6,
+          endTime: 23,
           day: "月曜から木曜",
           service: "",
         },
@@ -143,7 +152,6 @@ const HotelRateTable = memo(({ id, serviceList }: any) => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* <h1 className="text-2xl">休憩料金の設定</h1> */}
         <div className="overflow-x-auto">
           <table className="table table-compact w-full">
             <thead>

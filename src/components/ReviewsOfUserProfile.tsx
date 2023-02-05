@@ -1,7 +1,7 @@
-import React, { memo, useCallback, useMemo } from "react";
-import { Rating } from "react-simple-star-rating";
-import Image from "next/image";
+import React, { memo, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { Rating } from "react-simple-star-rating";
 import { ReviewType } from "types/types";
 
 type PROPS = {

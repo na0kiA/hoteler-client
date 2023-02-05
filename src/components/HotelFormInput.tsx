@@ -1,7 +1,7 @@
 import React, { memo, useState } from "react";
 import { useRouter } from "next/router";
-import { createHotel } from "lib/hotels";
-import { HotelCreateType } from "types/types";
+import { createHotel, updateHotel } from "lib/hotels";
+import { HotelCreateType, HotelDetailType, HotelUpdateType } from "types/types";
 import { useForm, useFormState } from "react-hook-form";
 import Cookies from "js-cookie";
 
@@ -15,23 +15,28 @@ const HotelFormInput = memo(
     postalCode,
     streetAddress,
     phoneNumber,
-  }: any) => {
+    id,
+  }: HotelDetailType) => {
     console.log("FormInputがレンダリングされました");
-    const [invalidName, setInvalidName] = useState("");
-    const [invalidContent, setInvalidContent] = useState("");
-    const [invalidCompany, setInvalidCompany] = useState("");
-    const [invalidPrefecture, setInvalidPrefecture] = useState("");
-    const [invalidCity, setInvalidCity] = useState("");
-    const [invalidPostalCode, setInvalidPostalCode] = useState("");
-    const [invalidStreetAddress, setInvalidStreetAddress] = useState("");
-    const [invalidPhoneNumber, setInvalidPhoneNumber] = useState("");
+    const [invalidName, setInvalidName] = useState<string>("");
+    const [invalidContent, setInvalidContent] = useState<string>("");
+    const [invalidCompany, setInvalidCompany] = useState<string>("");
+    const [invalidPrefecture, setInvalidPrefecture] = useState<string>("");
+    const [invalidCity, setInvalidCity] = useState<string>("");
+    const [invalidPostalCode, setInvalidPostalCode] = useState<string>("");
+    const [invalidStreetAddress, setInvalidStreetAddress] =
+      useState<string>("");
+    const [invalidPhoneNumber, setInvalidPhoneNumber] = useState<string>("");
+    const [invalidMessage, setInvalidMessage] = useState<string>("");
     const router = useRouter();
+    const pathname = router.asPath;
+
     const {
       register,
       handleSubmit,
       getValues,
       control,
-      formState: { errors, isDirty },
+      formState: { errors },
     } = useForm({
       defaultValues: {
         name: "" || name,
@@ -42,6 +47,7 @@ const HotelFormInput = memo(
         postalCode: "" || postalCode,
         streetAddress: "" || streetAddress,
         phoneNumber: "" || phoneNumber,
+        notification: { message: "" },
       },
     });
     const { dirtyFields } = useFormState({
@@ -89,16 +95,30 @@ const HotelFormInput = memo(
       );
     };
 
-    const onSubmit = async (data: HotelCreateType) => {
+    const onSubmit = async (data: HotelUpdateType) => {
       try {
-        const res = await createHotel(data);
-        console.log(res);
-        if (res.status == 200) {
-          Cookies.set("_hotel_id", res.data.id);
-          router.push(`/hotels/register/price`);
+        if (pathname.startsWith("/hotels/register")) {
+          const res = await createHotel(data);
+          console.log(res);
+          if (res.status == 200) {
+            Cookies.set("_hotel_id", res.data.id);
+            router.push(`/hotels/register/price`);
+          }
+        } else {
+          console.log(data);
+
+          const res = await updateHotel(id, data);
+          // notification: { message: "新しいソファーを設置しました。" }
+          console.log(res);
+
+          if (res.status == 200) {
+            router.push(`/hotels/${id}/edit/rate`);
+          }
+          console.log(res);
         }
       } catch (error: any) {
         if (error.response.data) {
+          setInvalidMessage(error.response.data.message);
           setInvalidName(error.response.data.name);
           setInvalidContent(error.response.data.content);
           setInvalidCompany(error.response.data.company);
@@ -113,13 +133,30 @@ const HotelFormInput = memo(
       }
     };
 
-    console.log(getHotelFormValue);
-
     return (
       <>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="card card-compact	flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 m-auto">
             <div className="card-body">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text text-sm font-bold">
+                    更新メッセージ
+                  </span>
+                </label>
+                <span className="text-sm mb-3">
+                  (お気に入り登録しているユーザーに送信されます)
+                </span>
+                <input
+                  type="text"
+                  id="notification.message"
+                  className="input input-bordered input-sm"
+                  {...register("notification.message", {
+                    required: "必須項目です",
+                  })}
+                />
+              </div>
+              {errorText(invalidMessage)}
               {inputForm("ホテル名", "name", invalidName)}
               {inputForm("会社", "company", invalidCompany)}
               {inputForm("ホテルの電話番号", "phoneNumber", invalidPhoneNumber)}
@@ -147,6 +184,7 @@ const HotelFormInput = memo(
                   className="btn btn-primary"
                   type="submit"
                   disabled={
+                    pathname.startsWith("/hotels/register") &&
                     !(
                       dirtyFields.name &&
                       dirtyFields.city &&
@@ -159,6 +197,7 @@ const HotelFormInput = memo(
                     )
                   }
                   onClick={(e) => {
+                    setInvalidMessage("");
                     setInvalidName("");
                     setInvalidContent("");
                     setInvalidCompany("");
@@ -169,7 +208,9 @@ const HotelFormInput = memo(
                     setInvalidStreetAddress("");
                   }}
                 >
-                  次に進む
+                  {pathname.startsWith("/hotels/register")
+                    ? "次に進む"
+                    : "更新する"}
                 </button>
               </div>
             </div>

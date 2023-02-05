@@ -16,8 +16,9 @@ const Edit = ({
   streetAddress,
   phoneNumber,
   id,
-  serviceList,
 }: HotelEditType) => {
+  console.log(prefecture);
+
   return (
     <Layout title={`${name}の編集ページ`}>
       <div className="flex justify-center mt-3">
@@ -48,6 +49,7 @@ const Edit = ({
         postalCode={postalCode}
         streetAddress={streetAddress}
         phoneNumber={phoneNumber}
+        id={id}
       />
     </Layout>
   );
@@ -59,7 +61,7 @@ export const getServerSideProps = async (ctx: any) => {
   const { id } = ctx.query;
 
   try {
-    const [hotelDetail, currentUser, serviceList]: any = await Promise.all([
+    const [hotelDetail, currentUser]: any = await Promise.all([
       client.get(`/hotels/${id}`, {
         headers: {
           "Content-Type": "application/json",
@@ -76,19 +78,11 @@ export const getServerSideProps = async (ctx: any) => {
           "access-token": ctx.req.cookies["_access_token"],
         },
       }),
-      getServiceList(
-        id,
-        ctx.req.cookies["_access_token"],
-        ctx.req.cookies["_client"],
-        ctx.req.cookies["_uid"]
-      ),
     ]);
-    console.log(serviceList);
     if (currentUser.data.data.id === hotelDetail.data.userId) {
       return {
         props: {
           ...hotelDetail.data,
-          serviceList,
         },
       };
     } else {

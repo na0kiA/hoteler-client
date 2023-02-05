@@ -106,6 +106,10 @@ export type HotelCreateType = {
   phoneNumber: string;
 };
 
+export type HotelUpdateType = HotelCreateType & {
+  notification: { message: string };
+};
+
 export type ServiceRateType = {
   plan: string;
   rate: number;
