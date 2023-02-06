@@ -145,6 +145,7 @@ export const getServiceList = async (
       await results[5],
       await results[6],
     ];
+
     const filterdServiceList = serviceList
       .flat()
       .filter((item: any) => item.status === 200)

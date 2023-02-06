@@ -5,10 +5,7 @@ import { createRestRate, createStayRate } from "lib/hotelRate";
 import { getDays } from "lib/hotels";
 import { HotelRateParams } from "types/types";
 
-const HotelRateTable = memo(({ id, serviceList }: any) => {
-  console.log(serviceList);
-  const tes = serviceList[0]?.plan;
-
+const HotelRateTable = memo(({ id }: any) => {
   const {
     register,
     handleSubmit,
@@ -25,14 +22,6 @@ const HotelRateTable = memo(({ id, serviceList }: any) => {
           rate: 5980,
           start_time: 6,
           end_time: 23,
-          day: "月曜から木曜",
-          service: "",
-        },
-        {
-          plan: tes,
-          rate: 5980,
-          startTime: 6,
-          endTime: 23,
           day: "月曜から木曜",
           service: "",
         },

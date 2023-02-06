@@ -115,6 +115,8 @@ export type ServiceRateType = {
   rate: number;
   startTime: number;
   endTime: number;
+  day: string;
+  service: string;
   restRates?: string;
 };
 
