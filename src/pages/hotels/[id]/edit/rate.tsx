@@ -1,14 +1,21 @@
+import React, { useState } from "react";
+import Link from "next/link";
+import { useForm, useFieldArray } from "react-hook-form";
 import HotelRateTable from "components/HotelRateTable";
 import Layout from "components/Layout";
 import client from "lib/client";
-import { getServiceList, updateRestRate, updateStayRate } from "lib/hotelRate";
+import {
+  deleteRestRate,
+  deleteStayRate,
+  getServiceList,
+  updateRestRate,
+  updateStayRate,
+} from "lib/hotelRate";
 import { getDays } from "lib/hotels";
-import Link from "next/link";
-import React from "react";
-import { useForm, useFieldArray } from "react-hook-form";
 import { HotelEditType, HotelRateParams } from "types/types";
 
 const Rate = ({ name, id, serviceList }: HotelEditType) => {
+  const [flag, setFlag] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -26,8 +33,24 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
     name: filedArrayName,
   });
 
-  const removeRestRate = (index: number) => {
-    remove(index);
+  const closeConfirmFlag = () => {
+    setFlag(true);
+    setTimeout(() => {
+      setFlag(false);
+    }, 5000);
+  };
+
+  const removeRestRate = async (index: number, field: any) => {
+    try {
+      if (field.service == "休憩") {
+        await deleteRestRate(field.serviceId, field.dayId);
+      } else {
+        await deleteStayRate(field.serviceId, field.dayId);
+      }
+      remove(index);
+    } catch (error: any) {
+      console.log(error);
+    }
   };
 
   type UpdateServiceType = HotelRateParams & { id: number };
@@ -51,17 +74,17 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
 
       await Promise.all([
         services.map((service: UpdateServiceType) => {
-          console.log(service);
-
-          postServiceListByWeekdays(service, hotelDays.data);
+          updateServiceListByWeekdays(service, hotelDays.data);
         }),
       ]);
+
+      closeConfirmFlag();
     } catch (error: any) {
       console.log(error);
     }
   };
 
-  const postServiceListByWeekdays = (
+  const updateServiceListByWeekdays = (
     service: UpdateServiceType,
     hotelDays: any
   ) => {
@@ -137,6 +160,17 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
             設備
           </Link>
         </div>
+        {flag ? (
+          <div className="toast toast-top toast-end">
+            <div className="alert alert-success">
+              <div>
+                <span>編集が完了しました。</span>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
         <div className="mb-5 font-bold text-xl underline">
@@ -269,7 +303,7 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
                     <td>
                       <button
                         className="btn btn-sm m-auto"
-                        onClick={() => removeRestRate(index)}
+                        onClick={(e) => removeRestRate(index, field)}
                       >
                         削除
                       </button>
@@ -326,6 +360,7 @@ export const getServerSideProps = async (ctx: any) => {
         ctx.req.cookies["_uid"]
       ),
     ]);
+    console.log(serviceList);
 
     if (currentUser.data.data.id === hotelDetail.data.userId) {
       return {

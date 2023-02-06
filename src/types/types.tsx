@@ -118,6 +118,9 @@ export type ServiceRateType = {
   day: string;
   service: string;
   restRates?: string;
+  id: number;
+  dayId: number;
+  serviceId: number;
 };
 
 export type AfterBusinessHour = {

@@ -4,8 +4,11 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { createRestRate, createStayRate } from "lib/hotelRate";
 import { getDays } from "lib/hotels";
 import { HotelRateParams } from "types/types";
+import { useRouter } from "next/router";
 
 const HotelRateTable = memo(({ id }: any) => {
+  const router = useRouter();
+  const pathname = router.asPath;
   const {
     register,
     handleSubmit,
@@ -296,8 +299,9 @@ const HotelRateTable = memo(({ id }: any) => {
         </button>
         <button
           disabled={!isDirty}
-          className="btn btn-primary btn-sm mb-5"
+          className="btn btn-primary btn-sm mb-5 ml-3"
           type="submit"
+          onClick={(e) => pathname.endsWith("/edit/rate") && router.reload()}
         >
           この内容で登録する
         </button>

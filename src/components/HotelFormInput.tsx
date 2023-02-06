@@ -18,6 +18,7 @@ const HotelFormInput = memo(
     id,
   }: HotelDetailType) => {
     console.log("FormInputがレンダリングされました");
+    const [flag, setFlag] = useState<boolean>(false);
     const [invalidName, setInvalidName] = useState<string>("");
     const [invalidContent, setInvalidContent] = useState<string>("");
     const [invalidCompany, setInvalidCompany] = useState<string>("");
@@ -95,26 +96,26 @@ const HotelFormInput = memo(
       );
     };
 
+    const closeConfirmFlag = () => {
+      setFlag(true);
+      setTimeout(() => {
+        setFlag(false);
+      }, 5000);
+    };
+
     const onSubmit = async (data: HotelUpdateType) => {
       try {
         if (pathname.startsWith("/hotels/register")) {
           const res = await createHotel(data);
-          console.log(res);
           if (res.status == 200) {
             Cookies.set("_hotel_id", res.data.id);
             router.push(`/hotels/register/price`);
           }
         } else {
-          console.log(data);
-
           const res = await updateHotel(id, data);
-          // notification: { message: "新しいソファーを設置しました。" }
-          console.log(res);
-
           if (res.status == 200) {
-            router.push(`/hotels/${id}/edit/rate`);
+            closeConfirmFlag();
           }
-          console.log(res);
         }
       } catch (error: any) {
         if (error.response.data) {
@@ -135,6 +136,17 @@ const HotelFormInput = memo(
 
     return (
       <>
+        {flag ? (
+          <div className="toast toast-top toast-end">
+            <div className="alert alert-success">
+              <div>
+                <span>編集が完了しました。</span>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="card card-compact	flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 m-auto">
             <div className="card-body">
