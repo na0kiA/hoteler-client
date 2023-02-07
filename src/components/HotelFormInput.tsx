@@ -1,7 +1,11 @@
 import React, { memo, useState } from "react";
 import { useRouter } from "next/router";
 import { createHotel, updateHotel } from "lib/hotels";
-import { HotelCreateType, HotelDetailType, HotelUpdateType } from "types/types";
+import {
+  HotelCreateType,
+  HotelEditFormType,
+  HotelUpdateType,
+} from "types/types";
 import { useForm, useFormState } from "react-hook-form";
 import Cookies from "js-cookie";
 
@@ -16,7 +20,7 @@ const HotelFormInput = memo(
     streetAddress,
     phoneNumber,
     id,
-  }: HotelDetailType) => {
+  }: HotelEditFormType) => {
     console.log("FormInputがレンダリングされました");
     const [flag, setFlag] = useState<boolean>(false);
     const [invalidName, setInvalidName] = useState<string>("");

@@ -21,7 +21,11 @@ const HotelOfUserProfile = ({ props }: PROPS) => {
           <Link href={`/hotels/${props.id}`}>
             <Image
               className="rounded-lg"
-              src="/hoteler_demo_photo.jpg"
+              src={
+                props.hotelImages
+                  ? props.hotelImages[0]?.fileUrl
+                  : "/noImageHotel.png"
+              }
               alt="ホテル画像"
               width={100}
               height={100}
@@ -79,7 +83,11 @@ const HotelOfUserProfile = ({ props }: PROPS) => {
           <Link href={`/hotels/${props.id}`}>
             <Image
               className="rounded-lg"
-              src="/hoteler_demo_photo.jpg"
+              src={
+                props.hotelImages
+                  ? props.hotelImages[0]?.fileUrl
+                  : "/noImageHotel.png"
+              }
               alt="ホテル画像"
               width={300}
               height={300}

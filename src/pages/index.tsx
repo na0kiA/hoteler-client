@@ -33,7 +33,11 @@ const Home = ({ hotels }: PROPS) => {
               <figure>
                 <Image
                   className="object-fill rounded-lg"
-                  src="/hoteler_demo_photo.jpg"
+                  src={
+                    hotel.hotelImages
+                      ? hotel.hotelImages[0]?.fileUrl
+                      : "/noImageHotel.png"
+                  }
                   alt="ホテル画像"
                   width={640}
                   height={480}

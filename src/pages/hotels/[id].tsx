@@ -63,18 +63,25 @@ const HotelDetail = ({
         <figure className="md:hidden h-3/4 mt-3">
           <Image
             className="md:hidden rounded-lg"
-            src="/hoteler_demo_photo.jpg"
+            src={
+              hotelImages && hotelImages.length > 4
+                ? hotelImages[0]?.fileUrl
+                : "/noImageHotel.png"
+            }
             alt="トップ画像"
             width={1280}
             height={720}
             priority={true}
           />
         </figure>
-
         <div className="hidden md:flex">
           <Image
             className="flex-1 lg:max-w-lg lg:max-h-lg md:max-w-sm md:max-h-sm rounded-lg p-1"
-            src="/hoteler_demo_photo.jpg"
+            src={
+              hotelImages && hotelImages.length > 4
+                ? hotelImages[1]?.fileUrl
+                : "/noImageHotel.png"
+            }
             alt="トップ画像"
             width={1280}
             height={720}
@@ -84,7 +91,11 @@ const HotelDetail = ({
           <div className="flex flex-wrap items-stretch">
             <Image
               className="w-1/2 h-1/2 rounded-lg p-1"
-              src="/hoteler_demo_photo.jpg"
+              src={
+                hotelImages && hotelImages.length > 4
+                  ? hotelImages[2]?.fileUrl
+                  : "/noImageHotel.png"
+              }
               alt="セカンド画像"
               width={1280}
               height={720}
@@ -93,7 +104,11 @@ const HotelDetail = ({
             />
             <Image
               className="w-1/2 h-1/2 rounded-lg p-1"
-              src="/hoteler_demo_photo.jpg"
+              src={
+                hotelImages && hotelImages.length > 4
+                  ? hotelImages[3]?.fileUrl
+                  : "/noImageHotel.png"
+              }
               alt="セカンド画像"
               width={1280}
               height={720}
@@ -102,7 +117,11 @@ const HotelDetail = ({
             />
             <Image
               className="w-1/2 h-1/2 rounded-lg p-1"
-              src="/hoteler_demo_photo.jpg"
+              src={
+                hotelImages && hotelImages.length > 4
+                  ? hotelImages[4]?.fileUrl
+                  : "/noImageHotel.png"
+              }
               alt="セカンド画像"
               width={1280}
               height={720}
@@ -111,7 +130,11 @@ const HotelDetail = ({
             />
             <Image
               className="w-1/2 h-1/2 rounded-lg p-1"
-              src="/hoteler_demo_photo.jpg"
+              src={
+                hotelImages && hotelImages.length > 4
+                  ? hotelImages[5]?.fileUrl
+                  : "/noImageHotel.png"
+              }
               alt="セカンド画像"
               width={1280}
               height={720}

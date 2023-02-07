@@ -4,7 +4,7 @@ import { getServiceList } from "lib/hotelRate";
 import HotelFormInput from "components/HotelFormInput";
 import Layout from "components/Layout";
 import client from "lib/client";
-import { HotelEditType } from "types/types";
+import { HotelEditFormType } from "types/types";
 
 const Edit = ({
   name,
@@ -16,7 +16,7 @@ const Edit = ({
   streetAddress,
   phoneNumber,
   id,
-}: HotelEditType) => {
+}: HotelEditFormType) => {
   console.log(prefecture);
 
   return (
@@ -27,13 +27,13 @@ const Edit = ({
             詳細
           </div>
           <Link
-            href={`/hotels/${id}/rate`}
+            href={`/hotels/${id}/edit/rate`}
             className="tab tab-md md:tab-lg  tab-bordered"
           >
             料金
           </Link>
           <Link
-            href={`/hotels/${id}/facilities`}
+            href={`/hotels/${id}/edit/facilities`}
             className="tab tab-md md:tab-lg  tab-bordered"
           >
             設備

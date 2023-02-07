@@ -2,13 +2,18 @@ import React, { memo, useState } from "react";
 import Image from "next/image";
 import { useHotelFormStateContext } from "context/HotelFormProvider";
 import { fetchSignedUrl } from "lib/image";
+import { useRouter } from "next/router";
+import { HotelImagesType } from "types/types";
 
 const HotelUploadImages = memo(() => {
-  const { keyList, setKeyList } = useHotelFormStateContext();
   console.log("FormInputがレンダリングされました");
-
+  const defaultImageKey = [
+    "uploads/hoteler/fe67ba70-5d0a-4b53-94a0-628003c8380e/ホテルのイメージ画像.jpeg",
+  ];
+  const router = useRouter();
+  const { keyList, setKeyList } = useHotelFormStateContext();
   const [imageList, setImageList] = useState<string[]>([]);
-  const maxImagesUpload = 4;
+  const maxImagesUpload = 10;
   const inputId = Math.random().toString(32).substring(2);
 
   const handleChangeImage = async (
@@ -44,15 +49,9 @@ const HotelUploadImages = memo(() => {
       .nodeValue;
     if (!key) return;
 
-    // setImageList([locationOfImage]);
     setImageList([...imageList, locationOfImage]);
     setKeyList([...keyList, key]);
   };
-
-  // const handleOnAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (!e.target.files) return;
-  //   setImageList([...imageList, ...e.target.files]);
-  // };
 
   const handleOnRemoveImage = (index: number) => {
     const newImages = [...imageList];
@@ -63,8 +62,6 @@ const HotelUploadImages = memo(() => {
     newKeyList.splice(index, 1);
     setKeyList(newKeyList);
   };
-  console.log(imageList);
-  console.log(keyList);
 
   return (
     <>

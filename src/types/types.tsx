@@ -69,13 +69,14 @@ export type HotelDetailType = {
   full: boolean;
   averageRating: number;
   reviewsCount: number;
-  hotelImages: string;
+  hotelImages: HotelImagesType[];
   dayOfTheWeek: string;
   topFourReviews: ReviewType[];
   id: number;
   userId: number;
   accepted: boolean;
 };
+
 export type HotelEditType = {
   name: string;
   content: string;
@@ -93,6 +94,18 @@ export type HotelEditType = {
   userId: number;
   accepted: boolean;
   serviceList: ServiceRateType[];
+};
+
+export type HotelEditFormType = {
+  name: string;
+  content: string;
+  company: string;
+  city: string;
+  prefecture: string;
+  streetAddress: string;
+  phoneNumber: string;
+  postalCode: string;
+  id: number;
 };
 
 export type HotelCreateType = {
@@ -135,7 +148,7 @@ export type HotelListType = {
   full: boolean;
   averageRating: number;
   reviewsCount: number;
-  hotelImages: string;
+  hotelImages: HotelImagesType[];
   dayOfTheWeek?: string;
   restRates: ServiceRateType;
   stayRates: ServiceRateType;

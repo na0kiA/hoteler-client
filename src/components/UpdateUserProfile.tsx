@@ -4,6 +4,7 @@ import { useAuthStateContext } from "context/AuthProvider";
 import { updateUserShow } from "lib/auth";
 import { fetchSignedUrl } from "lib/image";
 import { UpdateUserShowParams } from "types/types";
+import { useRouter } from "next/router";
 
 type UpdateUserProfileType = {
   name: string;
@@ -12,6 +13,7 @@ type UpdateUserProfileType = {
 };
 
 const UpdateUserProfile = ({ name, image, uid }: UpdateUserProfileType) => {
+  const router = useRouter();
   const forSliceImageKeyNumber = 54;
   const { currentUser } = useAuthStateContext();
   console.log("ユーザー詳細ページが呼ばれたよ");
@@ -181,6 +183,7 @@ const UpdateUserProfile = ({ name, image, uid }: UpdateUserProfileType) => {
                       handleUpdateUserProfile(event);
                       setNameError("");
                       setEditToggle(!editToggle);
+                      router.reload();
                     }}
                   >
                     保存

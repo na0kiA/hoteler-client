@@ -50,7 +50,6 @@ export const deleteHotel = (id: number) => {
 
 export const postImageKeyOfHotel = (
   id: string | string[] | undefined,
-  // params: string[]
   params: string[]
 ) => {
   return client.post(

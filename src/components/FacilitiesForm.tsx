@@ -1,5 +1,6 @@
 import React, { memo, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { useForm } from "react-hook-form";
@@ -74,7 +75,7 @@ const FacilitiesForm = memo(({ id }: PROPS) => {
 
   return (
     <div className="text-center p-10">
-      <div className="text-xl font-bold  mb-1">ホテル設備の設定</div>
+      <div className="text-xl font-bold mb-1">ホテル設備の設定</div>
       {error && (
         <div className="text-red-600 text-ssm md:text-sm my-auto">{error}</div>
       )}
@@ -96,9 +97,11 @@ const FacilitiesForm = memo(({ id }: PROPS) => {
           <Link href={`/hotels/${id}`} className="link md:text-lg mr-10">
             今はスキップ
           </Link>
-          <button type="submit" className="btn btn-primary">
-            仮登録
-          </button>
+          {keyList.length > 4 && (
+            <button type="submit" className="btn btn-primary">
+              仮登録
+            </button>
+          )}
         </div>
       </form>
     </div>

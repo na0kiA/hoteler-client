@@ -147,15 +147,17 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
       <div className="flex justify-center mt-3">
         <div className="tabs">
           <Link
-            className="tab tab-md md:tab-lg tab-bordered tab-active"
+            className="tab tab-md md:tab-lg tab-bordered"
             href={`/hotels/${id}/edit`}
           >
             詳細
           </Link>
-          <div className="tab tab-md md:tab-lg tab-active">料金</div>
+          <div className="tab tab-md md:tab-lg tab-bordered tab-active">
+            料金
+          </div>
           <Link
-            href={`/hotels/${id}/facilities`}
-            className="tab tab-md md:tab-lg  tab-bordered"
+            href={`/hotels/${id}/edit/facilities`}
+            className="tab tab-md md:tab-lg tab-bordered"
           >
             設備
           </Link>
