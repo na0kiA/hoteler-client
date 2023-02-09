@@ -9,7 +9,7 @@ const HotelUploadImages = memo(({ imageUrl = [], keys = [] }: any) => {
   console.log("FormInputがレンダリングされました");
 
   const router = useRouter();
-  // const { keyList, setKeyList } = useHotelFormStateContext();
+  const { setKeys } = useHotelFormStateContext();
   const [keyList, setKeyList] = useState<string[]>([...keys]);
   const [imageList, setImageList] = useState<string[]>([...imageUrl]);
   const maxImagesUpload = 10;
@@ -50,6 +50,7 @@ const HotelUploadImages = memo(({ imageUrl = [], keys = [] }: any) => {
 
     setImageList([...imageList, locationOfImage]);
     setKeyList([...keyList, key]);
+    setKeys([...keyList, key]);
   };
 
   const handleOnRemoveImage = (index: number) => {

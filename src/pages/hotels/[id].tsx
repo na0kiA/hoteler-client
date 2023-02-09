@@ -64,7 +64,7 @@ const HotelDetail = ({
           <Image
             className="md:hidden rounded-lg"
             src={
-              hotelImages[0]?.fileUrl
+              hotelImages && hotelImages[0]?.fileUrl
                 ? hotelImages[0]?.fileUrl
                 : "/noImageHotel.png"
             }
@@ -72,14 +72,15 @@ const HotelDetail = ({
             width={1280}
             height={720}
             priority={true}
+            style={{ objectFit: "cover" }}
           />
         </figure>
         <div className="hidden md:flex">
           <Image
-            className="flex-1 lg:max-w-lg lg:max-h-lg md:max-w-sm md:max-h-sm rounded-lg p-1"
+            className="flex lg:max-w-lg lg:max-h-lg md:max-w-sm md:max-h-sm rounded-lg p-1"
             src={
-              hotelImages[0]?.fileUrl
-                ? hotelImages[0]?.fileUrl
+              hotelImages && hotelImages[0]?.fileUrl
+                ? hotelImages[0].fileUrl
                 : "/noImageHotel.png"
             }
             alt="トップ画像"
@@ -92,8 +93,8 @@ const HotelDetail = ({
             <Image
               className="w-1/2 h-1/2 rounded-lg p-1"
               src={
-                hotelImages[1]?.fileUrl
-                  ? hotelImages[1]?.fileUrl
+                hotelImages && hotelImages[1]?.fileUrl
+                  ? hotelImages[1].fileUrl
                   : "/noImageHotel.png"
               }
               alt="セカンド画像"
@@ -105,8 +106,8 @@ const HotelDetail = ({
             <Image
               className="w-1/2 h-1/2 rounded-lg p-1"
               src={
-                hotelImages[2]?.fileUrl
-                  ? hotelImages[2]?.fileUrl
+                hotelImages && hotelImages[2]?.fileUrl
+                  ? hotelImages[2].fileUrl
                   : "/noImageHotel.png"
               }
               alt="セカンド画像"
@@ -118,8 +119,8 @@ const HotelDetail = ({
             <Image
               className="w-1/2 h-1/2 rounded-lg p-1"
               src={
-                hotelImages[3]?.fileUrl
-                  ? hotelImages[3]?.fileUrl
+                hotelImages && hotelImages[3]?.fileUrl
+                  ? hotelImages[3].fileUrl
                   : "/noImageHotel.png"
               }
               alt="セカンド画像"
@@ -131,8 +132,8 @@ const HotelDetail = ({
             <Image
               className="w-1/2 h-1/2 rounded-lg p-1"
               src={
-                hotelImages[4]?.fileUrl
-                  ? hotelImages[4]?.fileUrl
+                hotelImages && hotelImages[4]?.fileUrl
+                  ? hotelImages[4].fileUrl
                   : "/noImageHotel.png"
               }
               alt="セカンド画像"
@@ -207,10 +208,16 @@ const HotelDetail = ({
               "3人以上の利用",
               "/3人以上.svg"
             )}
-            {facilityBadge(
-              hotelFacilities.secretPaymentEnabled,
-              "入室から退室までフロントと会わない",
-              "/シークレットペイメント.svg"
+            {hotelFacilities.secretPaymentEnabled && (
+              <div className="flex text-base w-full my-1 md:w-1/2 md:p-3 md:mr-auto">
+                <Image
+                  src="/シークレットペイメント.svg"
+                  width={24}
+                  height={24}
+                  alt="アイコン"
+                />
+                <div className="ml-3">入室から退室までフロントと会わない</div>
+              </div>
             )}
           </div>
           <hr className="mt-5 border-t border-gray-500" />
@@ -343,8 +350,6 @@ export const getServerSideProps = async (ctx: any) => {
         "access-token": ctx.req.cookies["_access_token"] || undefined,
       },
     });
-    console.log(res);
-
     const hotelDetail: HotelDetailType = await res.data;
     console.log(hotelDetail);
 

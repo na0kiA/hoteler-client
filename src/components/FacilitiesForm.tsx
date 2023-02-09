@@ -14,7 +14,7 @@ type PROPS = {
 
 const FacilitiesForm = memo(({ id }: PROPS) => {
   const [error, setError] = useState("");
-  const { keyList } = useHotelFormStateContext();
+  const { keys } = useHotelFormStateContext();
   const router = useRouter();
 
   const { register, handleSubmit, getValues } = useForm({
@@ -39,10 +39,10 @@ const FacilitiesForm = memo(({ id }: PROPS) => {
   const onSubmit = async (data: HotelFacilityType) => {
     try {
       const [results]: any = await Promise.all([
-        postImageKeyOfHotel(id, keyList),
+        postImageKeyOfHotel(id, keys),
         updateFacilities(id, data),
       ]);
-      console.log([results]);
+      console.log(results);
 
       if (results.status == 200) {
         Cookies.remove("_hotel_id");

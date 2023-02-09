@@ -3,15 +3,15 @@ import { useContext, useState, createContext, memo } from "react";
 type HotelFormContextType = {
   id: number;
   setId: React.Dispatch<React.SetStateAction<number>>;
-  keyList: string[];
-  setKeyList: React.Dispatch<React.SetStateAction<string[]>>;
+  keys: string[];
+  setKeys: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 export const HotelFormContext = createContext({} as HotelFormContextType);
 
 export const HotelFormProvider = memo(({ children }: any) => {
   const [id, setId] = useState<number>(0);
-  const [keyList, setKeyList] = useState<string[]>([]);
+  const [keys, setKeys] = useState<string[]>([]);
 
   console.log("HotelFormProviderが呼ばれたよ");
 
@@ -20,8 +20,8 @@ export const HotelFormProvider = memo(({ children }: any) => {
       value={{
         id,
         setId,
-        keyList,
-        setKeyList,
+        keys,
+        setKeys,
       }}
     >
       {children}
