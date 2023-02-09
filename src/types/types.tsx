@@ -89,7 +89,7 @@ export type HotelEditType = {
   fullAddress: string;
   hotelFacilities: HotelFacilityType;
   full: boolean;
-  hotelImages: string;
+  hotelImages: HotelImagesType[];
   id: number;
   userId: number;
   accepted: boolean;
@@ -242,6 +242,7 @@ export type HotelRateParams = {
 export type HotelImagesType = {
   id: number;
   fileUrl: string;
+  key: string;
 };
 
 export type AuthContextType = {

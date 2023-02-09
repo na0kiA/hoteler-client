@@ -5,14 +5,13 @@ import { fetchSignedUrl } from "lib/image";
 import { useRouter } from "next/router";
 import { HotelImagesType } from "types/types";
 
-const HotelUploadImages = memo(() => {
+const HotelUploadImages = memo(({ imageUrl = [], keys = [] }: any) => {
   console.log("FormInputがレンダリングされました");
-  const defaultImageKey = [
-    "uploads/hoteler/fe67ba70-5d0a-4b53-94a0-628003c8380e/ホテルのイメージ画像.jpeg",
-  ];
+
   const router = useRouter();
-  const { keyList, setKeyList } = useHotelFormStateContext();
-  const [imageList, setImageList] = useState<string[]>([]);
+  // const { keyList, setKeyList } = useHotelFormStateContext();
+  const [keyList, setKeyList] = useState<string[]>([...keys]);
+  const [imageList, setImageList] = useState<string[]>([...imageUrl]);
   const maxImagesUpload = 10;
   const inputId = Math.random().toString(32).substring(2);
 
@@ -63,11 +62,14 @@ const HotelUploadImages = memo(() => {
     setKeyList(newKeyList);
   };
 
+  console.log(keyList);
+  console.log(imageList);
+
   return (
     <>
       <div className="form-control text-center mb-5 mt-5">
         <label className="label m-auto">
-          <span className="text-xl font-bold">ホテル画像の設定</span>
+          <span className="text-xl font-bold underline">ホテル画像の設定</span>
         </label>
         {imageList &&
           imageList.map((item, i) => {
@@ -105,8 +107,8 @@ const HotelUploadImages = memo(() => {
         <label htmlFor={inputId}>
           {imageList.length >= 1 && (
             <>
-              <span className="underline align-bottom">
-                画像を追加できます。画像は最大10枚までです。
+              <span className="align-bottom">
+                画像を追加選択できます。画像は最大10枚です。
               </span>
             </>
           )}

@@ -64,7 +64,7 @@ const HotelDetail = ({
           <Image
             className="md:hidden rounded-lg"
             src={
-              hotelImages && hotelImages.length > 4
+              hotelImages[0]?.fileUrl
                 ? hotelImages[0]?.fileUrl
                 : "/noImageHotel.png"
             }
@@ -78,8 +78,8 @@ const HotelDetail = ({
           <Image
             className="flex-1 lg:max-w-lg lg:max-h-lg md:max-w-sm md:max-h-sm rounded-lg p-1"
             src={
-              hotelImages && hotelImages.length > 4
-                ? hotelImages[1]?.fileUrl
+              hotelImages[0]?.fileUrl
+                ? hotelImages[0]?.fileUrl
                 : "/noImageHotel.png"
             }
             alt="トップ画像"
@@ -92,7 +92,20 @@ const HotelDetail = ({
             <Image
               className="w-1/2 h-1/2 rounded-lg p-1"
               src={
-                hotelImages && hotelImages.length > 4
+                hotelImages[1]?.fileUrl
+                  ? hotelImages[1]?.fileUrl
+                  : "/noImageHotel.png"
+              }
+              alt="セカンド画像"
+              width={1280}
+              height={720}
+              priority={true}
+              style={{ objectFit: "cover" }}
+            />
+            <Image
+              className="w-1/2 h-1/2 rounded-lg p-1"
+              src={
+                hotelImages[2]?.fileUrl
                   ? hotelImages[2]?.fileUrl
                   : "/noImageHotel.png"
               }
@@ -105,7 +118,7 @@ const HotelDetail = ({
             <Image
               className="w-1/2 h-1/2 rounded-lg p-1"
               src={
-                hotelImages && hotelImages.length > 4
+                hotelImages[3]?.fileUrl
                   ? hotelImages[3]?.fileUrl
                   : "/noImageHotel.png"
               }
@@ -118,21 +131,8 @@ const HotelDetail = ({
             <Image
               className="w-1/2 h-1/2 rounded-lg p-1"
               src={
-                hotelImages && hotelImages.length > 4
+                hotelImages[4]?.fileUrl
                   ? hotelImages[4]?.fileUrl
-                  : "/noImageHotel.png"
-              }
-              alt="セカンド画像"
-              width={1280}
-              height={720}
-              priority={true}
-              style={{ objectFit: "cover" }}
-            />
-            <Image
-              className="w-1/2 h-1/2 rounded-lg p-1"
-              src={
-                hotelImages && hotelImages.length > 4
-                  ? hotelImages[5]?.fileUrl
                   : "/noImageHotel.png"
               }
               alt="セカンド画像"

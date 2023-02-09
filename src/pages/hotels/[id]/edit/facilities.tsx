@@ -4,6 +4,12 @@ import Layout from "components/Layout";
 import client from "lib/client";
 import { getHotelImages } from "lib/hotels";
 import { HotelEditType } from "types/types";
+import HotelUploadImages from "components/HotelUploadImages";
+import {
+  HotelFormProvider,
+  useHotelFormStateContext,
+} from "context/HotelFormProvider";
+import { useAuthStateContext } from "context/AuthProvider";
 
 const Facilities = ({
   name,
@@ -12,7 +18,15 @@ const Facilities = ({
   hotelImages,
 }: HotelEditType) => {
   const hotelId = id.toString();
-  console.log(hotelImages);
+  // const { setKeyList } = useHotelFormStateContext();
+  const image = hotelImages.map((image) => {
+    return image.fileUrl;
+  });
+  const keys = hotelImages.map((image) => {
+    return image.key;
+    // setKeyList(keys);
+  });
+
   return (
     <Layout title={`${name}の設備編集ページ`}>
       <div className="flex justify-center mt-3">
@@ -34,6 +48,9 @@ const Facilities = ({
           </div>
         </div>
       </div>
+      <HotelFormProvider>
+        <HotelUploadImages imageUrl={image} keys={keys} />
+      </HotelFormProvider>
     </Layout>
   );
 };
@@ -42,10 +59,8 @@ export default Facilities;
 
 export const getServerSideProps = async (ctx: any) => {
   const { id } = ctx.query;
-
   try {
-    const [hotelImages, hotelDetail, currentUser]: any = await Promise.all([
-      getHotelImages(id),
+    const [hotelDetail, currentUser]: any = await Promise.all([
       client.get(`/hotels/${id}`, {
         headers: {
           "Content-Type": "application/json",
@@ -63,11 +78,11 @@ export const getServerSideProps = async (ctx: any) => {
         },
       }),
     ]);
+
     if (currentUser.data.data.id === hotelDetail.data.userId) {
       return {
         props: {
           ...hotelDetail.data,
-          hotelImages: hotelImages.data,
         },
       };
     } else {

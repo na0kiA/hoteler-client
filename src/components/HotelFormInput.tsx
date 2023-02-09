@@ -1,11 +1,7 @@
 import React, { memo, useState } from "react";
 import { useRouter } from "next/router";
 import { createHotel, updateHotel } from "lib/hotels";
-import {
-  HotelCreateType,
-  HotelEditFormType,
-  HotelUpdateType,
-} from "types/types";
+import { HotelEditFormType, HotelUpdateType } from "types/types";
 import { useForm, useFormState } from "react-hook-form";
 import Cookies from "js-cookie";
 
@@ -62,6 +58,13 @@ const HotelFormInput = memo(
     const getHotelFormValue = getValues();
 
     type HotelFormKeys = keyof typeof getHotelFormValue;
+
+    // const generateSnakeCase = (str = HotelFormKeys) => {
+    //   return str
+    //     .replace(/([A-Z])/g, "_$1")
+    //     .replace(/^_/, "")
+    //     .toLowerCase();
+    // }
 
     const inputForm = (
       labelText: string,
@@ -154,24 +157,30 @@ const HotelFormInput = memo(
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="card card-compact	flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 m-auto">
             <div className="card-body">
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text text-sm font-bold">
-                    更新メッセージ
-                  </span>
-                </label>
-                <span className="text-sm mb-3">
-                  (お気に入り登録しているユーザーに送信されます)
-                </span>
-                <input
-                  type="text"
-                  id="notification.message"
-                  className="input input-bordered input-sm"
-                  {...register("notification.message", {
-                    required: "必須項目です",
-                  })}
-                />
-              </div>
+              {pathname.startsWith("/hotels/register") ? (
+                <></>
+              ) : (
+                <>
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text text-sm font-bold">
+                        更新メッセージ
+                      </span>
+                    </label>
+                    <span className="text-sm mb-3">
+                      (お気に入り登録しているユーザーに送信されます)
+                    </span>
+                    <input
+                      type="text"
+                      id="notification.message"
+                      className="input input-bordered input-sm"
+                      {...register("notification.message", {
+                        required: "必須項目です",
+                      })}
+                    />
+                  </div>
+                </>
+              )}
               {errorText(invalidMessage)}
               {inputForm("ホテル名", "name", invalidName)}
               {inputForm("会社", "company", invalidCompany)}

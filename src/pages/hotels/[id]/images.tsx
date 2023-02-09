@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { getHotelImages } from "lib/hotels";
 import { HotelImagesType } from "types/types";
+import client from "lib/client";
 
 const images = ({ id, fileUrl }: HotelImagesType) => {
   return (
@@ -63,7 +64,14 @@ export const getServerSideProps = async (ctx: any) => {
   const { id } = ctx.query;
 
   try {
-    const res = await getHotelImages(id);
+    const res = await client.get(`/hotels/${id}/images`, {
+      headers: {
+        "Content-Type": "application/json",
+        uid: ctx.req.cookies["_uid"],
+        client: ctx.req.cookies["_client"],
+        "access-token": ctx.req.cookies["_access_token"],
+      },
+    });
     const hotelImages: HotelImagesType = await res.data;
     return {
       props: {
