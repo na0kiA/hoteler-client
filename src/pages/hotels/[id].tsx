@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import Image from "next/image";
 
-import { HotelDetailType, ReviewEditParams, ReviewType } from "types/types";
+import { HotelDetailType, ReviewType } from "types/types";
 import { Rating } from "react-simple-star-rating";
 import Link from "next/link";
 import client from "lib/client";
 import Layout from "components/Layout";
-import { useForm, useFormState } from "react-hook-form";
 import { useRouter } from "next/router";
-import { createReview } from "lib/reviews";
 import PostReviewForm from "components/PostReviewForm";
 import { useAuthStateContext } from "context/AuthProvider";
-import { log } from "console";
+import { updateHotel } from "lib/hotels";
 
 const HotelDetail = ({
   favoritesCount,
@@ -33,7 +31,8 @@ const HotelDetail = ({
 }: HotelDetailType) => {
   const { currentUser } = useAuthStateContext();
   const router = useRouter();
-  const [postReviewToggle, setPostReviewToggle] = useState(false);
+  const [postReviewToggle, setPostReviewToggle] = useState<boolean>(false);
+  const [editFull, setEditFull] = useState<boolean>(false);
   const facilityBadge = (
     facility: boolean,
     property: string,
@@ -57,9 +56,24 @@ const HotelDetail = ({
     }
   };
 
+  const handleChangeFull = async (e) => {
+    e.preventDefault();
+    const res = await updateHotel(id, { full: editFull });
+  };
+
   return (
     <Layout title={`${name}のホテル詳細ページ`}>
       <div className="card p-8 md:w-full md:h-full md:py-5 md:px-20 bg-base-100 shadow-xl">
+        {currentUser && currentUser.id === userId && (
+          <>
+            <button
+              className="btn btn-xs btn-primary btn-active ml-auto"
+              onClick={() => router.push(`/hotels/${id}/edit`)}
+            >
+              編集する
+            </button>
+          </>
+        )}
         <figure className="md:hidden h-3/4 mt-3">
           <Image
             className="md:hidden rounded-lg"
@@ -149,15 +163,34 @@ const HotelDetail = ({
         </Link>
         <h1 className="flex mt-2">
           <div className="text-3xl font-bold mb-1">{name}</div>
-          <div
-            className={
-              full
-                ? "badge badge-lg bg-pink-500 text-black rounded-lg  text-base ml-auto"
-                : "badge badge-lg bg-green-500 text-black rounded-lg  text-base ml-auto"
-            }
-          >
-            {full ? "満室" : "空室"}
-          </div>
+          {currentUser && currentUser.id === userId ? (
+            <>
+              <button
+                className={
+                  full
+                    ? "badge badge-lg bg-pink-500 text-black rounded-lg  text-base ml-auto"
+                    : "badge badge-lg bg-green-500 text-black rounded-lg  text-base ml-auto"
+                }
+                onClick={(e) => {
+                  setEditFull(!editFull), handleChangeFull(), router.reload();
+                }}
+              >
+                {full ? "満室に切り替える" : "空室に切り替える"}
+              </button>
+            </>
+          ) : (
+            <>
+              <div
+                className={
+                  full
+                    ? "badge badge-lg bg-pink-500 text-black rounded-lg  text-base ml-auto"
+                    : "badge badge-lg bg-green-500 text-black rounded-lg  text-base ml-auto"
+                }
+              >
+                {full ? "満室" : "空室"}
+              </div>
+            </>
+          )}
         </h1>
         <h3 className="italic mb-1">{fullAddress}</h3>
         <div className="">{content}</div>
@@ -300,7 +333,7 @@ const HotelDetail = ({
                           allowHover={false}
                           readonly={true}
                           allowTitleTag={false}
-                        />{" "}
+                        />
                         <span className="align-bottom">
                           {sliceString(`${review.title}`, 10)}
                         </span>

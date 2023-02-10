@@ -121,6 +121,7 @@ export type HotelCreateType = {
 
 export type HotelUpdateType = HotelCreateType & {
   notification: { message: string };
+  full: boolean;
 };
 
 export type ServiceRateType = {

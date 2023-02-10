@@ -1,6 +1,5 @@
 import React, { memo, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { useForm } from "react-hook-form";
@@ -10,6 +9,7 @@ import { HotelFacilityType } from "types/types";
 
 type PROPS = {
   id: string | undefined;
+  facilities: HotelFacilityType;
 };
 
 const FacilitiesForm = memo(({ id }: PROPS) => {
@@ -17,7 +17,7 @@ const FacilitiesForm = memo(({ id }: PROPS) => {
   const { keys } = useHotelFormStateContext();
   const router = useRouter();
 
-  const { register, handleSubmit, getValues } = useForm({
+  const { register, handleSubmit, getValues, setValue } = useForm({
     defaultValues: {
       wifiEnabled: false,
       parkingEnabled: false,
@@ -37,6 +37,8 @@ const FacilitiesForm = memo(({ id }: PROPS) => {
   type FacilitiesKey = keyof typeof getFacilitiesValue;
 
   const onSubmit = async (data: HotelFacilityType) => {
+    console.log(data);
+
     try {
       const [results]: any = await Promise.all([
         postImageKeyOfHotel(id, keys),

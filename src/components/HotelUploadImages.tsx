@@ -61,10 +61,8 @@ const HotelUploadImages = memo(({ imageUrl = [], keys = [] }: any) => {
     const newKeyList = [...keyList];
     newKeyList.splice(index, 1);
     setKeyList(newKeyList);
+    setKeys(newKeyList);
   };
-
-  console.log(keyList);
-  console.log(imageList);
 
   return (
     <>
@@ -101,6 +99,7 @@ const HotelUploadImages = memo(({ imageUrl = [], keys = [] }: any) => {
                   width={300}
                   height={300}
                   alt="ホテル画像"
+                  priority={true}
                 />
               </div>
             );

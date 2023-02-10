@@ -59,13 +59,6 @@ const HotelFormInput = memo(
 
     type HotelFormKeys = keyof typeof getHotelFormValue;
 
-    // const generateSnakeCase = (str = HotelFormKeys) => {
-    //   return str
-    //     .replace(/([A-Z])/g, "_$1")
-    //     .replace(/^_/, "")
-    //     .toLowerCase();
-    // }
-
     const inputForm = (
       labelText: string,
       value: HotelFormKeys,
