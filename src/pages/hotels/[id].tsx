@@ -31,6 +31,7 @@ const HotelDetail = ({
   name,
   id,
   userId,
+  accepted,
 }: HotelDetailType) => {
   const { currentUser } = useAuthStateContext();
   const router = useRouter();
@@ -64,22 +65,22 @@ const HotelDetail = ({
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
+    console.log(editFull);
+    const onlyUpdateFullParams: any = {
+      content: content,
+      company: company,
+      phone_number: phoneNumber,
+      postal_code: postalCode,
+      full_address: fullAddress,
+      full: !editFull,
+      name: name,
+      prefecture: prefecture,
+      city: city,
+      street_address: streetAddress,
+    };
     try {
-      const onlyUpdateFullParams: any = {
-        content: content,
-        company: company,
-        phone_number: phoneNumber,
-        postal_code: postalCode,
-        full_address: fullAddress,
-        full: editFull,
-        name: name,
-        prefecture: prefecture,
-        city: city,
-        street_address: streetAddress,
-      };
       const res = await updateHotel(id, onlyUpdateFullParams);
       if (res.status === 200) {
-        setEditFull(!editFull);
         router.reload();
       }
     } catch (error: any) {
@@ -94,16 +95,32 @@ const HotelDetail = ({
     <Layout title={`${name}のホテル詳細ページ`}>
       <div className="card p-8 md:w-full md:h-full md:py-5 md:px-20 bg-base-100 shadow-xl">
         {currentUser && currentUser.id === userId && (
-          <>
+          <div className="flex m-auto gap-3">
             <button
-              className="btn btn-xs btn-primary btn-active ml-auto"
+              className={
+                full
+                  ? "btn btn-sm btn-accent text-base ml-auto"
+                  : "btn btn-sm btn-secondary text-base ml-auto"
+              }
+              onClick={(e) => {
+                handleChangeFull(e), setEditFull(!editFull);
+              }}
+            >
+              {full ? (
+                <div className="flex-wrap">空室に切り替える</div>
+              ) : (
+                <div className="flex-wrap">満室に切り替える</div>
+              )}
+            </button>
+            <button
+              className="btn btn-sm btn-primary btn-active ml-auto"
               onClick={() => router.push(`/hotels/${id}/edit`)}
             >
-              編集する
+              ホテルを編集する
             </button>
-          </>
+          </div>
         )}
-        <figure className="md:hidden h-3/4 mt-3">
+        <figure className="md:hidden h-3/4 mt-5">
           <Image
             className="md:hidden rounded-lg"
             src={
@@ -190,39 +207,60 @@ const HotelDetail = ({
         <Link className="link ml-auto text-xs" href={`/hotels/${id}/images`}>
           全ての写真を表示
         </Link>
-        <h1 className="flex mt-2">
-          <div className="text-3xl font-bold mb-1">{name}</div>
+        <div>
           {currentUser && currentUser.id === userId ? (
             <>
-              <button
-                className={
-                  full
-                    ? "badge badge-lg bg-pink-500 text-black rounded-lg  text-base ml-auto"
-                    : "badge badge-lg bg-green-500 text-black rounded-lg  text-base ml-auto"
-                }
-                onClick={(e) => {
-                  handleChangeFull(e);
-                }}
-              >
-                {full ? "満室に切り替える" : "空室に切り替える"}
+              <button className="flex btn btn-active btn-sm gap-2 mt-5 ml-auto">
+                お気に入り
+                <div className="badge badge-secondary">{favoritesCount}件</div>
               </button>
+              {accepted ? (
+                <span className="text-sm badge">承認済みホテル</span>
+              ) : (
+                <span className="text-sm badge">未承認ホテル</span>
+              )}
             </>
           ) : (
             <>
-              <div
-                className={
-                  full
-                    ? "badge badge-lg bg-pink-500 text-black rounded-lg  text-base ml-auto"
-                    : "badge badge-lg bg-green-500 text-black rounded-lg  text-base ml-auto"
-                }
+              <button
+                className="flex ml-auto mt-3 btn btn-sm btn-outline"
+                onClick={(e) => {
+                  currentUser ? handlePostFavorite(e) : router.push("/signin");
+                }}
               >
-                {full ? "満室" : "空室"}
-              </div>
+                お気に入りに追加
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+              </button>
             </>
           )}
+        </div>
+        <h1 className="flex mt-1">
+          <div className="text-3xl font-bold mb-1">{name}</div>
+          <div
+            className={
+              full
+                ? "flex ml-auto btn btn-sm btn-active btn-secondary text-base"
+                : "flex ml-auto btn btn-sm btn-active btn-accent text-base"
+            }
+          >
+            {full ? "満室" : "空室"}
+          </div>
         </h1>
         <h3 className="italic mb-1">{fullAddress}</h3>
-        <div className="">{content}</div>
+        <p className="whitespace-pre-wrap">{content}</p>
         <hr className="mt-10 border-t border-gray-500" />
       </div>
 

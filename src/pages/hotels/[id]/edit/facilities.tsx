@@ -24,18 +24,22 @@ const Facilities = ({
     },
   });
   const hotelId = id.toString();
-  const image = hotelImages.map((image) => {
-    return image.fileUrl;
-  });
-  const defaultKeyList = hotelImages.map((image) => {
-    return image.key;
-  });
   const router = useRouter();
-  const { setKeys } = useHotelFormStateContext();
-  const [keyList, setKeyList] = useState<string[]>([...defaultKeyList]);
-  const [imageList, setImageList] = useState<string[]>([...image]);
+  const [keyList, setKeyList] = useState<string[]>([]);
+  const [imageList, setImageList] = useState<string[]>([]);
   const maxImagesUpload = 10;
   const inputId = Math.random().toString(32).substring(2);
+
+  const image = hotelImages?.map((image) => {
+    if (!image.fileUrl) return;
+    setImageList([...imageList, image.fileUrl]);
+    return image.fileUrl;
+  });
+  const defaultKeyList = hotelImages?.map((image) => {
+    if (!image.key) return;
+    setKeyList([...keyList, image.fileUrl]);
+    return image.key;
+  });
 
   const handleChangeImage = async (
     event: React.ChangeEvent<HTMLInputElement>

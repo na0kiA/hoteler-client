@@ -189,6 +189,7 @@ const HotelFormInput = memo(
                   </label>
                   <textarea
                     rows={20}
+                    wrap="soft"
                     className="textarea textarea-lg	textarea-bordered w-full  text-xs"
                     {...register("content", {
                       required: "コンテンツは10文字以上入力してください",
