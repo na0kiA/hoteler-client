@@ -17,7 +17,7 @@ const HotelOfUserProfile = ({ props }: PROPS) => {
   return (
     <>
       <div className="md:hidden card card-side bg-base-100 shadow-xl">
-        <div className="pl-3 pt-5">
+        <div className="flex m-auto pl-3 pt-5">
           <Link href={`/hotels/${props.id}`}>
             <Image
               className="rounded-lg"
@@ -33,7 +33,7 @@ const HotelOfUserProfile = ({ props }: PROPS) => {
             />
           </Link>
         </div>
-        <div className="p-1 pb-1">
+        <div className="m-auto p-1 pb-1">
           <div className="flex">
             <Rating
               initialValue={props.averageRating}

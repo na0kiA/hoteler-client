@@ -25,6 +25,9 @@ const HotelDetail = ({
   hotelImages,
   dayOfTheWeek,
   topFourReviews,
+  prefecture,
+  city,
+  streetAddress,
   name,
   id,
   userId,
@@ -33,6 +36,7 @@ const HotelDetail = ({
   const router = useRouter();
   const [postReviewToggle, setPostReviewToggle] = useState<boolean>(false);
   const [editFull, setEditFull] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
   const facilityBadge = (
     facility: boolean,
     property: string,
@@ -56,9 +60,34 @@ const HotelDetail = ({
     }
   };
 
-  const handleChangeFull = async (e) => {
+  const handleChangeFull = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
-    const res = await updateHotel(id, { full: editFull });
+    try {
+      const onlyUpdateFullParams: any = {
+        content: content,
+        company: company,
+        phone_number: phoneNumber,
+        postal_code: postalCode,
+        full_address: fullAddress,
+        full: editFull,
+        name: name,
+        prefecture: prefecture,
+        city: city,
+        street_address: streetAddress,
+      };
+      const res = await updateHotel(id, onlyUpdateFullParams);
+      if (res.status === 200) {
+        setEditFull(!editFull);
+        router.reload();
+      }
+    } catch (error: any) {
+      if (error.response.data) {
+        setError(error.response.data);
+      }
+      console.log(error);
+    }
   };
 
   return (
@@ -172,7 +201,7 @@ const HotelDetail = ({
                     : "badge badge-lg bg-green-500 text-black rounded-lg  text-base ml-auto"
                 }
                 onClick={(e) => {
-                  setEditFull(!editFull), handleChangeFull(), router.reload();
+                  handleChangeFull(e);
                 }}
               >
                 {full ? "満室に切り替える" : "空室に切り替える"}
