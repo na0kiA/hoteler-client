@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 
 import { HotelDetailType, ReviewType } from "types/types";
@@ -23,7 +23,6 @@ const HotelDetail = ({
   averageRating,
   reviewsCount,
   hotelImages,
-  dayOfTheWeek,
   topFourReviews,
   prefecture,
   city,
@@ -32,11 +31,12 @@ const HotelDetail = ({
   id,
   userId,
   accepted,
-}: HotelDetailType) => {
+  isFavoriteOrNot,
+}: HotelDetailType & { isFavoriteOrNot: boolean }) => {
   const { currentUser } = useAuthStateContext();
   const router = useRouter();
   const [postReviewToggle, setPostReviewToggle] = useState<boolean>(false);
-  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [isFavorite, setIsFavorite] = useState<boolean>(isFavoriteOrNot);
   const [editFull, setEditFull] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const facilityBadge = (
@@ -62,18 +62,29 @@ const HotelDetail = ({
     }
   };
 
+  const buttonRef = useRef(false);
+
   const handlePostOrDeleteFavorite = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     isFavorite: boolean
   ) => {
     event.preventDefault();
+
+    if (buttonRef.current) return;
+    buttonRef.current = true;
+
     try {
       if (isFavorite) {
-        await deleteFavorite(id);
+        const res = await deleteFavorite(id);
+        console.log(res);
+
         setIsFavorite(false);
+        buttonRef.current = false;
       } else {
-        await postFavorite(id);
+        const res = await postFavorite(id);
+        console.log(res);
         setIsFavorite(true);
+        buttonRef.current = false;
       }
     } catch (error: any) {
       console.log(error);
@@ -467,20 +478,39 @@ export const getServerSideProps = async (ctx: any) => {
   const { id } = ctx.query;
 
   try {
-    const res = await client.get(`/hotels/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        uid: ctx.req.cookies["_uid"] || undefined,
-        client: ctx.req.cookies["_client"] || undefined,
-        "access-token": ctx.req.cookies["_access_token"] || undefined,
-      },
-    });
-    const hotelDetail: HotelDetailType = await res.data;
-    console.log(hotelDetail);
+    const [hotelDetailResponse, favoriteOrNot]: any = await Promise.allSettled([
+      client.get(`/hotels/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          uid: ctx.req.cookies["_uid"] || undefined,
+          client: ctx.req.cookies["_client"] || undefined,
+          "access-token": ctx.req.cookies["_access_token"] || undefined,
+        },
+      }),
+      client.get(`/hotels/${id}/favorites`, {
+        headers: {
+          "Content-Type": "application/json",
+          uid: ctx.req.cookies["_uid"],
+          client: ctx.req.cookies["_client"],
+          "access-token": ctx.req.cookies["_access_token"],
+        },
+      }),
+    ]);
+
+    const hotelDetail: HotelDetailType = await hotelDetailResponse?.value?.data;
+    const isFavoriteOrNot: boolean = favoriteOrNot.value?.data?.favorite;
+    console.log(isFavoriteOrNot);
+
+    if (!hotelDetail) {
+      return {
+        notFound: true,
+      };
+    }
 
     return {
       props: {
         ...hotelDetail,
+        isFavoriteOrNot,
       },
     };
   } catch (error) {

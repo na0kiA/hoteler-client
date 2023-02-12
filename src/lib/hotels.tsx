@@ -111,15 +111,11 @@ export const postFavorite = (id: number) => {
 };
 
 export const deleteFavorite = (id: number) => {
-  return client.delete(
-    `/hotels/${id}/favorites`,
-    {},
-    {
-      headers: {
-        "access-token": Cookies.get("_access_token"),
-        client: Cookies.get("_client"),
-        uid: Cookies.get("_uid"),
-      },
-    }
-  );
+  return client.delete(`/hotels/${id}/favorites`, {
+    headers: {
+      "access-token": Cookies.get("_access_token"),
+      client: Cookies.get("_client"),
+      uid: Cookies.get("_uid"),
+    },
+  });
 };
