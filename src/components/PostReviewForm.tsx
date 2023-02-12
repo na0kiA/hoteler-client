@@ -70,6 +70,8 @@ const PostReviewForm = ({ id }: any) => {
           <span className="label-text text-sm">内容</span>
         </label>
         <textarea
+          wrap="soft"
+          rows={10}
           className="textarea textarea-bordered w-full max-h-full text-xs md:w-2/3"
           {...register("content", {
             required: "内容は10文字以上入力してください",

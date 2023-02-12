@@ -95,3 +95,31 @@ export const updateFacilities = (
     }
   );
 };
+
+export const postFavorite = (id: number) => {
+  return client.post(
+    `/hotels/${id}/favorites`,
+    {},
+    {
+      headers: {
+        "access-token": Cookies.get("_access_token"),
+        client: Cookies.get("_client"),
+        uid: Cookies.get("_uid"),
+      },
+    }
+  );
+};
+
+export const deleteFavorite = (id: number) => {
+  return client.delete(
+    `/hotels/${id}/favorites`,
+    {},
+    {
+      headers: {
+        "access-token": Cookies.get("_access_token"),
+        client: Cookies.get("_client"),
+        uid: Cookies.get("_uid"),
+      },
+    }
+  );
+};

@@ -9,7 +9,7 @@ import Layout from "components/Layout";
 import { useRouter } from "next/router";
 import PostReviewForm from "components/PostReviewForm";
 import { useAuthStateContext } from "context/AuthProvider";
-import { updateHotel } from "lib/hotels";
+import { deleteFavorite, postFavorite, updateHotel } from "lib/hotels";
 
 const HotelDetail = ({
   favoritesCount,
@@ -36,6 +36,7 @@ const HotelDetail = ({
   const { currentUser } = useAuthStateContext();
   const router = useRouter();
   const [postReviewToggle, setPostReviewToggle] = useState<boolean>(false);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [editFull, setEditFull] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const facilityBadge = (
@@ -61,6 +62,28 @@ const HotelDetail = ({
     }
   };
 
+  const handlePostOrDeleteFavorite = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    isFavorite: boolean
+  ) => {
+    event.preventDefault();
+    try {
+      if (isFavorite) {
+        await deleteFavorite(id);
+        setIsFavorite(false);
+      } else {
+        await postFavorite(id);
+        setIsFavorite(true);
+      }
+    } catch (error: any) {
+      console.log(error);
+      if (error.response?.data) {
+        setError(error.response?.data.errors);
+      } else {
+        console.log(error);
+      }
+    }
+  };
   const handleChangeFull = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -94,8 +117,8 @@ const HotelDetail = ({
   return (
     <Layout title={`${name}のホテル詳細ページ`}>
       <div className="card p-8 md:w-full md:h-full md:py-5 md:px-20 bg-base-100 shadow-xl">
-        {currentUser && currentUser.id === userId && (
-          <div className="flex m-auto gap-3">
+        {currentUser && currentUser.id === userId ? (
+          <div className="flex m-auto gap-3 mb-3">
             <button
               className={
                 full
@@ -119,8 +142,33 @@ const HotelDetail = ({
               ホテルを編集する
             </button>
           </div>
+        ) : (
+          <button
+            className="flex ml-auto mb-2 btn btn-sm gap-1 btn-outline text-sm"
+            onClick={(e) => {
+              currentUser
+                ? handlePostOrDeleteFavorite(e, isFavorite)
+                : router.push("/signin");
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+            {isFavorite ? "削除" : "保存"}
+          </button>
         )}
-        <figure className="md:hidden h-3/4 mt-5">
+        <figure className="md:hidden h-3/4">
           <Image
             className="md:hidden rounded-lg"
             src={
@@ -221,33 +269,10 @@ const HotelDetail = ({
               )}
             </>
           ) : (
-            <>
-              <button
-                className="flex ml-auto mt-3 btn btn-sm btn-outline"
-                onClick={(e) => {
-                  currentUser ? handlePostFavorite(e) : router.push("/signin");
-                }}
-              >
-                お気に入りに追加
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                  />
-                </svg>
-              </button>
-            </>
+            <></>
           )}
         </div>
-        <h1 className="flex mt-1">
+        <h1 className="flex mt-3">
           <div className="text-3xl font-bold mb-1">{name}</div>
           <div
             className={

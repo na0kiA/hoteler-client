@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Rating } from "react-simple-star-rating";
@@ -43,7 +43,6 @@ const UserReviewShow = ({
   const handleRating = (rate: number) => {
     setEditReviewRating(rate);
   };
-  console.log(createdDate);
 
   const handleDeleteReviews = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -108,18 +107,23 @@ const UserReviewShow = ({
     }
   };
 
+  const buttonRef = useRef(false);
+
   const handleDeleteHelpfulness = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
-
+    if (buttonRef.current) return;
+    buttonRef.current = true;
     try {
       const res = await deleteHelpfulness(id);
       console.log(res);
-
       if (res.status == 200) {
         console.log("参考になったの解除に成功");
         setHelpfulness(helpfulness - 1);
+        setIsHelpfulness(false);
+        setError("");
+        buttonRef.current = false;
       } else {
         throw new Error(
           "参考になったの解除に失敗しました。画面をご確認の上もう一度実行してください。"
@@ -140,13 +144,18 @@ const UserReviewShow = ({
   ) => {
     e.preventDefault();
 
+    if (buttonRef.current) return;
+    buttonRef.current = true;
+
     try {
       const res = await createHelpfulness(id);
       console.log(res);
-
       if (res.status == 200) {
         console.log("参考になったの登録に成功");
         setHelpfulness(helpfulness + 1);
+        setIsHelpfulness(true);
+        setError("");
+        buttonRef.current = false;
       } else {
         throw new Error(
           "参考になったの登録に失敗しました。画面をご確認の上もう一度実行してください。"
@@ -287,6 +296,8 @@ const UserReviewShow = ({
                     <span className="label-text text-sm">内容</span>
                   </label>
                   <textarea
+                    wrap="soft"
+                    rows={10}
                     className="textarea textarea-bordered w-full max-h-full text-xs"
                     value={editReviewContent}
                     onChange={(event) => {
@@ -324,9 +335,7 @@ const UserReviewShow = ({
                     type="submit"
                     className="btn btn-outline btn-active btn-xs md:btn-sm"
                     onClick={(e) => {
-                      handleDeleteHelpfulness(e),
-                        setIsHelpfulness(false),
-                        setError("");
+                      handleDeleteHelpfulness(e);
                     }}
                   >
                     参考になったを取り消す
@@ -338,9 +347,7 @@ const UserReviewShow = ({
                     type="submit"
                     className="btn btn-outline btn-xs md:btn-sm"
                     onClick={(e) => {
-                      handleCreateHelpfulness(e),
-                        setIsHelpfulness(true),
-                        setError("");
+                      handleCreateHelpfulness(e);
                     }}
                   >
                     参考になった
@@ -387,7 +394,7 @@ export const getServerSideProps = async (ctx: any) => {
   const ReviewDetail: ReviewShowType = apiResponse.value?.data;
   const isHelpful: boolean = helpfulOrNot.value?.data?.helpful;
 
-  if (!ReviewDetail || !isHelpful) {
+  if (!ReviewDetail) {
     return {
       notFound: true,
     };
