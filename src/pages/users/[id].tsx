@@ -7,6 +7,7 @@ import { useAuthStateContext } from "context/AuthProvider";
 import Layout from "components/Layout";
 import ReviewsOfUserProfile from "components/ReviewsOfUserProfile";
 import UpdateUserProfile from "components/UpdateUserProfile";
+import ReviewsOfUserProfile2 from "components/ReviewsOfUserProfile2";
 
 const UserDetail = ({
   id,
@@ -55,13 +56,7 @@ const UserDetail = ({
         {typeof reviews === "string" ? (
           <div className="mt-3 ml-3">{reviews}</div>
         ) : (
-          <div className="">
-            {reviews.map((review: ReviewType) => (
-              <div key={review.id}>
-                <ReviewsOfUserProfile props={review} />
-              </div>
-            ))}
-          </div>
+          <ReviewsOfUserProfile2 props={reviews} />
         )}
       </Layout>
     </>
