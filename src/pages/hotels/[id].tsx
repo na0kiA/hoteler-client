@@ -149,7 +149,7 @@ const HotelDetail = ({
     <Layout title={`${name}のホテル詳細ページ`}>
       <div className="card p-8 md:w-full md:h-full md:py-5 md:px-20 bg-base-100 shadow-xl">
         {currentUser && currentUser.id === userId ? (
-          <div className="flex m-auto gap-3 mb-3">
+          <div className="flex md:ml-auto  gap-3 mb-3">
             <button
               className={
                 full
@@ -260,10 +260,10 @@ const HotelDetail = ({
             {full ? "満室" : "空室"}
           </div>
         </h1>
-        <h3 className="text-sm italic">〒 {postalCode}</h3>
-        <h3 className="italic mb-3">{fullAddress}</h3>
-        <h3 className="text-base">【{company}】</h3>
-        <h3 className="italic mb-3">{phoneNumber}</h3>
+        <p className="text-sm italic">〒 {postalCode}</p>
+        <p className="mb-3 italic">{fullAddress}</p>
+        <p className="italic">☎ {phoneNumber}</p>
+        <p className="text-lg italic mb-3">{company}</p>
         <p className="whitespace-pre-wrap">{content}</p>
         <hr className="mt-10 border-t border-gray-500" />
       </div>
@@ -443,6 +443,11 @@ const HotelDetail = ({
 export default HotelDetail;
 
 export const getServerSideProps = async (ctx: any) => {
+  ctx.res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=60, stale-while-revalidate=10"
+  );
+
   const { id } = ctx.query;
 
   try {

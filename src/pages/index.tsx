@@ -8,6 +8,7 @@ import Layout from "components/Layout";
 import StarsRating from "components/StarsRating";
 import ServiceList from "components/serviceList";
 import { useAuthStateContext } from "context/AuthProvider";
+import { GetServerSideProps } from "next";
 
 type PROPS = {
   hotels: HotelListType[];
@@ -74,7 +75,7 @@ const Home = ({ hotels }: PROPS) => {
   );
 };
 
-export const getServerSideProps = async ({ res }: any) => {
+export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   res.setHeader(
     "Cache-Control",
     "public, s-maxage=60, stale-while-revalidate=10"

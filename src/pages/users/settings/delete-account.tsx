@@ -1,10 +1,9 @@
+import React, { useState } from "react";
+import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 import Layout from "components/Layout";
 import { useAuthStateContext } from "context/AuthProvider";
-import Cookies from "js-cookie";
-import { deleteAccount, withAuthServerSideProps } from "lib/auth";
-import client from "lib/client";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { deleteAccount } from "lib/auth";
 
 const DeleteAccount = () => {
   const [confirmAlart, setConfirmAlart] = useState(false);

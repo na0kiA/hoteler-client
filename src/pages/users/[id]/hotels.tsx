@@ -12,6 +12,7 @@ import FavoritesOfUserProfile from "components/FavoritesOfUserProfile";
 import client from "lib/client";
 import UpdateUserProfile from "components/UpdateUserProfile";
 import HotelOfUserProfile from "components/HotelOfUserProfile";
+import { GetServerSideProps } from "next";
 
 const UserHotels = ({
   id,
@@ -74,7 +75,7 @@ const UserHotels = ({
 };
 export default UserHotels;
 
-export const getServerSideProps = async (ctx: any) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   ctx.res.setHeader(
     "Cache-Control",
     "public, s-maxage=1800, stale-while-revalidate=180"
