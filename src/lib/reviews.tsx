@@ -1,5 +1,9 @@
 import Cookies from "js-cookie";
-import { PostReviewParams, ReviewEditParams } from "types/types";
+import {
+  AuthHeaderType,
+  PostReviewParams,
+  ReviewEditParams,
+} from "types/types";
 import client from "./client";
 
 // ホテルの口コミ一覧を取得
@@ -61,12 +65,17 @@ export const createHelpfulness = (id: number) => {
 };
 
 // 参考になったがあるかどうか
-export const searchHelpfulness = (id: number) => {
+export const searchHelpfulness = (
+  id: string | string[] | undefined,
+  accessToken: string | undefined,
+  clientToken: string | undefined,
+  uid: string | undefined
+) => {
   return client.get(`/reviews/${id}/helpfulnesses`, {
     headers: {
-      "access-token": Cookies.get("_access_token"),
-      client: Cookies.get("_client"),
-      uid: Cookies.get("_uid"),
+      "access-token": accessToken,
+      client: clientToken,
+      uid: uid,
     },
   });
 };

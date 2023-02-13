@@ -39,7 +39,7 @@ export type ReviewShowType = {
   userImage: string;
   userId: number;
   createdDate: string;
-  isHelpful: boolean;
+  helpful: boolean;
 };
 
 export type ReviewEditParams = {
@@ -244,6 +244,12 @@ export type HotelImagesType = {
   id: number;
   fileUrl: string;
   key: string;
+};
+
+export type AuthHeaderType = {
+  accessToken: string | undefined;
+  clientToken: string | undefined;
+  uid: string | undefined;
 };
 
 export type AuthContextType = {

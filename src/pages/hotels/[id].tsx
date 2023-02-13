@@ -54,6 +54,28 @@ const HotelDetail = ({
     );
   };
 
+  const hotelImageViews = (
+    srcIndex: number,
+    className: string = "w-full",
+    alt: string = "ホテル画像"
+  ) => {
+    return (
+      <Image
+        src={
+          hotelImages && hotelImages[srcIndex]?.fileUrl
+            ? hotelImages[srcIndex]?.fileUrl
+            : "/noImageHotel.png"
+        }
+        className={className}
+        width={1280}
+        height={720}
+        alt={alt}
+        priority={true}
+        style={{ objectFit: "cover" }}
+      />
+    );
+  };
+
   const sliceString = (content: string, point: number) => {
     if (content.length > point) {
       return content.slice(0, point).concat("…");
@@ -76,8 +98,6 @@ const HotelDetail = ({
     try {
       if (isFavorite) {
         const res = await deleteFavorite(id);
-        console.log(res);
-
         setIsFavorite(false);
         buttonRef.current = false;
       } else {
@@ -179,90 +199,35 @@ const HotelDetail = ({
             {isFavorite ? "削除" : "保存"}
           </button>
         )}
+
+        {/* スマホのホテル画像 */}
         <figure className="md:hidden h-3/4">
-          <Image
-            className="md:hidden rounded-lg"
-            src={
-              hotelImages && hotelImages[0]?.fileUrl
-                ? hotelImages[0]?.fileUrl
-                : "/noImageHotel.png"
-            }
-            alt="トップ画像"
-            width={1280}
-            height={720}
-            priority={true}
-            style={{ objectFit: "cover" }}
-          />
+          <div className="md:hidden carousel rounded-box">
+            <div className="carousel-item w-full">
+              {hotelImageViews(0, "サムネイル画像")}
+            </div>
+            <div className="carousel-item w-full">{hotelImageViews(1)}</div>
+            <div className="carousel-item w-full">{hotelImageViews(2)}</div>
+            <div className="carousel-item w-full">{hotelImageViews(3)}</div>
+            <div className="carousel-item w-full">{hotelImageViews(4)}</div>
+          </div>
         </figure>
+
+        {/* PCのホテル画像 */}
         <div className="hidden md:flex">
-          <Image
-            className="flex lg:max-w-lg lg:max-h-lg md:max-w-sm md:max-h-sm rounded-lg p-1"
-            src={
-              hotelImages && hotelImages[0]?.fileUrl
-                ? hotelImages[0].fileUrl
-                : "/noImageHotel.png"
-            }
-            alt="トップ画像"
-            width={1280}
-            height={720}
-            priority={true}
-            style={{ objectFit: "cover" }}
-          />
+          {hotelImageViews(
+            0,
+            "flex lg:max-w-lg lg:max-h-lg md:max-w-sm md:max-h-sm rounded-lg p-1",
+            "サムネイル画像"
+          )}
           <div className="flex flex-wrap items-stretch">
-            <Image
-              className="w-1/2 h-1/2 rounded-lg p-1"
-              src={
-                hotelImages && hotelImages[1]?.fileUrl
-                  ? hotelImages[1].fileUrl
-                  : "/noImageHotel.png"
-              }
-              alt="セカンド画像"
-              width={1280}
-              height={720}
-              priority={true}
-              style={{ objectFit: "cover" }}
-            />
-            <Image
-              className="w-1/2 h-1/2 rounded-lg p-1"
-              src={
-                hotelImages && hotelImages[2]?.fileUrl
-                  ? hotelImages[2].fileUrl
-                  : "/noImageHotel.png"
-              }
-              alt="セカンド画像"
-              width={1280}
-              height={720}
-              priority={true}
-              style={{ objectFit: "cover" }}
-            />
-            <Image
-              className="w-1/2 h-1/2 rounded-lg p-1"
-              src={
-                hotelImages && hotelImages[3]?.fileUrl
-                  ? hotelImages[3].fileUrl
-                  : "/noImageHotel.png"
-              }
-              alt="セカンド画像"
-              width={1280}
-              height={720}
-              priority={true}
-              style={{ objectFit: "cover" }}
-            />
-            <Image
-              className="w-1/2 h-1/2 rounded-lg p-1"
-              src={
-                hotelImages && hotelImages[4]?.fileUrl
-                  ? hotelImages[4].fileUrl
-                  : "/noImageHotel.png"
-              }
-              alt="セカンド画像"
-              width={1280}
-              height={720}
-              priority={true}
-              style={{ objectFit: "cover" }}
-            />
+            {hotelImageViews(1, "w-1/2 h-1/2 rounded-lg p-1")}
+            {hotelImageViews(2, "w-1/2 h-1/2 rounded-lg p-1")}
+            {hotelImageViews(3, "w-1/2 h-1/2 rounded-lg p-1")}
+            {hotelImageViews(4, "w-1/2 h-1/2 rounded-lg p-1")}
           </div>
         </div>
+
         <Link className="link ml-auto text-xs" href={`/hotels/${id}/images`}>
           全ての写真を表示
         </Link>
@@ -295,7 +260,10 @@ const HotelDetail = ({
             {full ? "満室" : "空室"}
           </div>
         </h1>
-        <h3 className="italic mb-1">{fullAddress}</h3>
+        <h3 className="text-sm italic">〒 {postalCode}</h3>
+        <h3 className="italic mb-3">{fullAddress}</h3>
+        <h3 className="text-base">【{company}】</h3>
+        <h3 className="italic mb-3">{phoneNumber}</h3>
         <p className="whitespace-pre-wrap">{content}</p>
         <hr className="mt-10 border-t border-gray-500" />
       </div>
@@ -426,7 +394,7 @@ const HotelDetail = ({
                     </Link>
                   </div>
                   <div className="flex my-1">
-                    <Link href={`/reivews/${review.id}`}>
+                    <Link href={`/reviews/${review.id}`}>
                       <span className="align-middle">
                         <Rating
                           initialValue={review.fiveStarRate}
@@ -447,7 +415,7 @@ const HotelDetail = ({
                     {review.createdDate}に口コミを投稿
                   </div>
                   <div className="max-x-sm">
-                    <Link href={`/reivews/${review.id}`}>
+                    <Link href={`/reviews/${review.id}`}>
                       {sliceString(`${review.content}`, 50)}
                     </Link>
                   </div>

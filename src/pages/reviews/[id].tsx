@@ -8,6 +8,7 @@ import {
   deleteHelpfulness,
   deleteReview,
   getReviewShow,
+  searchHelpfulness,
   updateReview,
 } from "lib/reviews";
 import { ReviewEditParams, ReviewShowType } from "types/types";
@@ -15,6 +16,7 @@ import { useAuthStateContext } from "context/AuthProvider";
 import { useRouter } from "next/router";
 import Layout from "components/Layout";
 import client from "lib/client";
+import { GetServerSideProps } from "next";
 
 const UserReviewShow = ({
   title,
@@ -26,11 +28,11 @@ const UserReviewShow = ({
   userId,
   createdDate,
   id,
-  isHelpful,
+  helpful,
 }: ReviewShowType) => {
   const { currentUser } = useAuthStateContext();
   const [error, setError] = useState("");
-  const [isHelpfulness, setIsHelpfulness] = useState<boolean>(isHelpful);
+  const [isHelpfulness, setIsHelpfulness] = useState<boolean>(helpful);
   const [helpfulness, setHelpfulness] = useState<number>(helpfulnessesCount);
   const [editToggle, setEditToggle] = useState<boolean>(false);
   const [editReviewTitle, setEditReviewTitle] = useState<string>(title);
@@ -117,11 +119,10 @@ const UserReviewShow = ({
     buttonRef.current = true;
     try {
       const res = await deleteHelpfulness(id);
-      console.log(res);
       if (res.status == 200) {
         console.log("参考になったの解除に成功");
-        setHelpfulness(helpfulness - 1);
         setIsHelpfulness(false);
+        setHelpfulness(helpfulness - 1);
         setError("");
         buttonRef.current = false;
       } else {
@@ -371,30 +372,29 @@ const UserReviewShow = ({
 
 export default UserReviewShow;
 
-export const getServerSideProps = async (ctx: any) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   ctx.res.setHeader(
     "Cache-Control",
     "public, s-maxage=1800, stale-while-revalidate=180"
   );
 
   const { id } = ctx.query;
+  const accessToken = ctx.req.cookies["_access_token"];
+  const clientToken = ctx.req.cookies["_client"];
+  const uid = ctx.req.cookies["_uid"];
 
-  const [apiResponse, helpfulOrNot]: any = await Promise.allSettled([
+  const [reviewShow, helpfulOrNot] = (await Promise.allSettled([
     getReviewShow(id),
-    client.get(`/reviews/${id}/helpfulnesses`, {
-      headers: {
-        "Content-Type": "application/json",
-        uid: ctx.req.cookies["_uid"],
-        client: ctx.req.cookies["_client"],
-        "access-token": ctx.req.cookies["_access_token"],
-      },
-    }),
-  ]);
+    searchHelpfulness(id, accessToken, clientToken, uid),
+  ])) as {
+    status: "fulfilled" | "rejected";
+    value: { data: ReviewShowType };
+  }[];
 
-  const ReviewDetail: ReviewShowType = apiResponse.value?.data;
-  const isHelpful: boolean = helpfulOrNot.value?.data?.helpful;
+  const reviewDetail = reviewShow?.value?.data;
+  const helpful = helpfulOrNot?.value?.data.helpful;
 
-  if (!ReviewDetail) {
+  if (!reviewDetail || helpful === undefined) {
     return {
       notFound: true,
     };
@@ -402,8 +402,8 @@ export const getServerSideProps = async (ctx: any) => {
 
   return {
     props: {
-      ...ReviewDetail,
-      isHelpful,
+      ...reviewDetail,
+      helpful,
     },
   };
 };
