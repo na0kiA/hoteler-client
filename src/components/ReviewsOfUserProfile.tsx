@@ -5,160 +5,111 @@ import { Rating } from "react-simple-star-rating";
 import { ReviewType } from "types/types";
 
 type PROPS = {
-  props: ReviewType;
+  props: ReviewType[];
 };
 
 const ReviewsOfUserProfile = memo(({ props }: PROPS) => {
   console.log("ユーザー詳細の口コミ一覧コンポーネントが呼ばれたよ");
 
-  const sliceReviewContent = useCallback((content: string) => {
-    if (content.length > 15) {
-      return content.slice(0, 15).concat("…");
+  const sliceReviewContent = (content: string, maxLength: number) => {
+    if (content.length > maxLength) {
+      return content.slice(0, maxLength).concat("…");
     } else {
       return content;
     }
-  }, []);
+  };
 
   return (
-    <>
-      {/* スマホ */}
-      <div className="md:hidden card card-side bg-base-100 shadow-xl">
-        <div className="m-auto pl-3 pt-5">
-          <Link href={`/hotels/${props.hotelId}`}>
-            <Image
-              className="rounded-lg  m-auto"
-              src={props.hotelImage ? props.hotelImage : "/noImageHotel.png"}
-              alt="ホテル画像"
-              width={100}
-              height={100}
-              priority={true}
-            />
-            <p className="m-auto">{props.hotelName}</p>
-            <p className="text-ssm m-auto">{props.hotelFullAddress}</p>
-          </Link>
-          <span className="align-bottom">
-            <Rating
-              initialValue={props.hotelAverageRating}
-              transition
-              size={15}
-              allowFraction
-              allowHover={false}
-              readonly={true}
-              allowTitleTag={false}
-            />
-          </span>
-          <span className="text-ssm align-middle">
-            {props.hotelReviewsCount}件
-          </span>
-        </div>
-        <div className="flex-1 p-5 pb-1">
-          <div className="">
-            <Rating
-              initialValue={props.fiveStarRate}
-              transition
-              size={20}
-              allowFraction
-              allowHover={false}
-              readonly={true}
-              allowTitleTag={false}
-            />
-            <span className="align-bottom">({props.fiveStarRate})</span>
-          </div>
-          <p className="text-xs mt-1">
-            <>{props.createdDate}に作成</>
-          </p>
-          <h2 className="card-title text-base mt-1 mb-1 md:text-xl">
-            {props.title}
-          </h2>
-          <p className="card-title text-xs md:text-base">
-            {sliceReviewContent(props.content)}
-          </p>
-          <div className="justify-start">
-            <Link
-              href={`/reviews/${props.id}`}
-              className="text-xs text-blue-link"
-            >
-              口コミ全文を表示する
+    <div className="shadow-xl md:ml-auto">
+      {props.map((review) => (
+        <div key={review.id} className="flex m-auto p-3">
+          <div className="mt-3">
+            <Link href={`/hotels/${review.hotelId}`}>
+              <Image
+                className="md:hidden rounded-lg"
+                src={
+                  review.hotelImage ? review.hotelImage : "/noImageHotel.png"
+                }
+                alt="ホテル画像"
+                width={100}
+                height={100}
+                priority={true}
+              />
+              <Image
+                className="hidden md:block rounded-lg"
+                src={
+                  review.hotelImage ? review.hotelImage : "/noImageHotel.png"
+                }
+                alt="ホテル画像"
+                priority={true}
+                width={150}
+                height={150}
+                style={{ objectFit: "cover" }}
+              />
+              <p className="m-auto">{review.hotelName}</p>
+              <p className="text-ssm m-auto">{review.hotelFullAddress}</p>
             </Link>
-            <p className="text-xs">
-              <span className="text-sm"> {props.helpfulnessesCount}</span>
-              人が参考になった
-            </p>
+            <div className="">
+              <div className="flex">
+                <Rating
+                  initialValue={review.hotelAverageRating}
+                  transition
+                  size={15}
+                  allowFraction
+                  allowHover={false}
+                  readonly={true}
+                  allowTitleTag={false}
+                  className="bottom-1"
+                />
+                <span className="text-ssm mt-1 ml-1">
+                  {review.hotelReviewsCount}件
+                </span>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* PC */}
-      <div className="hidden md:block md:card md:card-side md:bg-base-100 md:shadow-xl">
-        <div className="m-auto pl-3 pt-5 mb-3">
-          <Link href={`/hotels/${props.hotelId}`}>
-            <Image
-              className="rounded-lg  m-auto"
-              src={props.hotelImage ? props.hotelImage : "/noImageHotel.png"}
-              alt="ホテル画像"
-              width={300}
-              height={300}
-              priority={true}
-            />
-            <div className="flex-1 text-lg font-bold">{props.hotelName}</div>
-            <p className="text-xs m-auto">{props.hotelFullAddress}</p>
-          </Link>
-          <div className="m-auto">
-            <Rating
-              initialValue={props.hotelAverageRating}
-              transition
-              size={20}
-              allowFraction
-              allowHover={false}
-              readonly={true}
-              allowTitleTag={false}
-            />{" "}
-            <span className="align-middle text-base">
-              ({props.hotelAverageRating}){" "}
-              <Link
-                href={`/hotel/${props.id}/reviews`}
-                className="text-blue-link text-sm"
-              >
-                {props.hotelReviewsCount}件
-              </Link>
-            </span>
-          </div>
-        </div>
-        <div className="flex-1 p-5 pb-1">
-          <div className="">
-            <Rating
-              initialValue={props.fiveStarRate}
-              transition
-              size={30}
-              allowFraction
-              allowHover={false}
-              readonly={true}
-              allowTitleTag={false}
-            />
-            <span className="text-xl align-middle">({props.fiveStarRate})</span>
-          </div>
-          <p className="text-base mt-1">
-            <>{props.createdDate}に作成</>
-          </p>
-          <h2 className="card-title text-base mt-1 mb-1 md:text-xl">
-            {props.title}
-          </h2>
-          <p className="card-title text-base md:text-base">{props.content}</p>
-          <div className="justify-start mt-1">
-            <Link
-              href={`/reviews/${props.id}`}
-              className="text-sm text-blue-link"
-            >
-              口コミ詳細を表示する
-            </Link>
-            <p className="text-sm mt-1">
-              <span className="text-base"> {props.helpfulnessesCount}</span>
-              人のお客様がこれが役に立ったと考えています
+          {/* 右側の口コミ詳細 */}
+          <div className="flex-1 ml-3 mt-1">
+            <div className="m-auto">
+              <Rating
+                initialValue={review.fiveStarRate}
+                transition
+                size={20}
+                allowFraction
+                allowHover={false}
+                readonly={true}
+                allowTitleTag={false}
+              />
+              <span className="align-bottom">({review.fiveStarRate})</span>
+            </div>
+            <p className="text-xs mt-1">
+              <>{review.createdDate}に作成</>
             </p>
+            <h2 className="card-title text-base mt-1 mb-1 md:text-xl">
+              {review.title}
+            </h2>
+            <p className="md:hidden card-title text-xs">
+              {sliceReviewContent(review.content, 15)}
+            </p>
+            <p className="hidden md:block card-title text-base">
+              {sliceReviewContent(review.content, 280)}
+            </p>
+            <div className="justify-start">
+              <Link
+                href={`/reviews/${review.id}`}
+                className="text-xs text-blue-link"
+              >
+                口コミ全文を表示する
+              </Link>
+              <p className="text-xs">
+                <span className="text-sm">{review.helpfulnessesCount}</span>
+                人が参考になった
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-    </>
+      ))}
+    </div>
   );
 });
 

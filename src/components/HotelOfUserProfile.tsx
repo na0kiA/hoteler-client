@@ -7,98 +7,52 @@ import { Rating } from "react-simple-star-rating";
 import { HotelDetailType } from "types/types";
 
 type PROPS = {
-  props: HotelDetailType;
+  props: HotelDetailType[];
 };
 
 const HotelOfUserProfile = ({ props }: PROPS) => {
+  console.log("ホテル詳細ページが呼ばれたよ");
+
   const { currentUser } = useAuthStateContext();
   const router = useRouter();
 
   return (
     <>
-      <div className="md:hidden card card-side bg-base-100 shadow-xl">
-        <div className="flex m-auto pl-3 pt-5">
-          <Link href={`/hotels/${props.id}`}>
-            <Image
-              className="rounded-lg"
-              src={
-                props.hotelImages
-                  ? props.hotelImages[0]?.fileUrl
-                  : "/noImageHotel.png"
-              }
-              alt="ホテル画像"
-              width={100}
-              height={100}
-              priority={true}
-            />
-          </Link>
-        </div>
-        <div className="m-auto p-1 pb-1">
-          <div className="flex">
-            <Rating
-              initialValue={props.averageRating}
-              transition
-              size={20}
-              allowFraction
-              allowHover={false}
-              readonly={true}
-              allowTitleTag={false}
-            />
-            <div className="mt-auto">
-              <span className="text-sm">
-                ({props.averageRating}){" "}
-                <Link
-                  href={`/hotel/${props.id}/reviews`}
-                  className="text-blue-link text-xs"
-                >
-                  {props.reviewsCount}件
-                </Link>
-              </span>
+      <div className="flex flex-col card card-side bg-base-100 shadow-xl">
+        {props.map((hotel: HotelDetailType) => (
+          <div className="m-auto">
+            <div className="m-auto pl-3 pt-5">
+              <Link href={`/hotels/${hotel.id}`}>
+                <Image
+                  className="md:hidden rounded-lg"
+                  src={
+                    hotel.hotelImages
+                      ? hotel.hotelImages[0]?.fileUrl
+                      : "/noImageHotel.png"
+                  }
+                  alt="ホテル画像"
+                  width={200}
+                  height={200}
+                  priority={true}
+                />
+                <Image
+                  className="hidden md:block rounded-lg"
+                  src={
+                    hotel.hotelImages
+                      ? hotel.hotelImages[0]?.fileUrl
+                      : "/noImageHotel.png"
+                  }
+                  alt="ホテル画像"
+                  width={300}
+                  height={300}
+                  priority={true}
+                />
+              </Link>
             </div>
-            <div className="ml-3 mt-auto">
-              {currentUser && props.userId === currentUser.id ? (
-                <button
-                  className="btn btn-primary btn-xs"
-                  onClick={() => {
-                    router.push(`/hotels/${props.id}/edit`);
-                  }}
-                >
-                  編集
-                </button>
-              ) : (
-                <></>
-              )}
-            </div>
-          </div>
-          <h2 className="card-title text-xl mt-1 mb-1 font-bold">
-            {props.name}
-          </h2>
-          <h3 className="text-ssm m-auto">{props.fullAddress}</h3>
-        </div>
-      </div>
-
-      {/* PC */}
-      <div className="hidden md:block md:card md:card-side md:bg-base-100 md:shadow-xl">
-        <div className="m-auto pl-3 pt-5">
-          <Link href={`/hotels/${props.id}`}>
-            <Image
-              className="rounded-lg"
-              src={
-                props.hotelImages
-                  ? props.hotelImages[0]?.fileUrl
-                  : "/noImageHotel.png"
-              }
-              alt="ホテル画像"
-              width={300}
-              height={300}
-              priority={true}
-            />
-          </Link>
-          <div className="">
-            <div className="flex">
-              <div className="mt-auto">
+            <div className="m-auto p-2 mb-1">
+              <div className="flex">
                 <Rating
-                  initialValue={props.averageRating}
+                  initialValue={hotel.averageRating}
                   transition
                   size={20}
                   allowFraction
@@ -106,41 +60,42 @@ const HotelOfUserProfile = ({ props }: PROPS) => {
                   readonly={true}
                   allowTitleTag={false}
                 />
-              </div>
-              <div className="text-sm mt-auto">
-                ({props.averageRating}){" "}
-                <Link
-                  href={`/hotel/${props.id}/reviews`}
-                  className="text-blue-link text-xs"
-                >
-                  {props.reviewsCount}件
-                </Link>
-              </div>
-              {/* 編集と削除と保存ボタン */}
-              <div className="ml-auto">
-                {currentUser && props.userId === currentUser.id ? (
-                  <div className="">
+                <div className="mt-auto">
+                  <span className="text-sm">
+                    ({hotel.averageRating}){" "}
+                    <Link
+                      href={`/hotel/${hotel.id}/reviews`}
+                      className="text-blue-link text-xs"
+                    >
+                      {hotel.reviewsCount}件
+                    </Link>
+                  </span>
+                </div>
+                <div className="ml-3 mt-auto">
+                  {currentUser && hotel.userId === currentUser.id ? (
                     <button
-                      className="btn btn-primary btn-xs "
+                      className="btn btn-primary btn-xs"
                       onClick={() => {
-                        router.push(`/hotels/${props.id}/edit`);
+                        router.push(`/hotels/${hotel.id}/edit`);
                       }}
                     >
                       編集
                     </button>
-                  </div>
-                ) : (
-                  <></>
-                )}
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
+              <h2 className="card-title text-xl mt-1 mb-1 font-bold">
+                {hotel.name}
+              </h2>
+              <h3 className="text-ssm m-auto">{hotel.fullAddress}</h3>
             </div>
-            <h2 className="card-title text-xl mt-1 mb-1 font-bold">
-              {props.name}
-            </h2>
-            <h3 className="text-ssm m-auto">{props.fullAddress}</h3>
           </div>
-        </div>
+        ))}
       </div>
+
+      {/* PC */}
     </>
   );
 };

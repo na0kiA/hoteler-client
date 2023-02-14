@@ -60,13 +60,16 @@ const UserHotels = ({
         </div>
         {hotels ? (
           <>
-            {hotels.map((hotel: HotelDetailType) => (
-              <div key={hotel.id}>
-                <HotelOfUserProfile props={hotel} />
-              </div>
-            ))}
+            <HotelOfUserProfile props={hotels} />
           </>
         ) : (
+          // <>
+          //   {hotels.map((hotel: HotelDetailType) => (
+          //     <div key={hotel.id}>
+          //       <HotelOfUserProfile props={hotel} />
+          //     </div>
+          //   ))}
+          // </>
           <div className="mt-3 ml-3">掲載ホテルはありません。</div>
         )}
       </Layout>
