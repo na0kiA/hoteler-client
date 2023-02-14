@@ -297,7 +297,7 @@ const HotelRateTable = memo(({ id }: any) => {
           onClick={(e) =>
             pathname.endsWith("/edit/rate")
               ? router.reload()
-              : router.push("/hotels/register/facilities")
+              : router.push("/hotels/register/special-periods")
           }
         >
           この内容で登録する

@@ -137,6 +137,13 @@ export type ServiceRateType = {
   serviceId: number;
 };
 
+export type SpecialPeriodType = {
+  period: string;
+  startDate: string;
+  endDate: string;
+  id?: number;
+};
+
 export type AfterBusinessHour = {
   restRates: string;
   stayRates: string;

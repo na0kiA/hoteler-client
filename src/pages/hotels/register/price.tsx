@@ -22,13 +22,17 @@ const Price = () => {
           <span className="text-xs">料金設定</span>
         </li>
         <li className="step">
+          <span className="text-xs">特別期間</span>
+        </li>
+        <li className="step">
           <span className="text-xs">設備設定</span>
         </li>
       </ul>
-      {/* <HotelFormProvider> */}
       <HotelRateTable />
-      {/* </HotelFormProvider> */}
-      <Link href={"/hotels/register/facilities"} className="link md:text-lg">
+      <Link
+        href={"/hotels/register/special-periods"}
+        className="link md:text-lg"
+      >
         今はスキップ
       </Link>
     </Layout>

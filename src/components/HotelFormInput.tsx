@@ -4,6 +4,7 @@ import { createHotel, updateHotel } from "lib/hotels";
 import { HotelEditFormType, HotelUpdateType } from "types/types";
 import { useForm, useFormState } from "react-hook-form";
 import Cookies from "js-cookie";
+import SpecialPeriodForm from "./SpecialPeriodForm";
 
 const HotelFormInput = memo(
   ({

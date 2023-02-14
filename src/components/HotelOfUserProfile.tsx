@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useAuthStateContext } from "context/AuthProvider";
 import { Rating } from "react-simple-star-rating";
 import { HotelDetailType } from "types/types";
+import { deleteHotel } from "lib/hotels";
 
 type PROPS = {
   props: HotelDetailType[];
@@ -13,6 +14,13 @@ type PROPS = {
 const HotelOfUserProfile = ({ props }: PROPS) => {
   const { currentUser } = useAuthStateContext();
   const router = useRouter();
+
+  const handleDeleteHotel = (id: number) => async () => {
+    if (window.confirm("本当に削除しますか？")) {
+      await deleteHotel(id);
+      router.reload();
+    }
+  };
 
   return (
     <>
@@ -75,9 +83,7 @@ const HotelOfUserProfile = ({ props }: PROPS) => {
                       {router.pathname.endsWith("delete-hotel") ? (
                         <button
                           className="btn btn-primary btn-xs"
-                          onClick={() => {
-                            router.push(`/hotels/${hotel.id}/edit`);
-                          }}
+                          onClick={handleDeleteHotel(hotel.id)}
                         >
                           削除
                         </button>
