@@ -11,8 +11,6 @@ type PROPS = {
 };
 
 const HotelOfUserProfile = ({ props }: PROPS) => {
-  console.log("ホテル詳細ページが呼ばれたよ");
-
   const { currentUser } = useAuthStateContext();
   const router = useRouter();
 
@@ -71,16 +69,29 @@ const HotelOfUserProfile = ({ props }: PROPS) => {
                     </Link>
                   </span>
                 </div>
-                <div className="ml-3 mt-auto">
+                <div className="md:ml-auto ml-3 mt-auto">
                   {currentUser && hotel.userId === currentUser.id ? (
-                    <button
-                      className="btn btn-primary btn-xs"
-                      onClick={() => {
-                        router.push(`/hotels/${hotel.id}/edit`);
-                      }}
-                    >
-                      編集
-                    </button>
+                    <>
+                      {router.pathname.endsWith("delete-hotel") ? (
+                        <button
+                          className="btn btn-primary btn-xs"
+                          onClick={() => {
+                            router.push(`/hotels/${hotel.id}/edit`);
+                          }}
+                        >
+                          削除
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-primary btn-xs"
+                          onClick={() => {
+                            router.push(`/hotels/${hotel.id}/edit`);
+                          }}
+                        >
+                          編集
+                        </button>
+                      )}
+                    </>
                   ) : (
                     <></>
                   )}

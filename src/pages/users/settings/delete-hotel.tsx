@@ -1,4 +1,5 @@
 import HotelOfUserProfile from "components/HotelOfUserProfile";
+import Layout from "components/Layout";
 import client from "lib/client";
 import { GetServerSideProps } from "next";
 import React from "react";
@@ -9,9 +10,9 @@ type PROPS = {
 };
 const DeleteHotel = ({ hotels }: PROPS) => {
   return (
-    <div>
+    <Layout title={"ホテルを削除する"}>
       <HotelOfUserProfile props={hotels} />
-    </div>
+    </Layout>
   );
 };
 

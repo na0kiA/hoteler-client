@@ -53,13 +53,14 @@ const UserDetail = ({
           )}
         </div>
         {favorites ? (
-          <>
-            {favorites.map((favorite: UserFavoritesType) => (
-              <div key={favorite.id}>
-                <FavoritesOfUserProfile props={favorite} />
-              </div>
-            ))}
-          </>
+          // <>
+          //   {favorites.map((favorite: UserFavoritesType) => (
+          //     <div key={favorite.id}>
+          //       <FavoritesOfUserProfile props={favorite} />
+          //     </div>
+          //   ))}
+          // </>
+          <FavoritesOfUserProfile props={favorites} />
         ) : (
           <div className="mt-3 ml-3">お気に入りはまだありません。</div>
         )}
