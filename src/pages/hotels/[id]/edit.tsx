@@ -33,6 +33,12 @@ const Edit = ({
             料金
           </Link>
           <Link
+            href={`/hotels/${id}/edit/special-period`}
+            className="tab tab-md md:tab-lg  tab-bordered"
+          >
+            特別期間
+          </Link>
+          <Link
             href={`/hotels/${id}/edit/facilities`}
             className="tab tab-md md:tab-lg  tab-bordered"
           >

@@ -142,6 +142,12 @@ const Facilities = ({
           >
             料金
           </Link>
+          <Link
+            href={`/hotels/${id}/edit/special-period`}
+            className="tab tab-md md:tab-lg  tab-bordered"
+          >
+            特別期間
+          </Link>
           <div className="tab tab-md md:tab-lg tab-bordered tab-active">
             設備
           </div>

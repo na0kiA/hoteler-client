@@ -1,12 +1,8 @@
-import React, { memo, useState } from "react";
+import React from "react";
 import { useRouter } from "next/router";
-import { createHotel, getDays, updateHotel } from "lib/hotels";
-import {
-  HotelEditFormType,
-  HotelUpdateType,
-  SpecialPeriodType,
-} from "types/types";
-import { useFieldArray, useForm, useFormState } from "react-hook-form";
+import { getDays } from "lib/hotels";
+import { SpecialPeriodType } from "types/types";
+import { useFieldArray, useForm } from "react-hook-form";
 import Cookies from "js-cookie";
 import { createSpecialPeriod, updateSpecialPeriod } from "lib/specialPeriods";
 
@@ -21,7 +17,6 @@ const SpecialPeriodForm = ({ id }: PROPS) => {
   const {
     register,
     handleSubmit,
-    getValues,
     control,
     formState: { errors },
   } = useForm({
@@ -81,8 +76,7 @@ const SpecialPeriodForm = ({ id }: PROPS) => {
             createSpecialPeriod(periodParams, specialDay);
           }),
         ]);
-
-        // router.push(`/hotels/register/facilities`);
+        router.push(`/hotels/register/facilities`);
       } else {
         await Promise.all([
           periods.map((periodParams: SpecialPeriodType) => {
@@ -103,6 +97,7 @@ const SpecialPeriodForm = ({ id }: PROPS) => {
           <table className="table table-compact w-full">
             <thead>
               <tr>
+                <th></th>
                 <th></th>
                 <th>開始日時</th>
                 <th>終了日時</th>
@@ -137,9 +132,12 @@ const SpecialPeriodForm = ({ id }: PROPS) => {
                             /^\d{4}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/,
                         })}
                       />
-                      {errors?.periods?.[index]?.start_date &&
-                        errors?.periods?.[index]?.start_date?.message}
                     </div>
+                    {errors?.periods?.[index]?.start_date && (
+                      <div className="text-red-600 text-ssm md:text-sm my-auto">
+                        西暦4桁、月2桁、日2桁で入力してください。
+                      </div>
+                    )}
                   </td>
                   <td>
                     <div>
@@ -152,8 +150,11 @@ const SpecialPeriodForm = ({ id }: PROPS) => {
                             /^\d{4}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/,
                         })}
                       />
-                      {errors?.periods?.[index]?.end_date &&
-                        errors?.periods?.[index]?.end_date?.message}
+                      {errors?.periods?.[index]?.end_date && (
+                        <div className="text-red-600 text-ssm md:text-sm my-auto">
+                          西暦4桁、月2桁、日2桁で入力してください。
+                        </div>
+                      )}
                     </div>
                   </td>
                   <td>

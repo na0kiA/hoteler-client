@@ -14,7 +14,7 @@ import {
 import { getDays } from "lib/hotels";
 import { HotelEditType, HotelRateParams } from "types/types";
 
-const Rate = ({ name, id, serviceList }: HotelEditType) => {
+const SpecialPeriod = ({ name, id, serviceList }: HotelEditType) => {
   const [flag, setFlag] = useState<boolean>(false);
   const {
     register,
@@ -87,61 +87,8 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
   const updateServiceListByWeekdays = (
     service: UpdateServiceType,
     hotelDays: any
-  ) => {
-    if (service.service == "休憩") {
-      switch (service.day) {
-        case "月曜から木曜":
-          updateRestRate(service, hotelDays[0].id, service.id);
-          break;
-        case "金曜":
-          updateRestRate(service, hotelDays[1].id, service.id);
-          break;
-        case "土曜":
-          updateRestRate(service, hotelDays[2].id, service.id);
-          break;
-        case "日曜":
-          updateRestRate(service, hotelDays[3].id, service.id);
-          break;
-        case "祝日":
-          updateRestRate(service, hotelDays[4].id, service.id);
-          break;
-        case "祝前日":
-          updateRestRate(service, hotelDays[5].id, service.id);
-          break;
-        case "特別期間":
-          updateRestRate(service, hotelDays[6].id, service.id);
-          break;
-        default:
-          console.log("不一致");
-      }
-    } else {
-      switch (service.day) {
-        case "月曜から木曜":
-          updateStayRate(service, hotelDays[0].id, service.id);
-          break;
-        case "金曜":
-          updateStayRate(service, hotelDays[1].id, service.id);
-          break;
-        case "土曜":
-          updateStayRate(service, hotelDays[2].id, service.id);
-          break;
-        case "日曜":
-          updateStayRate(service, hotelDays[3].id, service.id);
-          break;
-        case "祝日":
-          updateStayRate(service, hotelDays[4].id, service.id);
-          break;
-        case "祝前日":
-          updateStayRate(service, hotelDays[5].id, service.id);
-          break;
-        case "特別期間":
-          updateStayRate(service, hotelDays[6].id, service.id);
-          break;
-        default:
-          console.log("不一致");
-      }
-    }
-  };
+  ) => {};
+
   return (
     <Layout title={`${name}の料金編集ページ`}>
       <div className="flex justify-center mt-3">
@@ -152,15 +99,15 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
           >
             詳細
           </Link>
-          <div className="tab tab-md md:tab-lg tab-bordered tab-active">
-            料金
-          </div>
           <Link
-            href={`/hotels/${id}/edit/special-period`}
+            href={`/hotels/${id}/rate`}
             className="tab tab-md md:tab-lg tab-bordered"
           >
-            特別期間
+            料金
           </Link>
+          <div className="tab tab-md md:tab-lg tab-bordered  tab-active">
+            特別期間
+          </div>
           <Link
             href={`/hotels/${id}/edit/facilities`}
             className="tab tab-md md:tab-lg tab-bordered"
@@ -338,7 +285,7 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
   );
 };
 
-export default Rate;
+export default SpecialPeriod;
 
 export const getServerSideProps = async (ctx: any) => {
   const { id } = ctx.query;
