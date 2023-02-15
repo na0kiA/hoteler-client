@@ -139,8 +139,8 @@ export type ServiceRateType = {
 
 export type SpecialPeriodType = {
   period: string;
-  startDate: string;
-  endDate: string;
+  start_date: string;
+  end_date: string;
   id?: number;
 };
 
