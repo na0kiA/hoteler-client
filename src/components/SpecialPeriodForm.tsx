@@ -4,7 +4,7 @@ import { getDays } from "lib/hotels";
 import { SpecialPeriodType } from "types/types";
 import { useFieldArray, useForm } from "react-hook-form";
 import Cookies from "js-cookie";
-import { createSpecialPeriod, updateSpecialPeriod } from "lib/specialPeriods";
+import { createSpecialPeriod } from "lib/specialPeriods";
 
 type PROPS = {
   id?: number | string;
@@ -12,8 +12,6 @@ type PROPS = {
 
 const SpecialPeriodForm = ({ id }: PROPS) => {
   const router = useRouter();
-  const pathName = router.asPath;
-
   const {
     register,
     handleSubmit,
@@ -70,7 +68,7 @@ const SpecialPeriodForm = ({ id }: PROPS) => {
       const hotelDays = await getDays(hotelId);
       const specialDay = hotelDays.data?.[6]?.id;
       await Promise.all([
-        periods.map((periodParams: SpecialPeriodType) => {
+        periods.forEach((periodParams: SpecialPeriodType) => {
           createSpecialPeriod(periodParams, specialDay);
         }),
       ]);

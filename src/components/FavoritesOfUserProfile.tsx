@@ -8,7 +8,9 @@ type PROPS = {
   props: UserFavoritesType[];
 };
 
-const FavoritesOfUserProfile = memo(({ props }: PROPS) => {
+const FavoritesOfUserProfile = memo(function favoriteOfUserProfile({
+  props,
+}: PROPS) {
   return (
     <>
       {props.map((favorite: UserFavoritesType) => (

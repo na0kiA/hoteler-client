@@ -1,14 +1,9 @@
 import React from "react";
 import Link from "next/link";
 
-import {
-  HotelDetailType,
-  UserDetailType,
-  UserFavoritesType,
-} from "types/types";
+import { UserDetailType } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import Layout from "components/Layout";
-import FavoritesOfUserProfile from "components/FavoritesOfUserProfile";
 import client from "lib/client";
 import UpdateUserProfile from "components/UpdateUserProfile";
 import HotelOfUserProfile from "components/HotelOfUserProfile";

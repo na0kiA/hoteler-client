@@ -106,7 +106,7 @@ export type HotelEditFormType = {
   streetAddress: string;
   phoneNumber: string;
   postalCode: string;
-  id: number;
+  id?: number;
 };
 
 export type HotelCreateType = {

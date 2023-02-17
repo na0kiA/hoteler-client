@@ -2,9 +2,7 @@ import { render, screen, cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
-import { getAllHotel } from "../lib/hotels";
 import Home from "pages/index";
-// import { useRouter } from "next/router";
 
 jest.mock("next/router", () => ({ useRouter: jest.fn() }));
 

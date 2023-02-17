@@ -26,7 +26,7 @@ const HotelOfUserProfile = ({ props }: PROPS) => {
     <>
       <div className="flex flex-col card card-side bg-base-100 shadow-xl">
         {props.map((hotel: HotelDetailType) => (
-          <div className="m-auto">
+          <div key={hotel.id} className="m-auto">
             <div className="m-auto pl-3 pt-5">
               <Link href={`/hotels/${hotel.id}`}>
                 <Image

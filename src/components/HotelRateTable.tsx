@@ -6,16 +6,17 @@ import { getDays } from "lib/hotels";
 import { HotelRateParams } from "types/types";
 import { useRouter } from "next/router";
 
-const HotelRateTable = memo(({ id }: any) => {
+type PROPS = {
+  id: number;
+};
+
+const HotelRateTable = memo(function hotelRateTable({ id }: PROPS) {
   const router = useRouter();
   const pathname = router.asPath;
   const {
     register,
     handleSubmit,
-    getValues,
-    setValue,
     control,
-    reset,
     formState: { errors, isDirty },
   } = useForm({
     defaultValues: {
@@ -33,17 +34,13 @@ const HotelRateTable = memo(({ id }: any) => {
   });
   const filedArrayName = "rates";
 
-  const { fields, append, remove, replace, update } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: filedArrayName,
   });
 
   const removeRestRate = (index: number) => {
     remove(index);
-  };
-
-  type DATA = {
-    rates: ServiceParams[];
   };
 
   type ServiceParams = {
@@ -55,9 +52,13 @@ const HotelRateTable = memo(({ id }: any) => {
     service?: string | undefined;
   };
 
+  type DATA = {
+    rates: ServiceParams[];
+  };
+
   const onSubmit = async (data: DATA) => {
     const services = data.rates.map((service: ServiceParams) => {
-      const converNumberToDate: HotelRateParams = {
+      const convertNumberToDate: HotelRateParams = {
         plan: service.plan,
         rate: service.rate,
         start_time: `${service.start_time}:00`,
@@ -65,14 +66,14 @@ const HotelRateTable = memo(({ id }: any) => {
         day: service.day,
         service: service.service,
       };
-      return converNumberToDate;
+      return convertNumberToDate;
     });
 
     try {
       const hotelId = Cookies.get("_hotel_id") || id;
       const hotelDays = await getDays(hotelId);
       await Promise.all([
-        services.map((service: HotelRateParams) => {
+        services.forEach((service: HotelRateParams) => {
           postServiceListByWeekdays(service, hotelDays.data);
         }),
       ]);
@@ -85,7 +86,7 @@ const HotelRateTable = memo(({ id }: any) => {
     service: HotelRateParams,
     hotelDays: any
   ) => {
-    if (service.service == "休憩") {
+    if (service.service === "休憩") {
       switch (service.day) {
         case "月曜から木曜":
           createRestRate(service, hotelDays[0].id);

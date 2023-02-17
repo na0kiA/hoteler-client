@@ -2,13 +2,18 @@ import React, { memo, useState } from "react";
 import Image from "next/image";
 import { useHotelFormStateContext } from "context/HotelFormProvider";
 import { fetchSignedUrl } from "lib/image";
-import { useRouter } from "next/router";
-import { HotelImagesType } from "types/types";
 
-const HotelUploadImages = memo(({ imageUrl = [], keys = [] }: any) => {
+type PROPS = {
+  imageUrl: string[];
+  keys: string[];
+};
+
+const HotelUploadImages = memo(function hotelUploadImages({
+  imageUrl,
+  keys,
+}: PROPS) {
   console.log("FormInputがレンダリングされました");
 
-  const router = useRouter();
   const { setKeys } = useHotelFormStateContext();
   const [keyList, setKeyList] = useState<string[]>([...keys]);
   const [imageList, setImageList] = useState<string[]>([...imageUrl]);

@@ -27,7 +27,16 @@ const Home = () => {
         </li>
       </ul>
       <HotelFormProvider>
-        <HotelFormInput />
+        <HotelFormInput
+          name={""}
+          content={""}
+          company={""}
+          city={""}
+          prefecture={""}
+          streetAddress={""}
+          phoneNumber={""}
+          postalCode={""}
+        />
       </HotelFormProvider>
     </Layout>
   );

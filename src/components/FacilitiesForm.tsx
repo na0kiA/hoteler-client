@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
@@ -12,12 +12,12 @@ type PROPS = {
   facilities?: HotelFacilityType;
 };
 
-const FacilitiesForm = memo(({ id }: PROPS) => {
+const FacilitiesForm = ({ id }: PROPS) => {
   const [error, setError] = useState("");
   const { keys } = useHotelFormStateContext();
   const router = useRouter();
 
-  const { register, handleSubmit, getValues, setValue } = useForm({
+  const { register, handleSubmit, getValues } = useForm({
     defaultValues: {
       wifiEnabled: false,
       parkingEnabled: false,
@@ -46,7 +46,7 @@ const FacilitiesForm = memo(({ id }: PROPS) => {
       ]);
       console.log(results);
 
-      if (results.status == 200) {
+      if (results.status === 200) {
         Cookies.remove("_hotel_id");
         router.push(`/hotels/${id}`);
       }
@@ -106,6 +106,6 @@ const FacilitiesForm = memo(({ id }: PROPS) => {
       </form>
     </div>
   );
-});
+};
 
 export default FacilitiesForm;

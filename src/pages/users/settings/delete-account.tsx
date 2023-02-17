@@ -6,15 +6,14 @@ import { useAuthStateContext } from "context/AuthProvider";
 import { deleteAccount } from "lib/auth";
 
 const DeleteAccount = () => {
-  const [confirmAlart, setConfirmAlart] = useState(false);
-  const { currentUser, loading, setIsSignedIn, setCurrentUser } =
-    useAuthStateContext();
+  const [confirmAlarm, setConfirmAlarm] = useState(false);
+  const { setIsSignedIn, setCurrentUser } = useAuthStateContext();
   const router = useRouter();
 
-  const closeConfirmAlart = () => {
-    setConfirmAlart(true);
+  const closeConfirmAlarm = () => {
+    setConfirmAlarm(true);
     setTimeout(() => {
-      setConfirmAlart(false);
+      setConfirmAlarm(false);
     }, 5000);
   };
 
@@ -30,7 +29,7 @@ const DeleteAccount = () => {
         Cookies.remove("_client");
         Cookies.remove("_uid");
 
-        closeConfirmAlart();
+        closeConfirmAlarm();
         setIsSignedIn(false);
         setCurrentUser(undefined);
         router.replace("/");
@@ -47,7 +46,7 @@ const DeleteAccount = () => {
   return (
     <>
       <Layout title={"設定"}>
-        {confirmAlart ? (
+        {confirmAlarm ? (
           <div className="toast toast-end">
             <div className="alert alert-success">
               <div>

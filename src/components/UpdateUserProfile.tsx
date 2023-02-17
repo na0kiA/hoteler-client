@@ -20,7 +20,7 @@ const UpdateUserProfile = ({ name, image, uid }: UpdateUserProfileType) => {
 
   const [nameError, setNameError] = useState("");
   const [userName, setUserName] = useState<string>(name);
-  const [userEmail, setUserEmail] = useState<string>(uid);
+  const [userEmail] = useState<string>(uid);
   const [editToggle, setEditToggle] = useState<boolean>(false);
   const [userImageKey, setUserImageKey] = useState(
     image.slice(forSliceImageKeyNumber)

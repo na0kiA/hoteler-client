@@ -1,15 +1,13 @@
 import Head from "next/head";
-import Link from "next/link";
 import React, { memo } from "react";
 import Navbar from "./Navbar";
-import Footer from "./Footer";
 
 type TITLE = {
   title: string;
   children: any;
 };
 
-const Layout = memo(({ children, title }: TITLE) => {
+const Layout = memo(function layout({ children, title }: TITLE) {
   console.log("レイアウトが呼ばれたよ");
 
   return (

@@ -3,7 +3,11 @@ import Link from "next/link";
 import Image from "next/image";
 import Head from "next/head";
 
-const HomeIcon = memo(({ title }: any) => {
+type PROPS = {
+  title: string;
+};
+
+const HomeIcon = memo(function homeIcon({ title }: PROPS) {
   console.log("HomeIconが呼ばれたよ");
 
   return (

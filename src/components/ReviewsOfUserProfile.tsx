@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Rating } from "react-simple-star-rating";
@@ -8,7 +8,9 @@ type PROPS = {
   props: ReviewType[];
 };
 
-const ReviewsOfUserProfile = memo(({ props }: PROPS) => {
+const ReviewsOfUserProfile = memo(function reviewOfUserProfile({
+  props,
+}: PROPS) {
   console.log("ユーザー詳細の口コミ一覧コンポーネントが呼ばれたよ");
 
   const sliceReviewContent = (content: string, maxLength: number) => {

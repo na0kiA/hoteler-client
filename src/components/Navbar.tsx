@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 import { signOut } from "lib/auth";
 import { useAuthStateContext } from "context/AuthProvider";
 
-const Navbar = memo(() => {
+const Navbar = memo(function navbar() {
   console.log("Navbarが呼ばれたよ");
   const router = useRouter();
 
