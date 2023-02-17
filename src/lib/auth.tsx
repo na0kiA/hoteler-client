@@ -8,6 +8,7 @@ import {
 } from "types/types";
 import client from "./client";
 import { ParsedUrlQuery } from "querystring";
+import { GetServerSideProps } from "next";
 
 export const signUp = (params: SignUpParams) => {
   return client.post("/auth", params);
@@ -118,8 +119,8 @@ export const getUserFavorites = (id: string | string[] | undefined) => {
 export const withAuthServerSideProps = (
   url: string,
   onlyAuthenticated: boolean
-) => {
-  return async (context: any) => {
+): GetServerSideProps => {
+  return async (context) => {
     const { req, res } = context;
     const response = await client.get(`${url}`, {
       headers: {
@@ -138,7 +139,7 @@ export const withAuthServerSideProps = (
         },
       };
     }
-    // TODO: 他にも500エラーを考慮した分岐も必要
+
     const auth = await response.data;
     console.log(auth);
 
@@ -146,6 +147,31 @@ export const withAuthServerSideProps = (
       props: {
         ...auth,
       },
+    };
+  };
+};
+export const withRequireNotAuthServerSideProps = (): GetServerSideProps => {
+  return async (context) => {
+    const { req } = context;
+    const response = await client.get(`auth/sessions`, {
+      headers: {
+        "Content-Type": "application/json",
+        uid: req.cookies["_uid"] || null,
+        client: req.cookies["_client"] || null,
+        "access-token": req.cookies["_access_token"] || null,
+      },
+    });
+
+    if (response.data.is_login) {
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
+    return {
+      props: { ...response.data },
     };
   };
 };

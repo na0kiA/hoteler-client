@@ -52,11 +52,6 @@ export const SignIn = () => {
       }
     }
   };
-  console.log(currentUser);
-
-  useLayoutEffect(() => {
-    currentUser && router.push("/");
-  }, [currentUser]);
 
   return (
     <>

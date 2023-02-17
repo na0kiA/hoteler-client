@@ -4,13 +4,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import HotelRateTable from "components/HotelRateTable";
 import Layout from "components/Layout";
 import client from "lib/client";
-import {
-  deleteRestRate,
-  deleteStayRate,
-  getServiceList,
-  updateRestRate,
-  updateStayRate,
-} from "lib/hotelRate";
+import { deleteRestRate, deleteStayRate, getServiceList } from "lib/hotelRate";
 import { getDays } from "lib/hotels";
 import { HotelEditType, HotelRateParams } from "types/types";
 
@@ -291,37 +285,20 @@ export const getServerSideProps = async (ctx: any) => {
   const { id } = ctx.query;
 
   try {
-    const [hotelDetail, currentUser, serviceList]: any = await Promise.all([
-      client.get(`/hotels/${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          uid: ctx.req.cookies["_uid"],
-          client: ctx.req.cookies["_client"],
-          "access-token": ctx.req.cookies["_access_token"],
-        },
-      }),
-      client.get(`/auth/sessions`, {
-        headers: {
-          "Content-Type": "application/json",
-          uid: ctx.req.cookies["_uid"],
-          client: ctx.req.cookies["_client"],
-          "access-token": ctx.req.cookies["_access_token"],
-        },
-      }),
-      getServiceList(
-        id,
-        ctx.req.cookies["_access_token"],
-        ctx.req.cookies["_client"],
-        ctx.req.cookies["_uid"]
-      ),
-    ]);
-    console.log(serviceList);
+    const hotelDetail = await client.get(`/hotels/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        uid: ctx.req.cookies["_uid"],
+        client: ctx.req.cookies["_client"],
+        "access-token": ctx.req.cookies["_access_token"],
+      },
+    });
+    console.log(hotelDetail);
 
-    if (currentUser.data.data.id === hotelDetail.data.userId) {
+    if (hotelDetail.data) {
       return {
         props: {
           ...hotelDetail.data,
-          serviceList,
         },
       };
     } else {
