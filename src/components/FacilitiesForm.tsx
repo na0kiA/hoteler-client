@@ -9,7 +9,7 @@ import { HotelFacilityType } from "types/types";
 
 type PROPS = {
   id: string | undefined;
-  facilities: HotelFacilityType;
+  facilities?: HotelFacilityType;
 };
 
 const FacilitiesForm = memo(({ id }: PROPS) => {

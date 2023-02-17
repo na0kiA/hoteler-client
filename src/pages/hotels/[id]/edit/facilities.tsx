@@ -17,6 +17,7 @@ const Facilities = ({
   hotelFacilities,
   hotelImages,
 }: HotelEditType) => {
+  const [flag, setFlag] = useState<boolean>(false);
   const [error, setError] = useState("");
   const { register, handleSubmit, getValues } = useForm({
     defaultValues: {
@@ -40,6 +41,13 @@ const Facilities = ({
     setKeyList([...keyList, image.fileUrl]);
     return image.key;
   });
+
+  const closeConfirmFlag = () => {
+    setFlag(true);
+    setTimeout(() => {
+      setFlag(false);
+    }, 5000);
+  };
 
   const handleChangeImage = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -99,6 +107,7 @@ const Facilities = ({
         updateFacilities(hotelId, data),
       ]);
       if (results.status == 200) {
+        closeConfirmFlag();
         router.push(`/hotels/${id}`);
       }
     } catch (error: any) {
@@ -128,6 +137,17 @@ const Facilities = ({
 
   return (
     <Layout title={`${name}の設備編集ページ`}>
+      {flag ? (
+        <div className="toast toast-middle toast-end">
+          <div className="alert alert-success">
+            <div>
+              <span>編集が完了しました。</span>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
       <div className="flex justify-center mt-3">
         <div className="tabs">
           <Link

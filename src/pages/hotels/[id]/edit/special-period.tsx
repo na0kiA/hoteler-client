@@ -57,10 +57,6 @@ const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
     }
   };
 
-  type DATA = {
-    periods: SpecialPeriodType[];
-  };
-
   const convertStringToAlphabet = (str: string) => {
     if (str === "GW") {
       return "golden_week";
@@ -80,10 +76,14 @@ const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
     }, 5000);
   };
 
+  type DATA = {
+    periods: SpecialPeriodEditType[];
+  };
+
   const onSubmit = async (data: DATA) => {
     console.log(data.periods);
 
-    const periods = data.periods.map((periodParams: any) => {
+    const periods = data.periods.map((periodParams: SpecialPeriodEditType) => {
       console.log(typeof periodParams);
 
       const convertNumberToDate: SpecialPeriodType = {

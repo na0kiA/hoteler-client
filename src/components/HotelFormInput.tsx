@@ -104,7 +104,7 @@ const HotelFormInput = memo(
       }, 5000);
     };
 
-    const onSubmit = async (data: HotelUpdateType) => {
+    const onSubmit = async (data: HotelEditFormType | HotelUpdateType) => {
       try {
         if (pathname.startsWith("/hotels/register")) {
           const res = await createHotel(data);
@@ -113,9 +113,11 @@ const HotelFormInput = memo(
             router.push(`/hotels/register/price`);
           }
         } else {
-          const res = await updateHotel(id, data);
-          if (res.status == 200) {
-            closeConfirmFlag();
+          if ("message" in data) {
+            const res = await updateHotel(id, data);
+            if (res.status == 200) {
+              closeConfirmFlag();
+            }
           }
         }
       } catch (error: any) {
