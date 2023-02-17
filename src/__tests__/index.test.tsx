@@ -4,8 +4,9 @@ import { rest } from "msw";
 import { setupServer } from "msw/node";
 import { getAllHotel } from "../lib/hotels";
 import Home from "pages/index";
-import handler from "pages/api/hello";
-import { HotelListType } from "types/types";
+// import { useRouter } from "next/router";
+
+jest.mock("next/router", () => ({ useRouter: jest.fn() }));
 
 const handlers = [
   rest.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/hotels`, (req, res, ctx) => {
@@ -69,21 +70,33 @@ describe("Home", () => {
       full: false,
       averageRating: 0,
       reviewsCount: 0,
-      hotelImages: "no image",
-      restRates: { plan: "休憩90分", rate: 5980, startTime: 6, endTime: 0 },
+      hotelImages: [{ id: 1, fileUrl: "", key: "" }],
+      restRates: {
+        plan: "休憩90分",
+        rate: 5980,
+        startTime: 6,
+        endTime: 0,
+        day: "月",
+        service: "休憩",
+        id: 1,
+        dayId: 1,
+        serviceId: 1,
+      },
       stayRates: {
         plan: "宿泊1部",
         rate: 12980,
         startTime: 22,
         endTime: 11,
+        day: "月",
+        service: "宿泊",
+        id: 2,
+        dayId: 1,
+        serviceId: 2,
       },
       id: 9,
     };
 
     render(<Home hotels={[hotels]} />);
-    screen.debug();
-    // expect(screen.getByText("dummy title 1")).toBeInTheDocument();
-    // expect(screen.getByRole("button")).toHaveTextContent("hello there");
     expect(await screen.findByText("ベルリーニ")).toBeInTheDocument();
   });
 });
