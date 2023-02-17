@@ -94,6 +94,7 @@ export type HotelEditType = {
   userId: number;
   accepted: boolean;
   serviceList: ServiceRateType[];
+  specialPeriods: SpecialPeriodType[];
 };
 
 export type HotelEditFormType = {
@@ -142,6 +143,15 @@ export type SpecialPeriodType = {
   start_date: string;
   end_date: string;
   id?: number;
+};
+
+export type SpecialPeriodEditType = {
+  period: string;
+  startDate: string;
+  endDate: string;
+  id: number;
+  dayId: number;
+  serviceId: number;
 };
 
 export type AfterBusinessHour = {

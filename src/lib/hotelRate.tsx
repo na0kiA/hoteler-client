@@ -146,13 +146,13 @@ export const getServiceList = async (
       await results[6],
     ];
 
-    const filterdServiceList = serviceList
+    const filteredServiceList = serviceList
       .flat()
       .filter((item: any) => item.status === 200)
       .map((item: any) => {
         return item.data;
       });
-    const result: ServiceRateType[][] = filterdServiceList.flat();
+    const result: ServiceRateType[][] = filteredServiceList.flat();
     return result;
   } catch (error) {
     console.log(error);

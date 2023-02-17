@@ -1,31 +1,77 @@
 import React, { useState } from "react";
-import Link from "next/link";
 import { useForm, useFieldArray } from "react-hook-form";
-import HotelRateTable from "components/HotelRateTable";
-import Layout from "components/Layout";
 import client from "lib/client";
-import { deleteRestRate, deleteStayRate, getServiceList } from "lib/hotelRate";
 import { getDays } from "lib/hotels";
-import { HotelEditType, HotelRateParams } from "types/types";
+import { SpecialPeriodEditType, SpecialPeriodType } from "types/types";
+import { deleteSpecialPeriod, updateSpecialPeriod } from "lib/specialPeriods";
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
+import { GetServerSideProps } from "next";
+import Layout from "components/Layout";
+import SpecialPeriodForm from "components/SpecialPeriodForm";
 
-const SpecialPeriod = ({ name, id, serviceList }: HotelEditType) => {
+type PROPS = {
+  name: string;
+  id: string;
+  specialPeriod: SpecialPeriodEditType[];
+};
+
+const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
   const [flag, setFlag] = useState<boolean>(false);
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors, isDirty },
+    formState: { errors },
   } = useForm({
     defaultValues: {
-      rates: serviceList,
+      periods: specialPeriod,
     },
   });
-  const filedArrayName = "rates";
+
+  const filedArrayName = "periods";
 
   const { fields, remove } = useFieldArray({
     control,
     name: filedArrayName,
   });
+
+  const removeSpecialPeriod = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    index: number,
+    field: SpecialPeriodEditType
+  ) => {
+    e.preventDefault();
+    try {
+      console.log(field);
+      const res = await deleteSpecialPeriod(field.dayId, field.serviceId);
+      console.log(res);
+
+      if (res.status === 200) {
+        remove(index);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  type DATA = {
+    periods: SpecialPeriodType[];
+  };
+
+  const convertStringToAlphabet = (str: string) => {
+    if (str === "GW") {
+      return "golden_week";
+    } else if (str === "お盆") {
+      return "obon";
+    } else if (str === "年末年始") {
+      return "the_new_years_holiday";
+    } else {
+      return "";
+    }
+  };
 
   const closeConfirmFlag = () => {
     setFlag(true);
@@ -34,271 +80,190 @@ const SpecialPeriod = ({ name, id, serviceList }: HotelEditType) => {
     }, 5000);
   };
 
-  const removeRestRate = async (index: number, field: any) => {
-    try {
-      if (field.service == "休憩") {
-        await deleteRestRate(field.serviceId, field.dayId);
-      } else {
-        await deleteStayRate(field.serviceId, field.dayId);
-      }
-      remove(index);
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
+  const onSubmit = async (data: DATA) => {
+    console.log(data.periods);
 
-  type UpdateServiceType = HotelRateParams & { id: number };
+    const periods = data.periods.map((periodParams: any) => {
+      console.log(typeof periodParams);
 
-  const onSubmit = async (data: any) => {
-    const services = data.rates.map((service: any) => {
-      const converNumberToDate: UpdateServiceType = {
-        plan: service.plan,
-        rate: service.rate,
-        start_time: `${service.startTime}:00`,
-        end_time: `${service.endTime}:00`,
-        day: service.day,
-        service: service.service,
-        id: service.id,
+      const convertNumberToDate: SpecialPeriodType = {
+        period: convertStringToAlphabet(periodParams.period),
+        start_date: `${periodParams.startDate}`,
+        end_date: `${periodParams.endDate}`,
+        id: periodParams.id,
       };
-      return converNumberToDate;
+      return convertNumberToDate;
     });
 
     try {
-      const hotelDays = await getDays(id);
+      const hotelId = Cookies.get("_hotel_id") || id;
+      const hotelDays = await getDays(hotelId);
+      const specialDay: number = hotelDays.data?.[6]?.id;
 
       await Promise.all([
-        services.map((service: UpdateServiceType) => {
-          updateServiceListByWeekdays(service, hotelDays.data);
+        periods.map((periodParams: SpecialPeriodType) => {
+          if (!periodParams.id) return;
+          updateSpecialPeriod(periodParams, specialDay, periodParams.id);
         }),
       ]);
-
       closeConfirmFlag();
     } catch (error: any) {
       console.log(error);
     }
   };
 
-  const updateServiceListByWeekdays = (
-    service: UpdateServiceType,
-    hotelDays: any
-  ) => {};
-
   return (
-    <Layout title={`${name}の料金編集ページ`}>
-      <div className="flex justify-center mt-3">
-        <div className="tabs">
-          <Link
-            className="tab tab-md md:tab-lg tab-bordered"
-            href={`/hotels/${id}/edit`}
-          >
-            詳細
-          </Link>
-          <Link
-            href={`/hotels/${id}/rate`}
-            className="tab tab-md md:tab-lg tab-bordered"
-          >
-            料金
-          </Link>
-          <div className="tab tab-md md:tab-lg tab-bordered  tab-active">
-            特別期間
-          </div>
-          <Link
-            href={`/hotels/${id}/edit/facilities`}
-            className="tab tab-md md:tab-lg tab-bordered"
-          >
-            設備
-          </Link>
-        </div>
-        {flag ? (
-          <div className="toast toast-top toast-end">
-            <div className="alert alert-success">
-              <div>
-                <span>編集が完了しました。</span>
-              </div>
+    <Layout title={`${name}の特別期間編集ページ`}>
+      {flag ? (
+        <div className="toast toast-middle toast-end">
+          <div className="alert alert-success">
+            <div>
+              <span>編集が完了しました。</span>
             </div>
           </div>
-        ) : (
-          <></>
-        )}
-      </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
-        <div className="mb-5 font-bold text-xl underline">
-          既存の料金を編集する
+        </div>
+      ) : (
+        <></>
+      )}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mt-5 mb-5 font-bold text-xl underline">
+          既存の特別期間を編集する
         </div>
         <div className="overflow-x-auto">
           <table className="table table-compact w-full">
             <thead>
               <tr>
                 <th></th>
-                <th>曜日</th>
-                <th>サービス</th>
-                <th>プラン名</th>
-                <th>料金</th>
-                <th>開始時刻</th>
-                <th>終了時刻</th>
+                <th></th>
+                <th>開始日時</th>
+                <th>終了日時</th>
                 <th></th>
               </tr>
             </thead>
             {fields.map((field, index) => (
-              <>
-                <tbody key={field.id}>
-                  <tr>
-                    <th>{index + 1}</th>
-                    <td>
-                      <div>
-                        <select
-                          {...register(`rates.${index}.day`)}
-                          className="select select-bordered select-sm max-w-xs"
-                        >
-                          <option disabled selected>
-                            曜日を選択
-                          </option>
-                          <option value="月曜から木曜">月曜から木曜</option>
-                          <option value="金曜">金曜</option>
-                          <option value="土曜">土曜</option>
-                          <option value="日曜">日曜</option>
-                          <option value="祝日">祝日</option>
-                          <option value="祝前日">祝前日</option>
-                          <option value="特別期間">特別期間</option>
-                        </select>
-                      </div>
-                    </td>
-                    <td>
+              <tbody key={field.id}>
+                <tr key={field.id}>
+                  <th>{index + 1}</th>
+                  <td>
+                    <div>
                       <select
-                        {...register(`rates.${index}.service`)}
+                        {...register(`periods.${index}.period`)}
                         className="select select-bordered select-sm max-w-xs"
                       >
-                        <option disabled selected>
-                          サービスを選択
-                        </option>
-                        <option value="休憩">休憩</option>
-                        <option value="宿泊">宿泊</option>
+                        <option disabled>特別期間を選択</option>
+                        <option value="GW">GW</option>
+                        <option value="お盆">お盆</option>
+                        <option value="年末年始">年末年始</option>
                       </select>
-                    </td>
-                    <td>
-                      <div>
-                        <input
-                          key={field.id}
-                          type="text"
-                          className="input input-bordered input-sm"
-                          {...register(`rates.${index}.plan`, {
-                            required: "必須項目です",
-                            maxLength: 10,
-                          })}
-                        />
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <input
+                        className="input input-bordered input-sm"
+                        placeholder="(例) 20230101"
+                        {...register(`periods.${index}.startDate`, {
+                          required: true,
+                          pattern:
+                            /^\d{4}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/,
+                        })}
+                      />
+                    </div>
+                    {errors?.periods?.[index]?.startDate && (
+                      <div className="text-red-600 text-ssm md:text-sm my-auto">
+                        西暦4桁、月2桁、日2桁で入力してください。
                       </div>
-                      {errors.rates?.[index]?.plan && (
+                    )}
+                  </td>
+                  <td>
+                    <div>
+                      <input
+                        className="input input-bordered input-sm"
+                        placeholder="(例) 20231230"
+                        {...register(`periods.${index}.endDate`, {
+                          required: true,
+                          pattern:
+                            /^\d{4}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/,
+                        })}
+                      />
+                      {errors?.periods?.[index]?.endDate && (
                         <div className="text-red-600 text-ssm md:text-sm my-auto">
-                          プラン名は10文字以下で入力してください。
+                          西暦4桁、月2桁、日2桁で入力してください。
                         </div>
                       )}
-                    </td>
-                    <td>
-                      <div>
-                        <input
-                          key={field.id}
-                          type="text"
-                          className="input input-bordered input-sm"
-                          {...register(`rates.${index}.rate`, {
-                            required: true,
-                            pattern: /^[0-9]+$/,
-                          })}
-                        />
-                      </div>
-                      {errors.rates?.[index]?.rate && (
-                        <span className="text-red-600 text-ssm md:text-sm mt-2">
-                          半角数字で入力してください。
-                        </span>
-                      )}
-                    </td>
-                    <td>
-                      <div>
-                        <input
-                          key={field.id}
-                          className="input input-bordered input-sm"
-                          {...register(`rates.${index}.startTime`, {
-                            required: true,
-                            min: 0,
-                            max: 24,
-                            pattern: /^[0-9]+$/,
-                          })}
-                        />
-                      </div>
-                      {errors.rates?.[index]?.startTime && (
-                        <span className="text-red-600 text-ssm md:text-sm mt-2">
-                          0時から24時の半角数字で入力してください。
-                        </span>
-                      )}
-                    </td>
-                    <td>
-                      <div>
-                        <input
-                          key={field.id}
-                          className="input input-bordered input-sm"
-                          {...register(`rates.${index}.endTime`, {
-                            required: true,
-                            min: 0,
-                            max: 24,
-                            pattern: /^[0-9]+$/,
-                          })}
-                        />
-                      </div>
-                      {errors.rates?.[index]?.endTime && (
-                        <span className="text-red-600 text-ssm md:text-sm mt-2">
-                          0時から24時の半角数字で入力してください。
-                        </span>
-                      )}
-                    </td>
-                    <td>
-                      <button
-                        className="btn btn-sm m-auto"
-                        onClick={(e) => removeRestRate(index, field)}
-                      >
-                        削除
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </>
+                    </div>
+                  </td>
+                  <td>
+                    <button
+                      className="btn btn-sm m-auto"
+                      onClick={(e) => removeSpecialPeriod(e, index, field)}
+                    >
+                      削除
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
             ))}
           </table>
         </div>
-        <button
-          disabled={!isDirty}
-          className="btn btn-primary btn-sm mb-5"
-          type="submit"
-        >
-          編集を完了する
+        <button className="btn btn-sm btn-primary ml-3 mt-3 mb-3" type="submit">
+          特別期間を更新する
         </button>
       </form>
       <div className="mt-5 mb-5 font-bold text-xl underline">
-        料金を新しく追加する
+        特別期間を新しく追加する
       </div>
-      <HotelRateTable id={id} />
+      <SpecialPeriodForm id={id} />
     </Layout>
   );
 };
 
 export default SpecialPeriod;
 
-export const getServerSideProps = async (ctx: any) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { id } = ctx.query;
 
   try {
-    const hotelDetail = await client.get(`/hotels/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        uid: ctx.req.cookies["_uid"],
-        client: ctx.req.cookies["_client"],
-        "access-token": ctx.req.cookies["_access_token"],
-      },
-    });
-    console.log(hotelDetail);
+    const [hotelDetail, currentUser, hotelDays] = await Promise.all([
+      client.get(`/hotels/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          uid: ctx.req.cookies["_uid"],
+          client: ctx.req.cookies["_client"],
+          "access-token": ctx.req.cookies["_access_token"],
+        },
+      }),
+      client.get(`/auth/sessions`, {
+        headers: {
+          "Content-Type": "application/json",
+          uid: ctx.req.cookies["_uid"],
+          client: ctx.req.cookies["_client"],
+          "access-token": ctx.req.cookies["_access_token"],
+        },
+      }),
+      getDays(id),
+    ]);
+    const specialPeriodId = await hotelDays.data?.[6]?.id;
+    const specialPeriodResponse = await client.get(
+      `/days/${specialPeriodId}/special_periods`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          uid: ctx.req.cookies["_uid"],
+          client: ctx.req.cookies["_client"],
+          "access-token": ctx.req.cookies["_access_token"],
+        },
+      }
+    );
 
-    if (hotelDetail.data) {
+    const specialPeriod = await specialPeriodResponse?.data;
+    console.log(specialPeriod);
+
+    if (currentUser.data.data.id === hotelDetail.data.userId) {
       return {
         props: {
           ...hotelDetail.data,
+          specialPeriod,
         },
       };
     } else {
@@ -307,6 +272,8 @@ export const getServerSideProps = async (ctx: any) => {
       };
     }
   } catch (error) {
+    console.log(error);
+
     return {
       notFound: true,
     };

@@ -169,7 +169,7 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
           </Link>
         </div>
         {flag ? (
-          <div className="toast toast-top toast-end">
+          <div className="toast toast-middle toast-end">
             <div className="alert alert-success">
               <div>
                 <span>編集が完了しました。</span>

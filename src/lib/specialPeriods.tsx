@@ -1,15 +1,30 @@
 import Cookies from "js-cookie";
 import { SpecialPeriodType } from "types/types";
 import client from "./client";
+import { getDays } from "./hotels";
 
-export const getSpecialPeriod = (id: number) => {
-  return client.get(`/days/${id}/special_periods`, {
-    headers: {
-      "access-token": Cookies.get("_access_token"),
-      client: Cookies.get("_client"),
-      uid: Cookies.get("_uid"),
-    },
-  });
+export const getSpecialPeriod = async (
+  id: string | string[] | undefined,
+  accessToken: string,
+  clientToken: string,
+  uid: string
+) => {
+  const hotelDays = await getDays(id);
+  const specialPeriodId = await hotelDays.data?.[6]?.id;
+  const specialPeriod = await client.get(
+    `/days/${specialPeriodId}/special_periods`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        uid: uid,
+        client: clientToken,
+        "access-token": accessToken,
+      },
+    }
+  );
+  console.log(specialPeriod);
+
+  return specialPeriod;
 };
 
 export const createSpecialPeriod = (params: SpecialPeriodType, id: number) => {

@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import { createSpecialPeriod, updateSpecialPeriod } from "lib/specialPeriods";
 
 type PROPS = {
-  id?: number;
+  id?: number | string;
 };
 
 const SpecialPeriodForm = ({ id }: PROPS) => {
@@ -69,22 +69,12 @@ const SpecialPeriodForm = ({ id }: PROPS) => {
       const hotelId = Cookies.get("_hotel_id") || id;
       const hotelDays = await getDays(hotelId);
       const specialDay = hotelDays.data?.[6]?.id;
-
-      if (pathName.startsWith("/hotels/register")) {
-        await Promise.all([
-          periods.map((periodParams: SpecialPeriodType) => {
-            createSpecialPeriod(periodParams, specialDay);
-          }),
-        ]);
-        router.push(`/hotels/register/facilities`);
-      } else {
-        await Promise.all([
-          periods.map((periodParams: SpecialPeriodType) => {
-            updateSpecialPeriod(periodParams, specialDay, periodId);
-          }),
-        ]);
-        router.reload();
-      }
+      await Promise.all([
+        periods.map((periodParams: SpecialPeriodType) => {
+          createSpecialPeriod(periodParams, specialDay);
+        }),
+      ]);
+      router.push(`/hotels/register/facilities`);
     } catch (error: any) {
       console.log(error);
     }
@@ -183,9 +173,7 @@ const SpecialPeriodForm = ({ id }: PROPS) => {
           追加
         </button>
         <button className="btn btn-sm btn-primary ml-3 mt-3 mb-3" type="submit">
-          {pathName.startsWith("/hotels/register")
-            ? "特別期間を登録する"
-            : "特別期間を更新する"}
+          特別期間を登録する
         </button>
       </form>
     </>
