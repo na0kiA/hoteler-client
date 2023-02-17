@@ -153,7 +153,7 @@ export const withAuthServerSideProps = (
 export const withRequireNotAuthServerSideProps = (): GetServerSideProps => {
   return async (context) => {
     const { req } = context;
-    const response = await client.get(`auth/sessions`, {
+    const response = await client.get(`/auth/sessions`, {
       headers: {
         "Content-Type": "application/json",
         uid: req.cookies["_uid"] || null,
@@ -170,8 +170,12 @@ export const withRequireNotAuthServerSideProps = (): GetServerSideProps => {
         },
       };
     }
+
+    const props = await response.data;
+    console.log(props);
+
     return {
-      props: { ...response.data },
+      props,
     };
   };
 };
