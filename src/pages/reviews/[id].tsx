@@ -379,9 +379,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   );
 
   const { id } = ctx.query;
-  const accessToken = ctx.req.cookies["_access_token"];
-  const clientToken = ctx.req.cookies["_client"];
-  const uid = ctx.req.cookies["_uid"];
+  const accessToken = ctx.req.cookies._access_token;
+  const clientToken = ctx.req.cookies._client;
+  const uid = ctx.req.cookies._uid;
 
   const [reviewShow, helpfulOrNot] = (await Promise.allSettled([
     getReviewShow(id),

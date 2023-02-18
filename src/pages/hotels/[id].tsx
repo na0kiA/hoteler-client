@@ -37,8 +37,8 @@ const HotelDetail = ({
   const router = useRouter();
   const [postReviewToggle, setPostReviewToggle] = useState<boolean>(false);
   const [isFavorite, setIsFavorite] = useState<boolean>(isFavoriteOrNot);
-  const [editFull, setEditFull] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  const [editFull, setEditFull] = useState<boolean>(full);
+  const [, setError] = useState<boolean>(false);
   const facilityBadge = (
     facility: boolean,
     property: string,
@@ -97,12 +97,11 @@ const HotelDetail = ({
 
     try {
       if (isFavorite) {
-        const res = await deleteFavorite(id);
+        await deleteFavorite(id);
         setIsFavorite(false);
         buttonRef.current = false;
       } else {
-        const res = await postFavorite(id);
-        console.log(res);
+        await postFavorite(id);
         setIsFavorite(true);
         buttonRef.current = false;
       }
@@ -121,15 +120,15 @@ const HotelDetail = ({
     e.preventDefault();
     console.log(editFull);
     const onlyUpdateFullParams: any = {
-      content: content,
-      company: company,
+      content,
+      company,
       phone_number: phoneNumber,
       postal_code: postalCode,
       full_address: fullAddress,
       full: !editFull,
-      name: name,
-      prefecture: prefecture,
-      city: city,
+      name,
+      prefecture,
+      city,
       street_address: streetAddress,
     };
     try {
@@ -157,7 +156,7 @@ const HotelDetail = ({
                   : "btn btn-sm btn-secondary text-base ml-auto"
               }
               onClick={(e) => {
-                handleChangeFull(e), setEditFull(!editFull);
+                handleChangeFull(e);
               }}
             >
               {full ? (
@@ -455,17 +454,17 @@ export const getServerSideProps = async (ctx: any) => {
       client.get(`/hotels/${id}`, {
         headers: {
           "Content-Type": "application/json",
-          uid: ctx.req.cookies["_uid"] || undefined,
-          client: ctx.req.cookies["_client"] || undefined,
-          "access-token": ctx.req.cookies["_access_token"] || undefined,
+          uid: ctx.req.cookies._uid || undefined,
+          client: ctx.req.cookies._client || undefined,
+          "access-token": ctx.req.cookies._access_token || undefined,
         },
       }),
       client.get(`/hotels/${id}/favorites`, {
         headers: {
           "Content-Type": "application/json",
-          uid: ctx.req.cookies["_uid"],
-          client: ctx.req.cookies["_client"],
-          "access-token": ctx.req.cookies["_access_token"],
+          uid: ctx.req.cookies._uid,
+          client: ctx.req.cookies._client,
+          "access-token": ctx.req.cookies._access_token,
         },
       }),
     ]);

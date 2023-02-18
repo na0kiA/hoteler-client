@@ -27,9 +27,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const currentUser = await client.get(`/auth/sessions`, {
     headers: {
       "Content-Type": "application/json",
-      uid: ctx.req.cookies["_uid"] || null,
-      client: ctx.req.cookies["_client"] || null,
-      "access-token": ctx.req.cookies["_access_token"] || null,
+      uid: ctx.req.cookies._uid || null,
+      client: ctx.req.cookies._client || null,
+      "access-token": ctx.req.cookies._access_token || null,
     },
   });
 
@@ -38,9 +38,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const userShow = await client.get(`/users/${id}`, {
     headers: {
       "Content-Type": "application/json",
-      uid: ctx.req.cookies["_uid"],
-      client: ctx.req.cookies["_client"],
-      "access-token": ctx.req.cookies["_access_token"],
+      uid: ctx.req.cookies._uid,
+      client: ctx.req.cookies._client,
+      "access-token": ctx.req.cookies._access_token,
     },
   });
 

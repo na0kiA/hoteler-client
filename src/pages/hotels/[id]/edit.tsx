@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import { getServiceList } from "lib/hotelRate";
 import HotelFormInput from "components/HotelFormInput";
 import Layout from "components/Layout";
 import client from "lib/client";
@@ -71,17 +70,17 @@ export const getServerSideProps = async (ctx: any) => {
       client.get(`/hotels/${id}`, {
         headers: {
           "Content-Type": "application/json",
-          uid: ctx.req.cookies["_uid"],
-          client: ctx.req.cookies["_client"],
-          "access-token": ctx.req.cookies["_access_token"],
+          uid: ctx.req.cookies._uid,
+          client: ctx.req.cookies._client,
+          "access-token": ctx.req.cookies._access_token,
         },
       }),
       client.get(`/auth/sessions`, {
         headers: {
           "Content-Type": "application/json",
-          uid: ctx.req.cookies["_uid"],
-          client: ctx.req.cookies["_client"],
-          "access-token": ctx.req.cookies["_access_token"],
+          uid: ctx.req.cookies._uid,
+          client: ctx.req.cookies._client,
+          "access-token": ctx.req.cookies._access_token,
         },
       }),
     ]);

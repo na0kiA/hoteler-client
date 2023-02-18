@@ -1,14 +1,12 @@
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import client from "lib/client";
 import { postImageKeyOfHotel, updateFacilities } from "lib/hotels";
-import { HotelFacilityType } from "types/types";
-import { HotelEditType } from "types/types";
+import { HotelFacilityType, HotelEditType } from "types/types";
 import Layout from "components/Layout";
-import { useHotelFormStateContext } from "context/HotelFormProvider";
 import { fetchSignedUrl } from "lib/image";
 
 const Facilities = ({
@@ -25,22 +23,21 @@ const Facilities = ({
     },
   });
   const hotelId = id.toString();
-  const router = useRouter();
-  const [keyList, setKeyList] = useState<string[]>([]);
-  const [imageList, setImageList] = useState<string[]>([]);
-  const maxImagesUpload = 10;
-  const inputId = Math.random().toString(32).substring(2);
 
   const image = hotelImages?.map((image) => {
-    if (!image.fileUrl) return;
-    setImageList([...imageList, image.fileUrl]);
+    if (!image.fileUrl) return "";
     return image.fileUrl;
   });
   const defaultKeyList = hotelImages?.map((image) => {
-    if (!image.key) return;
-    setKeyList([...keyList, image.fileUrl]);
+    if (!image.key) return "";
     return image.key;
   });
+
+  const router = useRouter();
+  const [keyList, setKeyList] = useState<string[]>(defaultKeyList);
+  const [imageList, setImageList] = useState<string[]>(image);
+  const maxImagesUpload = 10;
+  const inputId = Math.random().toString(32).substring(2);
 
   const closeConfirmFlag = () => {
     setFlag(true);
@@ -275,17 +272,17 @@ export const getServerSideProps = async (ctx: any) => {
       client.get(`/hotels/${id}`, {
         headers: {
           "Content-Type": "application/json",
-          uid: ctx.req.cookies["_uid"],
-          client: ctx.req.cookies["_client"],
-          "access-token": ctx.req.cookies["_access_token"],
+          uid: ctx.req.cookies._uid,
+          client: ctx.req.cookies._client,
+          "access-token": ctx.req.cookies._access_token,
         },
       }),
       client.get(`/auth/sessions`, {
         headers: {
           "Content-Type": "application/json",
-          uid: ctx.req.cookies["_uid"],
-          client: ctx.req.cookies["_client"],
-          "access-token": ctx.req.cookies["_access_token"],
+          uid: ctx.req.cookies._uid,
+          client: ctx.req.cookies._client,
+          "access-token": ctx.req.cookies._access_token,
         },
       }),
     ]);

@@ -348,24 +348,24 @@ export const getServerSideProps = async (ctx: any) => {
       client.get(`/hotels/${id}`, {
         headers: {
           "Content-Type": "application/json",
-          uid: ctx.req.cookies["_uid"],
-          client: ctx.req.cookies["_client"],
-          "access-token": ctx.req.cookies["_access_token"],
+          uid: ctx.req.cookies._uid,
+          client: ctx.req.cookies._client,
+          "access-token": ctx.req.cookies._access_token,
         },
       }),
       client.get(`/auth/sessions`, {
         headers: {
           "Content-Type": "application/json",
-          uid: ctx.req.cookies["_uid"],
-          client: ctx.req.cookies["_client"],
-          "access-token": ctx.req.cookies["_access_token"],
+          uid: ctx.req.cookies._uid,
+          client: ctx.req.cookies._client,
+          "access-token": ctx.req.cookies._access_token,
         },
       }),
       getServiceList(
         id,
-        ctx.req.cookies["_access_token"],
-        ctx.req.cookies["_client"],
-        ctx.req.cookies["_uid"]
+        ctx.req.cookies._access_token,
+        ctx.req.cookies._client,
+        ctx.req.cookies._uid
       ),
     ]);
     console.log(serviceList);

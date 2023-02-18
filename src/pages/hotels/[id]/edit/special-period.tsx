@@ -228,17 +228,17 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       client.get(`/hotels/${id}`, {
         headers: {
           "Content-Type": "application/json",
-          uid: ctx.req.cookies["_uid"],
-          client: ctx.req.cookies["_client"],
-          "access-token": ctx.req.cookies["_access_token"],
+          uid: ctx.req.cookies._uid,
+          client: ctx.req.cookies._client,
+          "access-token": ctx.req.cookies._access_token,
         },
       }),
       client.get(`/auth/sessions`, {
         headers: {
           "Content-Type": "application/json",
-          uid: ctx.req.cookies["_uid"],
-          client: ctx.req.cookies["_client"],
-          "access-token": ctx.req.cookies["_access_token"],
+          uid: ctx.req.cookies._uid,
+          client: ctx.req.cookies._client,
+          "access-token": ctx.req.cookies._access_token,
         },
       }),
       getDays(id),
@@ -249,9 +249,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       {
         headers: {
           "Content-Type": "application/json",
-          uid: ctx.req.cookies["_uid"],
-          client: ctx.req.cookies["_client"],
-          "access-token": ctx.req.cookies["_access_token"],
+          uid: ctx.req.cookies._uid,
+          client: ctx.req.cookies._client,
+          "access-token": ctx.req.cookies._access_token,
         },
       }
     );

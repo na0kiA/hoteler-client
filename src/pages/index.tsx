@@ -1,13 +1,11 @@
-import React, { createContext, useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-
 import { getAllHotel } from "lib/hotels";
 import { HotelListType } from "types/types";
 import Layout from "components/Layout";
 import StarsRating from "components/StarsRating";
 import ServiceList from "components/serviceList";
-import { useAuthStateContext } from "context/AuthProvider";
 import { GetServerSideProps } from "next";
 
 type PROPS = {

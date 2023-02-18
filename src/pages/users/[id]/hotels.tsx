@@ -74,9 +74,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const apiResponse = await client.get(`/users/${id}`, {
     headers: {
       "Content-Type": "application/json",
-      uid: ctx.req.cookies["_uid"],
-      client: ctx.req.cookies["_client"],
-      "access-token": ctx.req.cookies["_access_token"],
+      uid: ctx.req.cookies._uid,
+      client: ctx.req.cookies._client,
+      "access-token": ctx.req.cookies._access_token,
     },
   });
 

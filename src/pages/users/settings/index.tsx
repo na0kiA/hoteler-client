@@ -255,9 +255,9 @@ export const getServerSideProps = async (ctx: any) => {
   const response = await client.get(`/auth/sessions`, {
     headers: {
       "Content-Type": "application/json",
-      uid: req?.cookies["_uid"] || null,
-      client: req?.cookies["_client"] || null,
-      "access-token": req?.cookies["_access_token"] || null,
+      uid: req?.cookies._uid || null,
+      client: req?.cookies._client || null,
+      "access-token": req?.cookies._access_token || null,
     },
   });
 
