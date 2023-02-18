@@ -16,7 +16,7 @@ export const getSpecialPeriod = async (
     {
       headers: {
         "Content-Type": "application/json",
-        uid: uid,
+        uid,
         client: clientToken,
         "access-token": accessToken,
       },

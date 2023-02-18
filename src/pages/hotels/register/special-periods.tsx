@@ -1,5 +1,4 @@
 import React from "react";
-import HotelFormInput from "components/HotelFormInput";
 import Layout from "components/Layout";
 import { HotelFormProvider } from "context/HotelFormProvider";
 import { withAuthServerSideProps } from "lib/auth";

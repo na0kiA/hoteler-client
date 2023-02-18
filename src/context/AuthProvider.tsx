@@ -1,15 +1,7 @@
+import React, { useContext, useState, createContext, useEffect, memo } from "react";
 import Cookies from "js-cookie";
-import { getCurrentUser, withAuthServerSideProps } from "lib/auth";
+import { getCurrentUser } from "lib/auth";
 import client from "lib/client";
-import {
-  useContext,
-  useState,
-  createContext,
-  useEffect,
-  memo,
-  useCallback,
-  useMemo,
-} from "react";
 import { CurrentUser } from "types/types";
 
 type AuthContextType = {
@@ -25,7 +17,7 @@ type AuthContextType = {
 
 export const AuthContext = createContext({} as AuthContextType);
 
-export const AuthProvider = memo(({ children, props }: any) => {
+export const AuthProvider = memo(function authProvider({ children }: any) {
   const [loading, setLoading] = useState<boolean>(true);
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<CurrentUser>();
@@ -43,8 +35,8 @@ export const AuthProvider = memo(({ children, props }: any) => {
         setCurrentUser(res?.data.data);
 
         Cookies.set("_access_token", res.headers["access-token"]);
-        Cookies.set("_client", res.headers["client"]);
-        Cookies.set("_uid", res.headers["uid"]);
+        Cookies.set("_client", res.headers.client);
+        Cookies.set("_uid", res.headers.uid);
       } else {
         setIsSignedIn(false);
       }

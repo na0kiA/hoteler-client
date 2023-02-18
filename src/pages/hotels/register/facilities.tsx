@@ -1,13 +1,8 @@
 import React from "react";
 import FacilitiesForm from "components/FacilitiesForm";
-import Navbar from "components/Navbar";
-import {
-  HotelFormProvider,
-  useHotelFormStateContext,
-} from "context/HotelFormProvider";
+import { HotelFormProvider } from "context/HotelFormProvider";
 import { withAuthServerSideProps } from "lib/auth";
 import HotelUploadImages from "components/HotelUploadImages";
-import Link from "next/link";
 import Cookies from "js-cookie";
 import Layout from "components/Layout";
 
@@ -35,7 +30,7 @@ const Facilities = () => {
         </li>
       </ul>
       <HotelFormProvider>
-        <HotelUploadImages />
+        <HotelUploadImages imageUrl={[]} keys={[]} />
         <FacilitiesForm id={id} />
       </HotelFormProvider>
     </Layout>

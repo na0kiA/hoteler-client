@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { getHotelImages } from "lib/hotels";
 import { HotelImagesType } from "types/types";
 import client from "lib/client";
 import Layout from "components/Layout";

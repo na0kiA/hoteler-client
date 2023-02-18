@@ -7,7 +7,7 @@ import { HotelRateParams } from "types/types";
 import { useRouter } from "next/router";
 
 type PROPS = {
-  id: number;
+  id?: number;
 };
 
 const HotelRateTable = memo(function hotelRateTable({ id }: PROPS) {

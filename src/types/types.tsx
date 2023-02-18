@@ -1,3 +1,5 @@
+import React from "react";
+
 export type HotelFacilityType = {
   wifiEnabled: boolean;
   parkingEnabled: boolean;
@@ -9,6 +11,43 @@ export type HotelFacilityType = {
   cookingEnabled: boolean;
   breakfastEnabled: boolean;
   couponEnabled: boolean;
+};
+
+export type HotelImagesType = {
+  id: number;
+  fileUrl: string;
+  key: string;
+};
+
+export type SpecialPeriodType = {
+  period: string;
+  start_date: string;
+  end_date: string;
+  id?: number;
+};
+
+export type ServiceRateType = {
+  plan: string;
+  rate: number;
+  startTime: number;
+  endTime: number;
+  day: string;
+  service: string;
+  restRates?: string;
+  id: number;
+  dayId: number;
+  serviceId: number;
+};
+
+export type UserFavoritesType = {
+  id: number;
+  hotelName: string;
+  hotelId: number;
+  hotelFullAddress: string;
+  hotelReviewsCount: number;
+  hotelTopImage: string;
+  fiveStarRate: number;
+  createdDate: string;
 };
 
 export type ReviewType = {
@@ -125,26 +164,6 @@ export type HotelUpdateType = HotelCreateType & {
   full?: boolean;
 };
 
-export type ServiceRateType = {
-  plan: string;
-  rate: number;
-  startTime: number;
-  endTime: number;
-  day: string;
-  service: string;
-  restRates?: string;
-  id: number;
-  dayId: number;
-  serviceId: number;
-};
-
-export type SpecialPeriodType = {
-  period: string;
-  start_date: string;
-  end_date: string;
-  id?: number;
-};
-
 export type SpecialPeriodEditType = {
   period: string;
   startDate: string;
@@ -218,17 +237,6 @@ export type UserDetailType = {
   hotels: HotelDetailType[];
 };
 
-export type UserFavoritesType = {
-  id: number;
-  hotelName: string;
-  hotelId: number;
-  hotelFullAddress: string;
-  hotelReviewsCount: number;
-  hotelTopImage: string;
-  fiveStarRate: number;
-  createdDate: string;
-};
-
 export type CurrentUser = {
   id: number;
   uid: string;
@@ -255,12 +263,6 @@ export type HotelRateParams = {
   end_time: string;
   day?: string;
   service?: string;
-};
-
-export type HotelImagesType = {
-  id: number;
-  fileUrl: string;
-  key: string;
 };
 
 export type AuthHeaderType = {

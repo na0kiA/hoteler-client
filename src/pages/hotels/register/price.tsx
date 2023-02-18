@@ -1,8 +1,6 @@
-import React, { createContext, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import HotelRateTable from "components/HotelRateTable";
-import Navbar from "components/Navbar";
-import { HotelFormProvider } from "context/HotelFormProvider";
 import { withAuthServerSideProps } from "lib/auth";
 import Layout from "components/Layout";
 

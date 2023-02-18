@@ -11,13 +11,6 @@ type PROPS = {
 };
 
 const HotelReviews = ({ hotelReviews }: PROPS) => {
-  const sliceString = (content: string, point: number) => {
-    if (content.length > point) {
-      return content.slice(0, point).concat("…");
-    } else {
-      return content;
-    }
-  };
   return (
     <Layout title={`${hotelReviews?.[1]?.hotelName}の口コミ一覧ページ`}>
       {hotelReviews.map((review: ReviewType) => (

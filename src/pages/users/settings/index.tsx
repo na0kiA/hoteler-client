@@ -17,7 +17,7 @@ const Home = ({
   const { currentUser } = useAuthStateContext();
   const [nameError, setNameError] = useState("");
   const [userName, setUserName] = useState<string>(name);
-  const [userEmail, setUserEmail] = useState<string>(uid);
+  const [userEmail] = useState<string>(uid);
   const [editToggle, setEditToggle] = useState<boolean>(false);
   const [userImageKey, setUserImageKey] = useState(image);
   const [imageUrl, setImageUrl] = useState("");
@@ -248,9 +248,7 @@ const Home = ({
 export default Home;
 
 export const getServerSideProps = async (ctx: any) => {
-  const { req, res } = ctx;
-
-  console.log(req);
+  const { req } = ctx;
 
   const response = await client.get(`/auth/sessions`, {
     headers: {

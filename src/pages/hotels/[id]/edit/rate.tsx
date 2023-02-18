@@ -42,7 +42,7 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
 
   const removeRestRate = async (index: number, field: any) => {
     try {
-      if (field.service == "休憩") {
+      if (field.service === "休憩") {
         await deleteRestRate(field.serviceId, field.dayId);
       } else {
         await deleteStayRate(field.serviceId, field.dayId);
@@ -73,7 +73,7 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
       const hotelDays = await getDays(id);
 
       await Promise.all([
-        services.map((service: UpdateServiceType) => {
+        services.forEach((service: UpdateServiceType) => {
           updateServiceListByWeekdays(service, hotelDays.data);
         }),
       ]);
@@ -88,7 +88,7 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
     service: UpdateServiceType,
     hotelDays: any
   ) => {
-    if (service.service == "休憩") {
+    if (service.service === "休憩") {
       switch (service.day) {
         case "月曜から木曜":
           updateRestRate(service, hotelDays[0].id, service.id);

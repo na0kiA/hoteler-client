@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-import { UserDetailType, UserFavoritesType } from "types/types";
+import { UserDetailType } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import Layout from "components/Layout";
 import FavoritesOfUserProfile from "components/FavoritesOfUserProfile";
@@ -53,13 +53,6 @@ const UserDetail = ({
           )}
         </div>
         {favorites ? (
-          // <>
-          //   {favorites.map((favorite: UserFavoritesType) => (
-          //     <div key={favorite.id}>
-          //       <FavoritesOfUserProfile props={favorite} />
-          //     </div>
-          //   ))}
-          // </>
           <FavoritesOfUserProfile props={favorites} />
         ) : (
           <div className="mt-3 ml-3">お気に入りはまだありません。</div>

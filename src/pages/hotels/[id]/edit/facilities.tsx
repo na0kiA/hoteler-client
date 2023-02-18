@@ -103,7 +103,7 @@ const Facilities = ({
         postImageKeyOfHotel(hotelId, keyList),
         updateFacilities(hotelId, data),
       ]);
-      if (results.status == 200) {
+      if (results.status === 200) {
         closeConfirmFlag();
         router.push(`/hotels/${id}`);
       }

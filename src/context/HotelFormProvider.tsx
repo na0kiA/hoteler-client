@@ -1,4 +1,4 @@
-import { useContext, useState, createContext, memo } from "react";
+import React, { useContext, useState, createContext, memo } from "react";
 
 type HotelFormContextType = {
   id: number;
@@ -9,7 +9,9 @@ type HotelFormContextType = {
 
 export const HotelFormContext = createContext({} as HotelFormContextType);
 
-export const HotelFormProvider = memo(({ children }: any) => {
+export const HotelFormProvider = memo(function hotelFormProvider({
+  children,
+}: any) {
   const [id, setId] = useState<number>(0);
   const [keys, setKeys] = useState<string[]>([]);
 

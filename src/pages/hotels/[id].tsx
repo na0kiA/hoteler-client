@@ -37,7 +37,7 @@ const HotelDetail = ({
   const router = useRouter();
   const [postReviewToggle, setPostReviewToggle] = useState<boolean>(false);
   const [isFavorite, setIsFavorite] = useState<boolean>(isFavoriteOrNot);
-  const [editFull, setEditFull] = useState<boolean>(full);
+  const [editFull] = useState<boolean>(full);
   const [, setError] = useState<boolean>(false);
   const facilityBadge = (
     facility: boolean,

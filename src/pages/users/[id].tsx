@@ -2,12 +2,11 @@ import React from "react";
 import Link from "next/link";
 
 import client from "lib/client";
-import { ReviewType, UserDetailType } from "types/types";
+import { UserDetailType } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import Layout from "components/Layout";
 import ReviewsOfUserProfile from "components/ReviewsOfUserProfile";
 import UpdateUserProfile from "components/UpdateUserProfile";
-import ReviewsOfUserProfile2 from "components/ReviewsOfUserProfile";
 
 const UserDetail = ({
   id,

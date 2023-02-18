@@ -1,10 +1,9 @@
+import React from "react";
 import { render, screen, cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 import Home from "pages/index";
-
-jest.mock("next/router", () => ({ useRouter: jest.fn() }));
 
 const handlers = [
   rest.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/hotels`, (req, res, ctx) => {
@@ -62,6 +61,7 @@ afterAll(() => {
 
 describe("Home", () => {
   it("ホームページが取得できること", async () => {
+    jest.mock("next/router", () => ({ useRouter: jest.fn() }));
     const hotels = {
       name: "ベルリーニ",
       fullAddress: "宮崎県原田市6の42",

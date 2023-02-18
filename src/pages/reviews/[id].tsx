@@ -15,7 +15,6 @@ import { ReviewEditParams, ReviewShowType } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import { useRouter } from "next/router";
 import Layout from "components/Layout";
-import client from "lib/client";
 import { GetServerSideProps } from "next";
 
 const UserReviewShow = ({
@@ -53,7 +52,7 @@ const UserReviewShow = ({
 
     try {
       const res = await deleteReview(id);
-      if (res.status == 200) {
+      if (res.status === 200) {
         console.log("口コミ削除に成功");
         router.push(`/users/${userId}`);
       } else {
@@ -91,7 +90,7 @@ const UserReviewShow = ({
       const res = await updateReview(id, params);
       console.log(res);
 
-      if (res.status == 200) {
+      if (res.status === 200) {
         console.log("口コミ編集に成功");
         router.push(`/reviews/${id}`);
       } else {
@@ -119,7 +118,7 @@ const UserReviewShow = ({
     buttonRef.current = true;
     try {
       const res = await deleteHelpfulness(id);
-      if (res.status == 200) {
+      if (res.status === 200) {
         console.log("参考になったの解除に成功");
         setIsHelpfulness(false);
         setHelpfulness(helpfulness - 1);
@@ -151,7 +150,7 @@ const UserReviewShow = ({
     try {
       const res = await createHelpfulness(id);
       console.log(res);
-      if (res.status == 200) {
+      if (res.status === 200) {
         console.log("参考になったの登録に成功");
         setHelpfulness(helpfulness + 1);
         setIsHelpfulness(true);

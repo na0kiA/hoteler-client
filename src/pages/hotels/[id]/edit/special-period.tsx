@@ -5,7 +5,6 @@ import { getDays } from "lib/hotels";
 import { SpecialPeriodEditType, SpecialPeriodType } from "types/types";
 import { deleteSpecialPeriod, updateSpecialPeriod } from "lib/specialPeriods";
 import Cookies from "js-cookie";
-import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
 import Layout from "components/Layout";
 import SpecialPeriodForm from "components/SpecialPeriodForm";
@@ -18,7 +17,6 @@ type PROPS = {
 
 const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
   const [flag, setFlag] = useState<boolean>(false);
-  const router = useRouter();
 
   const {
     register,
@@ -101,7 +99,7 @@ const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
       const specialDay: number = hotelDays.data?.[6]?.id;
 
       await Promise.all([
-        periods.map((periodParams: SpecialPeriodType) => {
+        periods.forEach((periodParams: SpecialPeriodType) => {
           if (!periodParams.id) return;
           updateSpecialPeriod(periodParams, specialDay, periodParams.id);
         }),

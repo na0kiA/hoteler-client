@@ -1,7 +1,6 @@
 import Cookies from "js-cookie";
 import { HotelRateParams, ServiceRateType } from "types/types";
 import client from "./client";
-import { getDays } from "./hotels";
 
 export const getRestRates = (
   id: number,
@@ -111,7 +110,7 @@ export const getServiceList = async (
     const hotelDays = await client.get(`/hotels/${id}/days`, {
       headers: {
         "Content-Type": "application/json",
-        uid: uid,
+        uid,
         client: clientToken,
         "access-token": accessToken,
       },

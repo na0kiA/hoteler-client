@@ -41,8 +41,8 @@ export const updatePassword = (
   return client.put("/auth/password", params, {
     headers: {
       "access-token": query["access-token"],
-      client: query["client"],
-      uid: query["uid"],
+      client: query.client,
+      uid: query.uid,
     },
   });
 };
@@ -121,13 +121,13 @@ export const withAuthServerSideProps = (
   onlyAuthenticated: boolean
 ): GetServerSideProps => {
   return async (context) => {
-    const { req, res } = context;
+    const { req } = context;
     const response = await client.get(`${url}`, {
       headers: {
         "Content-Type": "application/json",
-        uid: req.cookies["_uid"] || null,
-        client: req.cookies["_client"] || null,
-        "access-token": req.cookies["_access_token"] || null,
+        uid: req.cookies._uid || null,
+        client: req.cookies._client || null,
+        "access-token": req.cookies._access_token || null,
       },
     });
 
@@ -156,9 +156,9 @@ export const withRequireNotAuthServerSideProps = (): GetServerSideProps => {
     const response = await client.get(`/auth/sessions`, {
       headers: {
         "Content-Type": "application/json",
-        uid: req.cookies["_uid"] || null,
-        client: req.cookies["_client"] || null,
-        "access-token": req.cookies["_access_token"] || null,
+        uid: req.cookies._uid || null,
+        client: req.cookies._client || null,
+        "access-token": req.cookies._access_token || null,
       },
     });
 

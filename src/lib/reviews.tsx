@@ -1,9 +1,5 @@
 import Cookies from "js-cookie";
-import {
-  AuthHeaderType,
-  PostReviewParams,
-  ReviewEditParams,
-} from "types/types";
+import { PostReviewParams, ReviewEditParams } from "types/types";
 import client from "./client";
 
 // ホテルの口コミ一覧を取得
@@ -75,7 +71,7 @@ export const searchHelpfulness = (
     headers: {
       "access-token": accessToken,
       client: clientToken,
-      uid: uid,
+      uid,
     },
   });
 };
