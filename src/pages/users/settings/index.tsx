@@ -8,11 +8,16 @@ import { fetchSignedUrl } from "lib/image";
 import { UpdateUserShowParams, UserDetailType } from "types/types";
 import client from "lib/client";
 
-const Home = ({ name, image, uid }: UserDetailType) => {
+const Home = ({
+  name,
+  image,
+  uid,
+  hasHotel,
+}: UserDetailType & { hasHotel: boolean }) => {
   const { currentUser } = useAuthStateContext();
   const [nameError, setNameError] = useState("");
   const [userName, setUserName] = useState<string>(name);
-  const [userEmail, setUserEmail] = useState<string>(uid);
+  const [userEmail] = useState<string>(uid);
   const [editToggle, setEditToggle] = useState<boolean>(false);
   const [userImageKey, setUserImageKey] = useState(image);
   const [imageUrl, setImageUrl] = useState("");
@@ -217,6 +222,16 @@ const Home = ({ name, image, uid }: UserDetailType) => {
             </Link>
           </li>
           <li>
+            {hasHotel && (
+              <Link
+                className="link text-lg"
+                href={"/users/settings/delete-hotel"}
+              >
+                掲載ホテルを削除する
+              </Link>
+            )}
+          </li>
+          <li>
             <Link
               className="link text-base"
               href={"/users/settings/delete-account"}
@@ -233,16 +248,14 @@ const Home = ({ name, image, uid }: UserDetailType) => {
 export default Home;
 
 export const getServerSideProps = async (ctx: any) => {
-  const { req, res } = ctx;
-
-  console.log(req);
+  const { req } = ctx;
 
   const response = await client.get(`/auth/sessions`, {
     headers: {
       "Content-Type": "application/json",
-      uid: req?.cookies["_uid"] || null,
-      client: req?.cookies["_client"] || null,
-      "access-token": req?.cookies["_access_token"] || null,
+      uid: req?.cookies._uid || null,
+      client: req?.cookies._client || null,
+      "access-token": req?.cookies._access_token || null,
     },
   });
 
@@ -256,10 +269,12 @@ export const getServerSideProps = async (ctx: any) => {
       },
     };
   }
+  const hasHotel = response.data.has_hotel;
 
   return {
     props: {
       ...response.data.data,
+      hasHotel,
     },
   };
 };

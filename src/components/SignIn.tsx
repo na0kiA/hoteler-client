@@ -1,8 +1,8 @@
-import Cookies from "js-cookie";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 import { signIn } from "lib/auth";
-import { useRouter } from "next/navigation";
 import { SignInParams } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import HomeIcon from "./HomeIcon";
@@ -13,12 +13,12 @@ export const SignIn = () => {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const { setIsSignedIn, setCurrentUser, currentUser } = useAuthStateContext();
+  const { setIsSignedIn, setCurrentUser } = useAuthStateContext();
 
   const generateParams = () => {
     const signInParams: SignInParams = {
-      email: email,
-      password: password,
+      email,
+      password,
     };
     return signInParams;
   };
@@ -35,8 +35,8 @@ export const SignIn = () => {
 
       if (res.status === 200) {
         Cookies.set("_access_token", res.headers["access-token"]);
-        Cookies.set("_client", res.headers["client"]);
-        Cookies.set("_uid", res.headers["uid"]);
+        Cookies.set("_client", res.headers.client);
+        Cookies.set("_uid", res.headers.uid);
 
         setIsSignedIn(true);
         setCurrentUser(res.data.data);
@@ -52,11 +52,6 @@ export const SignIn = () => {
       }
     }
   };
-  console.log(currentUser);
-
-  useLayoutEffect(() => {
-    currentUser && router.push("/");
-  }, [currentUser]);
 
   return (
     <>

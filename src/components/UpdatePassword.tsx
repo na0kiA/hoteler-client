@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { updatePassword } from "lib/auth";
 import { useRouter } from "next/router";
+import { updatePassword } from "lib/auth";
 import { UpdatePasswordParams } from "types/types";
-import { useAuthStateContext } from "context/AuthProvider";
 import HomeIcon from "./HomeIcon";
 
 export const UpdatePassword = () => {
@@ -15,21 +14,21 @@ export const UpdatePassword = () => {
   const [error, setError] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [confirmAlart, setConfirmAlart] = useState(false);
+  const [confirmAlarm, setConfirmAlarm] = useState(false);
 
   const generateParams = () => {
     const updatePasswordParams: UpdatePasswordParams = {
-      password: password,
-      passwordConfirmation: passwordConfirmation,
+      password,
+      passwordConfirmation,
       token: query.token,
     };
     return updatePasswordParams;
   };
 
-  const closeConfirmAlart = () => {
-    setConfirmAlart(true);
+  const closeConfirmAlarm = () => {
+    setConfirmAlarm(true);
     setTimeout(() => {
-      setConfirmAlart(false);
+      setConfirmAlarm(false);
     }, 5000);
   };
 
@@ -42,11 +41,11 @@ export const UpdatePassword = () => {
     try {
       const res = await updatePassword(params, query);
       if (res.status === 200) {
-        closeConfirmAlart();
+        closeConfirmAlarm();
         router.push("/signin");
       }
     } catch (error: any) {
-      if (error.response?.data.errors == "Unauthorized") {
+      if (error.response?.data.errors === "Unauthorized") {
         setError("認証情報が無効です。");
       } else if (error.response?.data) {
         setInvalidPassword(error.response.data.errors.password);
@@ -62,7 +61,7 @@ export const UpdatePassword = () => {
   return (
     <>
       <HomeIcon title={"パスワード更新ページ"} />
-      {confirmAlart ? (
+      {confirmAlarm ? (
         <div className="toast toast-end">
           <div className="alert alert-success">
             <div>

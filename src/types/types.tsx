@@ -1,14 +1,53 @@
+import React from "react";
+
 export type HotelFacilityType = {
-  wifiEnabled: string | undefined;
-  parkingEnabled: string | undefined;
-  creditCardEnabled: string | undefined;
-  phoneReservationEnabled: string | undefined;
-  netReservationEnabled: string | undefined;
-  tripleRoomsEnabled: string | undefined;
-  secretPaymentEnabled: string | undefined;
-  cookingEnabled: string | undefined;
-  breakfastEnabled: string | undefined;
-  couponEnabled: string | undefined;
+  wifiEnabled: boolean;
+  parkingEnabled: boolean;
+  creditCardEnabled: boolean;
+  phoneReservationEnabled: boolean;
+  netReservationEnabled: boolean;
+  tripleRoomsEnabled: boolean;
+  secretPaymentEnabled: boolean;
+  cookingEnabled: boolean;
+  breakfastEnabled: boolean;
+  couponEnabled: boolean;
+};
+
+export type HotelImagesType = {
+  id: number;
+  fileUrl: string;
+  key: string;
+};
+
+export type SpecialPeriodType = {
+  period: string;
+  start_date: string;
+  end_date: string;
+  id?: number;
+};
+
+export type ServiceRateType = {
+  plan: string;
+  rate: number;
+  startTime: number;
+  endTime: number;
+  day: string;
+  service: string;
+  restRates?: string;
+  id: number;
+  dayId: number;
+  serviceId: number;
+};
+
+export type UserFavoritesType = {
+  id: number;
+  hotelName: string;
+  hotelId: number;
+  hotelFullAddress: string;
+  hotelReviewsCount: number;
+  hotelTopImage: string;
+  fiveStarRate: number;
+  createdDate: string;
 };
 
 export type ReviewType = {
@@ -19,13 +58,14 @@ export type ReviewType = {
   helpfulnessesCount: number;
   userName: string;
   userImage: string;
+  userId: number;
   hotelName: string;
   hotelImage: string;
   hotelId: number;
   hotelReviewsCount: number;
   hotelAverageRating: number;
   hotelFullAddress: string;
-  createdAt: Date;
+  createdDate: string;
 };
 
 export type ReviewShowType = {
@@ -37,8 +77,8 @@ export type ReviewShowType = {
   userName: string;
   userImage: string;
   userId: number;
-  createdAt: Date;
-  isHelpful: boolean;
+  createdDate: string;
+  helpful: boolean;
 };
 
 export type ReviewEditParams = {
@@ -47,11 +87,20 @@ export type ReviewEditParams = {
   fiveStarRate: number;
 };
 
+export type PostReviewParams = {
+  title: string;
+  content: string;
+  five_star_rate: number;
+};
+
 export type HotelDetailType = {
   name: string;
   favoritesCount: number;
   content: string;
   company: string;
+  city: string;
+  prefecture: string;
+  streetAddress: string;
   phoneNumber: string;
   postalCode: string;
   fullAddress: string;
@@ -59,18 +108,69 @@ export type HotelDetailType = {
   full: boolean;
   averageRating: number;
   reviewsCount: number;
-  hotelImages: string;
+  hotelImages: HotelImagesType[];
   dayOfTheWeek: string;
-  topFourReviews: ReviewType;
+  topFourReviews: ReviewType[];
   id: number;
+  userId: number;
+  accepted: boolean;
 };
 
-export type ServiceRateType = {
-  plan: string;
-  rate: number;
-  startTime: Date;
-  endTime: Date;
-  restRates: string;
+export type HotelEditType = {
+  name: string;
+  content: string;
+  company: string;
+  city: string;
+  prefecture: string;
+  streetAddress: string;
+  phoneNumber: string;
+  postalCode: string;
+  fullAddress: string;
+  hotelFacilities: HotelFacilityType;
+  full: boolean;
+  hotelImages: HotelImagesType[];
+  id: number;
+  userId: number;
+  accepted: boolean;
+  serviceList: ServiceRateType[];
+  specialPeriods: SpecialPeriodType[];
+};
+
+export type HotelEditFormType = {
+  name: string;
+  content: string;
+  company: string;
+  city: string;
+  prefecture: string;
+  streetAddress: string;
+  phoneNumber: string;
+  postalCode: string;
+  id?: number;
+};
+
+export type HotelCreateType = {
+  name: string;
+  content: string;
+  company: string;
+  prefecture: string;
+  city: string;
+  postalCode: string;
+  streetAddress: string;
+  phoneNumber: string;
+};
+
+export type HotelUpdateType = HotelCreateType & {
+  notification: { message: string };
+  full?: boolean;
+};
+
+export type SpecialPeriodEditType = {
+  period: string;
+  startDate: string;
+  endDate: string;
+  id: number;
+  dayId: number;
+  serviceId: number;
 };
 
 export type AfterBusinessHour = {
@@ -85,8 +185,8 @@ export type HotelListType = {
   full: boolean;
   averageRating: number;
   reviewsCount: number;
-  hotelImages: string;
-  dayOfTheWeek: string;
+  hotelImages: HotelImagesType[];
+  dayOfTheWeek?: string;
   restRates: ServiceRateType;
   stayRates: ServiceRateType;
 };
@@ -134,16 +234,7 @@ export type UserDetailType = {
   uid: string;
   hotelsCount: number;
   reviewsCount: number;
-};
-
-export type UserFavoritesType = {
-  id: number;
-  hotelName: string;
-  hotelId: number;
-  hotelFullAddress: string;
-  hotelReviewsCount: number;
-  hotelTopImage: string;
-  fiveStarRate: number;
+  hotels: HotelDetailType[];
 };
 
 export type CurrentUser = {
@@ -163,6 +254,21 @@ export type UpdateUserShowParams = {
   email: string;
   name: string;
   image: string;
+};
+
+export type HotelRateParams = {
+  plan: string;
+  rate: number;
+  start_time: string;
+  end_time: string;
+  day?: string;
+  service?: string;
+};
+
+export type AuthHeaderType = {
+  accessToken: string | undefined;
+  clientToken: string | undefined;
+  uid: string | undefined;
 };
 
 export type AuthContextType = {

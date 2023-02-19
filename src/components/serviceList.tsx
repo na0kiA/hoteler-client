@@ -41,7 +41,7 @@ const ServiceList = ({ rest, stay }: PROPS) => {
     }
   };
 
-  const convertTwentyFourHour = (time: Date) => {
+  const convertTwentyFourHour = (time: number) => {
     if (Number(time) === 0) {
       return 24;
     } else {

@@ -6,21 +6,21 @@ import HomeIcon from "./HomeIcon";
 export const ResetPassword = () => {
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
-  const [confirmAlart, setConfirmAlart] = useState(false);
+  const [confirmAlarm, setConfirmAlarm] = useState(false);
   const redirectUrl = "http://localhost:3000/users/settings/update-password";
 
   const generateParams = () => {
     const signInParams: PostResetPasswordParams = {
-      email: email,
-      redirectUrl: redirectUrl,
+      email,
+      redirectUrl,
     };
     return signInParams;
   };
 
-  const closeConfirmAlart = () => {
-    setConfirmAlart(true);
+  const closeConfirmAlarm = () => {
+    setConfirmAlarm(true);
     setTimeout(() => {
-      setConfirmAlart(false);
+      setConfirmAlarm(false);
     }, 5000);
   };
 
@@ -31,8 +31,8 @@ export const ResetPassword = () => {
     const params = generateParams();
 
     try {
-      const res = await postResetPassword(params);
-      closeConfirmAlart();
+      await postResetPassword(params);
+      closeConfirmAlarm();
     } catch (error: any) {
       if (error.response?.data) {
         setError(error.response?.data.errors);
@@ -45,7 +45,7 @@ export const ResetPassword = () => {
   return (
     <>
       <HomeIcon title={"パスワード再設定ページ"} />
-      {confirmAlart ? (
+      {confirmAlarm ? (
         <div className="toast toast-end">
           <div className="alert alert-success">
             <div>

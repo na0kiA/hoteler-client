@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Rating } from "react-simple-star-rating";
@@ -8,13 +8,14 @@ import {
   deleteHelpfulness,
   deleteReview,
   getReviewShow,
+  searchHelpfulness,
   updateReview,
 } from "lib/reviews";
 import { ReviewEditParams, ReviewShowType } from "types/types";
 import { useAuthStateContext } from "context/AuthProvider";
 import { useRouter } from "next/router";
 import Layout from "components/Layout";
-import client from "lib/client";
+import { GetServerSideProps } from "next";
 
 const UserReviewShow = ({
   title,
@@ -24,13 +25,14 @@ const UserReviewShow = ({
   userName,
   userImage,
   userId,
-  createdAt,
+  createdDate,
   id,
-  isHelpful,
+  helpful,
 }: ReviewShowType) => {
   const { currentUser } = useAuthStateContext();
   const [error, setError] = useState("");
-  const [isHelpfulness, setIsHelpfulness] = useState<boolean>(isHelpful);
+  const [isHelpfulness, setIsHelpfulness] = useState<boolean>(helpful);
+  const [helpfulness, setHelpfulness] = useState<number>(helpfulnessesCount);
   const [editToggle, setEditToggle] = useState<boolean>(false);
   const [editReviewTitle, setEditReviewTitle] = useState<string>(title);
   const [editReviewContent, setEditReviewContent] = useState<string>(content);
@@ -43,14 +45,6 @@ const UserReviewShow = ({
     setEditReviewRating(rate);
   };
 
-  const createdDateByJapanese = useCallback((date: Date) => {
-    const yearAndMonthAndDays = date.toString().slice(0, 10);
-    return `${yearAndMonthAndDays.slice(0, 4)}年${yearAndMonthAndDays.slice(
-      6,
-      7
-    )}月${yearAndMonthAndDays.slice(8, 10)}日`;
-  }, []);
-
   const handleDeleteReviews = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -58,7 +52,7 @@ const UserReviewShow = ({
 
     try {
       const res = await deleteReview(id);
-      if (res.status == 200) {
+      if (res.status === 200) {
         console.log("口コミ削除に成功");
         router.push(`/users/${userId}`);
       } else {
@@ -96,7 +90,7 @@ const UserReviewShow = ({
       const res = await updateReview(id, params);
       console.log(res);
 
-      if (res.status == 200) {
+      if (res.status === 200) {
         console.log("口コミ編集に成功");
         router.push(`/reviews/${id}`);
       } else {
@@ -114,18 +108,22 @@ const UserReviewShow = ({
     }
   };
 
+  const buttonRef = useRef(false);
+
   const handleDeleteHelpfulness = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
-
+    if (buttonRef.current) return;
+    buttonRef.current = true;
     try {
       const res = await deleteHelpfulness(id);
-      console.log(res);
-
-      if (res.status == 200) {
+      if (res.status === 200) {
         console.log("参考になったの解除に成功");
-        router.push(`/reviews/${id}`);
+        setIsHelpfulness(false);
+        setHelpfulness(helpfulness - 1);
+        setError("");
+        buttonRef.current = false;
       } else {
         throw new Error(
           "参考になったの解除に失敗しました。画面をご確認の上もう一度実行してください。"
@@ -146,13 +144,18 @@ const UserReviewShow = ({
   ) => {
     e.preventDefault();
 
+    if (buttonRef.current) return;
+    buttonRef.current = true;
+
     try {
       const res = await createHelpfulness(id);
       console.log(res);
-
-      if (res.status == 200) {
+      if (res.status === 200) {
         console.log("参考になったの登録に成功");
-        router.push(`/reviews/${id}`);
+        setHelpfulness(helpfulness + 1);
+        setIsHelpfulness(true);
+        setError("");
+        buttonRef.current = false;
       } else {
         throw new Error(
           "参考になったの登録に失敗しました。画面をご確認の上もう一度実行してください。"
@@ -282,11 +285,7 @@ const UserReviewShow = ({
               )}
             </div>
             <p className="text-xs italic mt-1 mb-1">
-              {editToggle ? (
-                <></>
-              ) : (
-                <>{createdDateByJapanese(createdAt)}に口コミを投稿</>
-              )}
+              {editToggle ? <></> : <>{createdDate}に口コミを投稿</>}
             </p>
 
             {/* 口コミの内容 */}
@@ -297,6 +296,8 @@ const UserReviewShow = ({
                     <span className="label-text text-sm">内容</span>
                   </label>
                   <textarea
+                    wrap="soft"
+                    rows={10}
                     className="textarea textarea-bordered w-full max-h-full text-xs"
                     value={editReviewContent}
                     onChange={(event) => {
@@ -317,7 +318,7 @@ const UserReviewShow = ({
                 <></>
               ) : (
                 <>
-                  <span className="text-sm"> {helpfulnessesCount}</span>
+                  <span className="text-sm"> {helpfulness}</span>
                   人のお客様がこれが役に立ったと考えています
                 </>
               )}
@@ -328,28 +329,13 @@ const UserReviewShow = ({
             <></>
           ) : (
             <>
-              {/* {
-                <>
-                  <button
-                    type="submit"
-                    className="btn btn-outline btn-xs md:btn-sm"
-                    onClick={(e) => {
-                      handleCreateHelpfulness(e), setError("");
-                    }}
-                  >
-                    参考になった
-                  </button>
-                </>
-              } */}
               {isHelpfulness ? (
                 <>
                   <button
                     type="submit"
                     className="btn btn-outline btn-active btn-xs md:btn-sm"
                     onClick={(e) => {
-                      handleDeleteHelpfulness(e),
-                        setIsHelpfulness(false),
-                        setError("");
+                      handleDeleteHelpfulness(e);
                     }}
                   >
                     参考になったを取り消す
@@ -361,9 +347,7 @@ const UserReviewShow = ({
                     type="submit"
                     className="btn btn-outline btn-xs md:btn-sm"
                     onClick={(e) => {
-                      handleCreateHelpfulness(e),
-                        setIsHelpfulness(true),
-                        setError("");
+                      handleCreateHelpfulness(e);
                     }}
                   >
                     参考になった
@@ -387,32 +371,29 @@ const UserReviewShow = ({
 
 export default UserReviewShow;
 
-export const getServerSideProps = async (ctx: any) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   ctx.res.setHeader(
     "Cache-Control",
     "public, s-maxage=1800, stale-while-revalidate=180"
   );
 
   const { id } = ctx.query;
-  const apiResponse = await getReviewShow(id);
+  const accessToken = ctx.req.cookies._access_token;
+  const clientToken = ctx.req.cookies._client;
+  const uid = ctx.req.cookies._uid;
 
-  const helpfulOrNot = await client.get(`/reviews/${id}/helpfulnesses`, {
-    headers: {
-      "Content-Type": "application/json",
-      uid: ctx.req.cookies["_uid"],
-      client: ctx.req.cookies["_client"],
-      "access-token": ctx.req.cookies["_access_token"],
-    },
-  });
+  const [reviewShow, helpfulOrNot] = (await Promise.allSettled([
+    getReviewShow(id),
+    searchHelpfulness(id, accessToken, clientToken, uid),
+  ])) as {
+    status: "fulfilled" | "rejected";
+    value: { data: ReviewShowType };
+  }[];
 
-  console.log(helpfulOrNot);
+  const reviewDetail = reviewShow?.value?.data;
+  const helpful = helpfulOrNot?.value?.data.helpful;
 
-  const ReviewDetail: ReviewShowType = apiResponse.data;
-  const isHelpful: boolean = helpfulOrNot.data.helpful;
-
-  console.log(isHelpful);
-
-  if (!ReviewDetail) {
+  if (!reviewDetail || helpful === undefined) {
     return {
       notFound: true,
     };
@@ -420,8 +401,8 @@ export const getServerSideProps = async (ctx: any) => {
 
   return {
     props: {
-      ...ReviewDetail,
-      isHelpful,
+      ...reviewDetail,
+      helpful,
     },
   };
 };

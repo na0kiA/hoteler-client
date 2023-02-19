@@ -1,8 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { signUp } from "lib/auth";
-import { SignUpParams } from "types/types";
 import HomeIcon from "./HomeIcon";
 
 export const SignUp = () => {
@@ -13,17 +12,17 @@ export const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [confirmAlart, setConfirmAlart] = useState(false);
+  const [confirmAlarm, setConfirmAlarm] = useState(false);
 
   const confirmSuccessUrl = "http://localhost:3000/signin";
 
   const generateParams = () => {
     const signUpParams = {
-      email: email,
-      password: password,
+      email,
+      password,
       name: "名無しさん",
-      passwordConfirmation: passwordConfirmation,
-      confirmSuccessUrl: confirmSuccessUrl,
+      passwordConfirmation,
+      confirmSuccessUrl,
     };
     return signUpParams;
   };
@@ -35,8 +34,8 @@ export const SignUp = () => {
     const params = generateParams();
 
     try {
-      const res: SignUpParams = await signUp(params);
-      openAndCloseConfirmAlart();
+      await signUp(params);
+      openAndCloseConfirmAlarm();
     } catch (error: any) {
       if (error.response.data) {
         setInvalidEmail(error.response.data.errors.email);
@@ -50,17 +49,17 @@ export const SignUp = () => {
     }
   };
 
-  const openAndCloseConfirmAlart = () => {
-    setConfirmAlart(true);
+  const openAndCloseConfirmAlarm = () => {
+    setConfirmAlarm(true);
     setTimeout(() => {
-      setConfirmAlart(false);
+      setConfirmAlarm(false);
     }, 5000);
   };
 
   return (
     <>
       <HomeIcon title={"新規登録"} />
-      {confirmAlart ? (
+      {confirmAlarm ? (
         <div className="toast toast-end">
           <div className="alert alert-success">
             <div>

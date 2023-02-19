@@ -1,21 +1,19 @@
+import React, { useState } from "react";
+import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 import Layout from "components/Layout";
 import { useAuthStateContext } from "context/AuthProvider";
-import Cookies from "js-cookie";
-import { deleteAccount, withAuthServerSideProps } from "lib/auth";
-import client from "lib/client";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { deleteAccount } from "lib/auth";
 
 const DeleteAccount = () => {
-  const [confirmAlart, setConfirmAlart] = useState(false);
-  const { currentUser, loading, setIsSignedIn, setCurrentUser } =
-    useAuthStateContext();
+  const [confirmAlarm, setConfirmAlarm] = useState(false);
+  const { setIsSignedIn, setCurrentUser } = useAuthStateContext();
   const router = useRouter();
 
-  const closeConfirmAlart = () => {
-    setConfirmAlart(true);
+  const closeConfirmAlarm = () => {
+    setConfirmAlarm(true);
     setTimeout(() => {
-      setConfirmAlart(false);
+      setConfirmAlarm(false);
     }, 5000);
   };
 
@@ -31,7 +29,7 @@ const DeleteAccount = () => {
         Cookies.remove("_client");
         Cookies.remove("_uid");
 
-        closeConfirmAlart();
+        closeConfirmAlarm();
         setIsSignedIn(false);
         setCurrentUser(undefined);
         router.replace("/");
@@ -48,7 +46,7 @@ const DeleteAccount = () => {
   return (
     <>
       <Layout title={"設定"}>
-        {confirmAlart ? (
+        {confirmAlarm ? (
           <div className="toast toast-end">
             <div className="alert alert-success">
               <div>
@@ -81,24 +79,3 @@ const DeleteAccount = () => {
 };
 
 export default DeleteAccount;
-
-// export const getServerSideProps = async (ctx: any) => {
-//   const { req, res } = ctx;
-
-//   const response = await client.get(`/auth/sessions`, {
-//     headers: {
-//       "Content-Type": "application/json",
-//       uid: req.cookies["_uid"],
-//       client: req.cookies["_client"],
-//       "access-token": req.cookies["_access_token"],
-//     },
-//   });
-
-//   console.log(response);
-
-//   return {
-//     props: {
-//       ...response.data.data,
-//     },
-//   };
-// };

@@ -17,7 +17,9 @@
     "next": "^13.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-simple-star-rating": "^5.1.7"
+    "react-hook-form": "^7.42.1",
+    "react-simple-star-rating": "^5.1.7",
+    "sharp": "^0.31.3"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
@@ -35,6 +37,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jest": "^27.2.1",
     "eslint-plugin-n": "^15.0.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.29.4",

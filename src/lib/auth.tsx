@@ -8,6 +8,7 @@ import {
 } from "types/types";
 import client from "./client";
 import { ParsedUrlQuery } from "querystring";
+import { GetServerSideProps } from "next";
 
 export const signUp = (params: SignUpParams) => {
   return client.post("/auth", params);
@@ -40,8 +41,8 @@ export const updatePassword = (
   return client.put("/auth/password", params, {
     headers: {
       "access-token": query["access-token"],
-      client: query["client"],
-      uid: query["uid"],
+      client: query.client,
+      uid: query.uid,
     },
   });
 };
@@ -85,7 +86,13 @@ export const getCurrentUser = () => {
 
 // ユーザー詳細を取得
 export const getUserShow = (id: string | string[] | undefined) => {
-  return client.get(`/users/${id}`);
+  return client.get(`/users/${id}`, {
+    headers: {
+      access_token: Cookies.get("_access_token"),
+      client: Cookies.get("_client"),
+      uid: Cookies.get("_uid"),
+    },
+  });
 };
 
 // ユーザーのお気に入りホテル一覧取得
@@ -112,15 +119,15 @@ export const getUserFavorites = (id: string | string[] | undefined) => {
 export const withAuthServerSideProps = (
   url: string,
   onlyAuthenticated: boolean
-) => {
-  return async (context: any) => {
-    const { req, res } = context;
+): GetServerSideProps => {
+  return async (context) => {
+    const { req } = context;
     const response = await client.get(`${url}`, {
       headers: {
         "Content-Type": "application/json",
-        uid: req.cookies["_uid"] || null,
-        client: req.cookies["_client"] || null,
-        "access-token": req.cookies["_access_token"] || null,
+        uid: req.cookies._uid || null,
+        client: req.cookies._client || null,
+        "access-token": req.cookies._access_token || null,
       },
     });
 
@@ -132,7 +139,7 @@ export const withAuthServerSideProps = (
         },
       };
     }
-    // TODO: 他にも500エラーを考慮した分岐も必要
+
     const auth = await response.data;
     console.log(auth);
 
@@ -140,6 +147,35 @@ export const withAuthServerSideProps = (
       props: {
         ...auth,
       },
+    };
+  };
+};
+export const withRequireNotAuthServerSideProps = (): GetServerSideProps => {
+  return async (context) => {
+    const { req } = context;
+    const response = await client.get(`/auth/sessions`, {
+      headers: {
+        "Content-Type": "application/json",
+        uid: req.cookies._uid || null,
+        client: req.cookies._client || null,
+        "access-token": req.cookies._access_token || null,
+      },
+    });
+
+    if (response.data.is_login) {
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
+
+    const props = await response.data;
+    console.log(props);
+
+    return {
+      props,
     };
   };
 };

@@ -1,19 +1,19 @@
 import React, { memo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { signOut } from "lib/auth";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import { signOut } from "lib/auth";
 import { useAuthStateContext } from "context/AuthProvider";
 
-const Navbar = memo(() => {
+const Navbar = memo(function navbar() {
   console.log("Navbarが呼ばれたよ");
+  const router = useRouter();
 
   const [menuDisplay, setmenuDisplay] = useState(true);
   const [displayMenuStyle, setdisplayMenuStyle] = useState("");
   const [search, setSearch] = useState(true);
 
-  const router = useRouter();
   const { currentUser, isSignedIn, loading, setIsSignedIn, setCurrentUser } =
     useAuthStateContext();
 
@@ -176,6 +176,9 @@ const Navbar = memo(() => {
                 </li>
                 <li>
                   <Link href="/users/settings">設定</Link>
+                </li>
+                <li className="justify-between">
+                  <Link href={`/hotels/register`}>ホテルを掲載する</Link>
                 </li>
                 <li>
                   <button
