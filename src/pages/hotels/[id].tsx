@@ -300,7 +300,7 @@ const HotelDetail = ({
               "ネット予約",
               "/ネット予約.svg"
             )}
-            {/* カードのSVGが本番環境でなぜか表示できなかったのでコードに変更 */}
+            {/* カードのSVGファイルが本番環境でなぜか表示できなかったのでコードに変更 */}
             {hotelFacilities.secretPaymentEnabled && (
               <div className="flex text-base w-full my-1 md:w-1/2 md:p-3 md:m-auto">
                 <svg
