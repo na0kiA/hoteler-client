@@ -10,15 +10,13 @@ const FilterCondition = () => {
     register,
     handleSubmit,
     setValue,
-    getValues,
     reset,
     control,
-    formState: { errors, isDirty },
+    formState: { isDirty },
   } = useForm({
     defaultValues: {
       hotelFacilities: [],
     },
-    shouldUnregister: true,
   });
   const { dirtyFields } = useFormState({
     control,
@@ -86,11 +84,12 @@ const FilterCondition = () => {
     "coupon_enabled",
     "secret_payment_enabled",
   ];
+  const hogeList: string[] = ["inu", "neko", "ushi"];
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="card w-full bg-base-200 shadow-xl">
+      <form onSubmit={handleSubmit(onSubmit)} className="">
+        <div className="card w-full  bg-base-200 shadow-xl">
           <div className="card-body">
             <h3 className="card-title justify-start font-semibold">
               アメニティ・設備
@@ -111,7 +110,6 @@ const FilterCondition = () => {
                 className="btn btn-xs btn-active btn-ghost"
                 onClick={(e) => {
                   e.preventDefault();
-                  setValue("hotelFacilities", []);
                   reset({ hotelFacilities: [] });
                 }}
               >
@@ -178,7 +176,7 @@ const FilterCondition = () => {
               <button
                 className="btn btn-sm btn-primary"
                 type="submit"
-                disabled={!isDirty || !dirtyFields.hotelFacilities}
+                disabled={!isDirty}
               >
                 絞り込む
               </button>

@@ -57,7 +57,7 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
             <form>
               <div className="flex justify-end mb-3">
                 <button
-                  className="btn btn-outline btn-xs gap-2 mr-5"
+                  className="md:hidden btn btn-outline btn-xs gap-2 mr-5"
                   onClick={(e) => {
                     e.preventDefault();
                     setCheckFilterCard(!checkFilterCard);
@@ -95,13 +95,20 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
                 </select>
               </div>
             </form>
-            <div>{checkFilterCard && <FilterCondition />}</div>
+            <div className="md:hidden">
+              {checkFilterCard && <FilterCondition />}
+            </div>
           </>
         )}
-
+        <div className="hidden md:block w-1/3 absolute">
+          <FilterCondition />
+        </div>
         {searchedHotelList ? (
           searchedHotelList.map((hotel: HotelListType) => (
-            <div key={hotel.id} className="md:flex  md:justify-center">
+            <div
+              key={hotel.id}
+              className="md:flex md:justify-center md:ml-auto md:w-2/3 md:h-2/3"
+            >
               <figure className="">
                 <Image
                   className="object-fill rounded-lg md:w-4/5 md:h-4/5 md:m-auto"
