@@ -290,11 +290,6 @@ const HotelDetail = ({
               "電話予約",
               "/電話予約.svg"
             )}
-            {/* {facilityBadge(
-              hotelFacilities.creditCardEnabled,
-              "クレジットカード",
-              "/クレジットカードのフリーアイコン (1).svg"
-            )} */}
             {facilityBadge(
               hotelFacilities.netReservationEnabled,
               "ネット予約",

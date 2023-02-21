@@ -10,9 +10,10 @@ const Navbar = memo(function navbar() {
   console.log("Navbarが呼ばれたよ");
   const router = useRouter();
 
-  const [menuDisplay, setmenuDisplay] = useState(true);
-  const [displayMenuStyle, setdisplayMenuStyle] = useState("");
-  const [search, setSearch] = useState(true);
+  const [menuDisplay, setMenuDisplay] = useState<boolean>(true);
+  const [displayMenuStyle, setDisplayMenuStyle] = useState<string>("");
+  const [searchWord, setSearchWord] = useState<string>("");
+  const [search, setSearch] = useState<boolean>(true);
 
   const { currentUser, isSignedIn, loading, setIsSignedIn, setCurrentUser } =
     useAuthStateContext();
@@ -22,13 +23,13 @@ const Navbar = memo(function navbar() {
   };
 
   const showMenu = () => {
-    setmenuDisplay(!menuDisplay);
+    setMenuDisplay(!menuDisplay);
     if (menuDisplay) {
-      setdisplayMenuStyle("");
+      setDisplayMenuStyle("");
     } else {
-      setdisplayMenuStyle("none");
+      setDisplayMenuStyle("none");
     }
-    return setdisplayMenuStyle;
+    return setDisplayMenuStyle;
   };
 
   const handleSignOutSubmit = async (
@@ -77,7 +78,13 @@ const Navbar = memo(function navbar() {
         </div>
 
         {/* PCで表示する検索バー */}
-        <form className="hidden md:block md:navbar-end m-auto">
+        <form
+          className="hidden md:block md:navbar-end m-auto"
+          onSubmit={(e) => {
+            e.preventDefault();
+            router.push(`search?keyword=${searchWord}`);
+          }}
+        >
           {/* <form className="hidden md:block md:navbar-center"> */}
           <div className="relative">
             <svg
@@ -98,14 +105,18 @@ const Navbar = memo(function navbar() {
               type="text"
               placeholder="ホテルを検索"
               className="input input-bordered md:w-80 h-9 py-3 pl-8"
+              value={searchWord}
+              onChange={(e) => {
+                setSearchWord(e.target.value);
+              }}
             />
           </div>
         </form>
 
         {/* スマホで表示する検索バー */}
         <div className="md:hidden navbar-center m-auto">
-          <div className="relative" onClick={searchToggle}>
-            <button className="btn btn-ghost btn-circle">
+          <div className="relative">
+            <button className="btn btn-ghost btn-circle" onClick={searchToggle}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6 inline-block absolute mb-1"
@@ -226,7 +237,13 @@ const Navbar = memo(function navbar() {
         {search ? (
           <></>
         ) : (
-          <form className="max-w-md px-4 m-auto mt-5">
+          <form
+            className="max-w-md px-4 m-auto mt-5"
+            onSubmit={(e) => {
+              e.preventDefault();
+              router.push(`search?keyword=${searchWord}`);
+            }}
+          >
             <div className="relative text-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -246,6 +263,10 @@ const Navbar = memo(function navbar() {
                 type="text"
                 placeholder="ホテルを検索"
                 className="input input-bordered w-full h-10 py-3 pl-12 pr-4  border rounded-md outline-none"
+                value={searchWord}
+                onChange={(e) => {
+                  setSearchWord(e.target.value);
+                }}
               />
             </div>
           </form>

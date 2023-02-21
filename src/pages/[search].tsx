@@ -1,0 +1,247 @@
+import React, { useState } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import Image from "next/image";
+import { GetServerSideProps } from "next";
+import { HotelListType } from "types/types";
+import { searchHotels } from "lib/hotels";
+import { useFieldArray, useForm } from "react-hook-form";
+import Layout from "components/Layout";
+import ServiceList from "components/serviceList";
+import StarsRating from "components/StarsRating";
+
+type PROPS = {
+  searchedHotelList: HotelListType[];
+};
+
+const HotelSearch = ({ searchedHotelList }: PROPS) => {
+  const router = useRouter();
+  const query = router.query;
+  const keyword = query.keyword;
+  const [checkFilterCard, setCheckFilterCard] = useState<boolean>(false);
+  const {
+    register,
+    handleSubmit,
+    control,
+    getValues,
+    formState: { errors, isDirty },
+  } = useForm({
+    defaultValues: {
+      filterAndSort: {
+        sort: "",
+        hotelFacilities: [""],
+      },
+    },
+  });
+
+  const sliceNameOrNot = (name: string) => {
+    if (name.length > 6) {
+      return name.slice(0, 6).concat("…");
+    } else {
+      return name;
+    }
+  };
+
+  const onChangeSort = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const querySort = `&sort=${e.target.value}`;
+    router.push(`/search?keyword=${keyword}${querySort}`);
+  };
+
+  const filteringFacilities = () => {
+    if (checkFilterCard) {
+      return (
+        <div className="card w-full bg-base-200 shadow-xl">
+          <div className="card-body">
+            <h3 className="card-title justify-start font-semibold">
+              アメニティ・設備
+            </h3>
+            <ul className="w-full text-sm">
+              <li className="w-full border-b rounded-t-lg">
+                <div className="flex">
+                  <div className="flex justify-start items-center">
+                    <input
+                      type="checkbox"
+                      value="wifi_enabled"
+                      className="w-4 h-4 checkbox checkbox-secondary"
+                    />
+                    <label className="py-3 ml-2 text-sm font-medium ">
+                      Wi-Fi
+                    </label>
+                  </div>
+                  <div className="flex m-auto items-center pl-3">
+                    <input
+                      type="checkbox"
+                      value="parking_enabled"
+                      className="w-4 h-4 checkbox checkbox-secondary"
+                    />
+                    <label className="py-3 ml-2 text-sm font-medium ">
+                      駐車場
+                    </label>
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <div className="card-actions justify-end">
+              <button className="btn btn-primary">絞り込む</button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  };
+
+  return (
+    <Layout title={`${keyword}の検索結果`}>
+      <div className="p-10 pt-5" id="home">
+        {searchedHotelList && (
+          <>
+            <form>
+              <div className="flex justify-end mb-3">
+                <button
+                  className="btn btn-outline btn-xs gap-2 mr-5"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCheckFilterCard(!checkFilterCard);
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
+                    />
+                  </svg>
+                  <div className="text-xs">フィルター</div>
+                </button>
+                <select
+                  className="select select-bordered select-xs max-w-xs"
+                  onChange={(e) => {
+                    onChangeSort(e);
+                  }}
+                >
+                  <option disabled>標準</option>
+                  <option value="low_rest">休憩安い順</option>
+                  <option value="low_stay">宿泊安い順</option>
+                  <option value="high_rest">休憩高い順</option>
+                  <option value="high_stay">宿泊高い順</option>
+                  <option value="reviews_count">口コミ多い順</option>
+                  <option value="favorites_count">お気に入り多い順</option>
+                </select>
+              </div>
+            </form>
+            <div>{filteringFacilities()}</div>
+          </>
+        )}
+
+        {searchedHotelList ? (
+          searchedHotelList.map((hotel: HotelListType) => (
+            <div key={hotel.id} className="md:flex  md:justify-center">
+              <figure className="">
+                <Image
+                  className="object-fill rounded-lg md:w-4/5 md:h-4/5 md:m-auto"
+                  src={
+                    hotel.hotelImages
+                      ? hotel.hotelImages[0]?.fileUrl
+                      : "/noImageHotel.png"
+                  }
+                  alt="ホテル画像"
+                  width={640}
+                  height={480}
+                  priority={true}
+                />
+              </figure>
+              <div className="p-0 mb-10">
+                <Link href={`/hotels/${hotel.id}`}>
+                  <div className="inline-block mt-1 text-base font-bold font-mono">
+                    {sliceNameOrNot(hotel.name)}
+                  </div>
+                </Link>
+                <div
+                  className={
+                    hotel.full
+                      ? "badge ml-1 bg-pink-500 text-black rounded-lg float-right  mt-1"
+                      : "badge ml-1 bg-green-500 text-black rounded-lg float-right  mt-1"
+                  }
+                >
+                  {hotel.full ? "満室" : "空室"}
+                </div>
+                <div>
+                  <p className="text-xs  font-sans font-thin italic">
+                    {hotel.fullAddress}
+                  </p>
+                </div>
+                <StarsRating props={hotel} />
+                <ServiceList stay={hotel.stayRates} rest={hotel.restRates} />
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="text-center">
+            <div className="w-full">
+              <p className="text-sm md:text-base py-6 font-bold">
+                「{keyword}」に該当するホテルがありませんでした。
+              </p>
+              <button className="btn btn-primary" onClick={() => router.back()}>
+                前へ戻る
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </Layout>
+  );
+};
+
+export default HotelSearch;
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  ctx.res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=1800, stale-while-revalidate=180"
+  );
+
+  const query = ctx.query;
+  const keyword = query.keyword;
+  const sort = query.sort;
+  const hotelFacilities = query.hotelFacilities;
+  console.log(query);
+  console.log(keyword);
+
+  try {
+    const searchHotelResponse = await searchHotels(
+      keyword,
+      sort,
+      hotelFacilities
+    );
+    const searchedHotelList = await searchHotelResponse.data;
+    console.log(searchedHotelList);
+
+    if (!searchedHotelList || typeof searchedHotelList === "string") {
+      return {
+        props: {
+          searchedHotelList: null,
+        },
+      };
+    }
+
+    return {
+      props: {
+        searchedHotelList,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      props: {
+        notFound: true,
+      },
+    };
+  }
+};

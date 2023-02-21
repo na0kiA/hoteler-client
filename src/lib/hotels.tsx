@@ -10,6 +10,16 @@ export const getAllHotel = () => {
   return client.get("/hotels");
 };
 
+export const searchHotels = (
+  keyword: string | string[] | undefined,
+  sort: string | string[] | undefined,
+  hotelFacilities: string | string[] | undefined
+) => {
+  return client.get("/search", {
+    params: { keyword: keyword, sort: sort, hotel_facilities: hotelFacilities },
+  });
+};
+
 export const getHotelDetail = (id: string | string[] | undefined) => {
   return client.get(`/hotels/${id}`);
 };
