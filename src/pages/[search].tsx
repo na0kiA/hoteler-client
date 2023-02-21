@@ -5,12 +5,10 @@ import Image from "next/image";
 import { GetServerSideProps } from "next";
 import { HotelListType } from "types/types";
 import { searchHotels } from "lib/hotels";
-import { useFieldArray, useForm } from "react-hook-form";
 import Layout from "components/Layout";
 import ServiceList from "components/serviceList";
 import StarsRating from "components/StarsRating";
 import FilterCondition from "components/FilterCondition";
-import PostReviewForm from "components/PostReviewForm";
 
 type PROPS = {
   searchedHotelList: HotelListType[];
@@ -20,21 +18,11 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
   const router = useRouter();
   const query = router.query;
   const keyword = query.keyword;
+  const filteringCondition = query["hotel_facilities[]"];
+  console.log(filteringCondition);
+  console.log(!filteringCondition);
+
   const [checkFilterCard, setCheckFilterCard] = useState<boolean>(false);
-  const {
-    register,
-    handleSubmit,
-    control,
-    getValues,
-    formState: { errors, isDirty },
-  } = useForm({
-    defaultValues: {
-      filterAndSort: {
-        sort: "",
-        hotelFacilities: [""],
-      },
-    },
-  });
 
   const sliceNameOrNot = (name: string) => {
     if (name.length > 6) {
@@ -44,9 +32,23 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
     }
   };
 
+  const makingFilterQuery = () => {
+    let queryFacilities = "";
+    if (typeof filteringCondition === "string") {
+      return `&hotel_facilities[]=${filteringCondition}`;
+    } else if (!filteringCondition) {
+      return "";
+    } else {
+      filteringCondition.forEach((facility) => {
+        queryFacilities += `&hotel_facilities[]=${facility}`;
+      });
+      return queryFacilities;
+    }
+  };
+
   const onChangeSort = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const querySort = `&sort=${e.target.value}`;
-    router.push(`/search?keyword=${keyword}${querySort}`);
+    router.push(`/search?keyword=${keyword}${makingFilterQuery()}${querySort}`);
   };
 
   return (
@@ -100,7 +102,7 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
             </div>
           </>
         )}
-        <div className="hidden md:block w-1/3 absolute">
+        <div className="hidden md:block w-1/3 absolute left-3">
           <FilterCondition />
         </div>
         {searchedHotelList ? (
@@ -176,9 +178,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const query = ctx.query;
   const keyword = query.keyword;
   const sort = query.sort;
-  const hotelFacilities = query["hotel_facilities[]"];
+  const hotelFacilities =
+    typeof query["hotel_facilities[]"] === "string"
+      ? [query["hotel_facilities[]"]]
+      : query["hotel_facilities[]"];
+
   console.log(query);
-  console.log(keyword);
   console.log(hotelFacilities);
 
   try {
@@ -188,7 +193,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       hotelFacilities
     );
     const searchedHotelList = await searchHotelResponse.data;
-    console.log(searchedHotelList);
 
     if (!searchedHotelList || typeof searchedHotelList === "string") {
       return {

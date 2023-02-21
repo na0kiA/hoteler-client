@@ -84,11 +84,10 @@ const FilterCondition = () => {
     "coupon_enabled",
     "secret_payment_enabled",
   ];
-  const hogeList: string[] = ["inu", "neko", "ushi"];
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className="">
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="card w-full  bg-base-200 shadow-xl">
           <div className="card-body">
             <h3 className="card-title justify-start font-semibold">
@@ -110,7 +109,7 @@ const FilterCondition = () => {
                 className="btn btn-xs btn-active btn-ghost"
                 onClick={(e) => {
                   e.preventDefault();
-                  reset({ hotelFacilities: [] });
+                  setValue("hotelFacilities", []);
                 }}
               >
                 <span className="text-sm font-medium">取り消し</span>
