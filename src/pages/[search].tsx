@@ -9,6 +9,8 @@ import { useFieldArray, useForm } from "react-hook-form";
 import Layout from "components/Layout";
 import ServiceList from "components/serviceList";
 import StarsRating from "components/StarsRating";
+import FilterCondition from "components/FilterCondition";
+import PostReviewForm from "components/PostReviewForm";
 
 type PROPS = {
   searchedHotelList: HotelListType[];
@@ -45,49 +47,6 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
   const onChangeSort = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const querySort = `&sort=${e.target.value}`;
     router.push(`/search?keyword=${keyword}${querySort}`);
-  };
-
-  const filteringFacilities = () => {
-    if (checkFilterCard) {
-      return (
-        <div className="card w-full bg-base-200 shadow-xl">
-          <div className="card-body">
-            <h3 className="card-title justify-start font-semibold">
-              アメニティ・設備
-            </h3>
-            <ul className="w-full text-sm">
-              <li className="w-full border-b rounded-t-lg">
-                <div className="flex">
-                  <div className="flex justify-start items-center">
-                    <input
-                      type="checkbox"
-                      value="wifi_enabled"
-                      className="w-4 h-4 checkbox checkbox-secondary"
-                    />
-                    <label className="py-3 ml-2 text-sm font-medium ">
-                      Wi-Fi
-                    </label>
-                  </div>
-                  <div className="flex m-auto items-center pl-3">
-                    <input
-                      type="checkbox"
-                      value="parking_enabled"
-                      className="w-4 h-4 checkbox checkbox-secondary"
-                    />
-                    <label className="py-3 ml-2 text-sm font-medium ">
-                      駐車場
-                    </label>
-                  </div>
-                </div>
-              </li>
-            </ul>
-            <div className="card-actions justify-end">
-              <button className="btn btn-primary">絞り込む</button>
-            </div>
-          </div>
-        </div>
-      );
-    }
   };
 
   return (
@@ -136,7 +95,7 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
                 </select>
               </div>
             </form>
-            <div>{filteringFacilities()}</div>
+            <div>{checkFilterCard && <FilterCondition />}</div>
           </>
         )}
 
@@ -210,9 +169,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const query = ctx.query;
   const keyword = query.keyword;
   const sort = query.sort;
-  const hotelFacilities = query.hotelFacilities;
+  const hotelFacilities = query["hotel_facilities[]"];
   console.log(query);
   console.log(keyword);
+  console.log(hotelFacilities);
 
   try {
     const searchHotelResponse = await searchHotels(
