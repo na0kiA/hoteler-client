@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
@@ -19,14 +19,13 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
   const query = router.query;
   const keyword = query.keyword;
   const filteringCondition = query["hotel_facilities[]"];
-  console.log(filteringCondition);
-  console.log(!filteringCondition);
 
   const [checkFilterCard, setCheckFilterCard] = useState<boolean>(false);
+  console.log("searchページが呼ばれたよ");
 
   const sliceNameOrNot = (name: string) => {
-    if (name.length > 6) {
-      return name.slice(0, 6).concat("…");
+    if (name.length > 8) {
+      return name.slice(0, 8).concat("…");
     } else {
       return name;
     }
@@ -50,6 +49,10 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
     const querySort = `&sort=${e.target.value}`;
     router.push(`/search?keyword=${keyword}${makingFilterQuery()}${querySort}`);
   };
+
+  useEffect(() => {
+    setCheckFilterCard(false);
+  }, [filteringCondition]);
 
   return (
     <Layout title={`${keyword}の検索結果`}>

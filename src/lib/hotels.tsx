@@ -16,7 +16,7 @@ export const searchHotels = (
   hotelFacilities: string | string[] | undefined
 ) => {
   return client.get("/search", {
-    params: { keyword: keyword, sort: sort, hotel_facilities: hotelFacilities },
+    params: { keyword, sort, hotel_facilities: hotelFacilities },
   });
 };
 

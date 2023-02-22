@@ -1,27 +1,31 @@
 import { useRouter } from "next/router";
-import React from "react";
-import { useForm, useFormState } from "react-hook-form";
+import React, { useCallback } from "react";
+import { useForm } from "react-hook-form";
 
 const FilterCondition = () => {
   const router = useRouter();
   const query = router.query;
+  console.log("FIlterConditionがレンダリングされました");
 
+  const facilityQueryList = useCallback(() => {
+    if (typeof query["hotel_facilities[]"] === "string") {
+      return [query["hotel_facilities[]"]];
+    } else if (!query["hotel_facilities[]"]) {
+      return [];
+    } else {
+      return query["hotel_facilities[]"];
+    }
+  }, []);
   const {
     register,
     handleSubmit,
     setValue,
-    reset,
-    control,
     formState: { isDirty },
   } = useForm({
     defaultValues: {
-      hotelFacilities: [],
+      hotelFacilities: facilityQueryList(),
     },
   });
-  const { dirtyFields } = useFormState({
-    control,
-  });
-
   const filteringComponent = (
     leftValue: string,
     leftLabel: string,
