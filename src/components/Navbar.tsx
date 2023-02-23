@@ -15,8 +15,14 @@ const Navbar = memo(function navbar() {
   const [searchWord, setSearchWord] = useState<string>("");
   const [search, setSearch] = useState<boolean>(true);
 
-  const { currentUser, isSignedIn, loading, setIsSignedIn, setCurrentUser } =
-    useAuthStateContext();
+  const {
+    currentUser,
+    isSignedIn,
+    loading,
+    setIsSignedIn,
+    setCurrentUser,
+    notificationCount,
+  } = useAuthStateContext();
 
   const searchToggle = () => {
     setSearch(!search);
@@ -142,11 +148,24 @@ const Navbar = memo(function navbar() {
         {isSignedIn && currentUser ? (
           <div className="m-auto">
             {/* 通知 */}
-            <button className="btn btn-ghost btn-circle">
+            <button className="btn btn-circle btn-ghost">
               <div className="indicator m-auto">
+                {notificationCount > 0 ? (
+                  <>
+                    <span className="indicator-item badge badge-xs badge-secondary">
+                      {notificationCount > 9 ? "9+" : notificationCount}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className="indicator-item badge badge-xs badge-secondary">
+                      9
+                    </span>
+                  </>
+                )}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
+                  className="h-6 w-6"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -158,7 +177,6 @@ const Navbar = memo(function navbar() {
                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                   />
                 </svg>
-                <span className="badge badge-xs badge-primary indicator-item"></span>
               </div>
             </button>
 

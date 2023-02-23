@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useCallback } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 
 const FilterCondition = () => {
@@ -7,7 +7,7 @@ const FilterCondition = () => {
   const query = router.query;
   console.log("FIlterConditionがレンダリングされました");
 
-  const facilityQueryList = useCallback(() => {
+  const facilityQueryList = () => {
     if (typeof query["hotel_facilities[]"] === "string") {
       return [query["hotel_facilities[]"]];
     } else if (!query["hotel_facilities[]"]) {
@@ -15,7 +15,7 @@ const FilterCondition = () => {
     } else {
       return query["hotel_facilities[]"];
     }
-  }, []);
+  };
   const {
     register,
     handleSubmit,
