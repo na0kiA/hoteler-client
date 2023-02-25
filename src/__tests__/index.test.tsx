@@ -59,9 +59,10 @@ afterAll(() => {
   server.close();
 });
 
+jest.mock("next/router", () => ({ useRouter: jest.fn() }));
+
 describe("Home", () => {
   it("ホームページが取得できること", async () => {
-    jest.mock("next/router", () => ({ useRouter: jest.fn() }));
     const hotels = {
       name: "ベルリーニ",
       fullAddress: "宮崎県原田市6の42",
