@@ -108,8 +108,10 @@ const HotelFormInput = memo(function hotelFormInput({
           router.push(`/hotels/register/price`);
         }
       } else {
-        if ("message" in data && id) {
+        if (data.notification?.message && id) {
           const res = await updateHotel(id, data);
+          console.log(res);
+
           if (res.status === 200) {
             closeConfirmFlag();
           }
@@ -134,20 +136,20 @@ const HotelFormInput = memo(function hotelFormInput({
 
   return (
     <>
-      {flag ? (
-        <div className="toast toast-middle toast-end">
-          <div className="alert alert-success">
-            <div>
-              <span>編集が完了しました。</span>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <></>
-      )}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="card card-compact	flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 m-auto">
           <div className="card-body">
+            {flag ? (
+              <div className="toast toast-top toast-end">
+                <div className="alert alert-success">
+                  <div>
+                    <span>編集が完了しました。</span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
             {pathname.startsWith("/hotels/register") ? (
               <></>
             ) : (

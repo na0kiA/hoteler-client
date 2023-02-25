@@ -146,6 +146,7 @@ export type HotelEditFormType = {
   phoneNumber: string;
   postalCode: string;
   id?: number;
+  notification: { message: string };
 };
 
 export type HotelCreateType = {

@@ -55,6 +55,9 @@ const Edit = ({
         streetAddress={streetAddress}
         phoneNumber={phoneNumber}
         id={id}
+        notification={{
+          message: "",
+        }}
       />
     </Layout>
   );
