@@ -99,11 +99,9 @@ const HotelDetail = ({
       if (isFavorite) {
         await deleteFavorite(id);
         setIsFavorite(false);
-        buttonRef.current = false;
       } else {
         await postFavorite(id);
         setIsFavorite(true);
-        buttonRef.current = false;
       }
     } catch (error: any) {
       console.log(error);
@@ -111,6 +109,8 @@ const HotelDetail = ({
         setError(error.response?.data.errors);
       } else {
         console.log(error);
+      } finally{
+        buttonRef.current = false;
       }
     }
   };

@@ -123,7 +123,6 @@ const UserReviewShow = ({
         setIsHelpfulness(false);
         setHelpfulness(helpfulness - 1);
         setError("");
-        buttonRef.current = false;
       } else {
         throw new Error(
           "参考になったの解除に失敗しました。画面をご確認の上もう一度実行してください。"
@@ -136,6 +135,8 @@ const UserReviewShow = ({
       } else {
         console.log(error);
       }
+    } finally {
+      buttonRef.current = false;
     }
   };
 
