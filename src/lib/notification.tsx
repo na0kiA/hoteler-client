@@ -1,13 +1,16 @@
-import React from "react";
 import Cookies from "js-cookie";
 import client from "./client";
 
-export const readNotification = () => {
+export const getNotification = (
+  accessToken: string | string[] | undefined,
+  clientToken: string | string[] | undefined,
+  uid: string | string[] | undefined
+) => {
   return client.get(`/notifications`, {
     headers: {
-      access_token: Cookies.get("_access_token"),
-      client: Cookies.get("_client"),
-      uid: Cookies.get("_uid"),
+      access_token: accessToken,
+      client: clientToken,
+      uid,
     },
   });
 };

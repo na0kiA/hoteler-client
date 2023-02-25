@@ -1,10 +1,11 @@
-import React, { memo, useState } from "react";
+import React, { memo, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { signOut } from "lib/auth";
 import { useAuthStateContext } from "context/AuthProvider";
+import { getNotification } from "lib/notification";
 
 const Navbar = memo(function navbar() {
   console.log("Navbarが呼ばれたよ");
@@ -22,7 +23,9 @@ const Navbar = memo(function navbar() {
     setIsSignedIn,
     setCurrentUser,
     notificationCount,
+    setNotificationCount,
   } = useAuthStateContext();
+  console.log(notificationCount);
 
   const searchToggle = () => {
     setSearch(!search);
@@ -62,6 +65,27 @@ const Navbar = memo(function navbar() {
       console.log(error);
     }
   };
+
+  // const buttonRef = useRef(false);
+
+  // const handleGetNotifications = async (
+  //   e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  // ) => {
+  //   e.preventDefault();
+  //   if (buttonRef.current) return;
+  //   buttonRef.current = true;
+  //   try {
+  //     const res = await getNotification();
+  //     if (res.status === 200) {
+  //       setNotificationCount(0);
+  //       buttonRef.current = false;
+  //     } else {
+  //       throw new Error("通知の取得に失敗しました。");
+  //     }
+  //   } catch (error: any) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <>
@@ -148,7 +172,14 @@ const Navbar = memo(function navbar() {
         {isSignedIn && currentUser ? (
           <div className="m-auto">
             {/* 通知 */}
-            <button className="btn btn-circle btn-ghost">
+            <button
+              className="btn btn-circle btn-ghost"
+              onClick={(e) => {
+                // handleGetNotifications(e);
+                setNotificationCount(0);
+                router.push(`/notifications`);
+              }}
+            >
               <div className="indicator m-auto">
                 {notificationCount > 0 ? (
                   <>
@@ -157,11 +188,7 @@ const Navbar = memo(function navbar() {
                     </span>
                   </>
                 ) : (
-                  <>
-                    <span className="indicator-item badge badge-xs badge-secondary">
-                      9
-                    </span>
-                  </>
+                  <></>
                 )}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -183,7 +210,7 @@ const Navbar = memo(function navbar() {
             {/* アイコン */}
             <div className="dropdown dropdown-end" onClick={showMenu}>
               <div tabIndex={1} className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full">
+                <div className="w-10 rounded-full" id="AvatarImage">
                   <Image
                     src={`https://hoteler-image.s3.ap-northeast-1.amazonaws.com/${currentUser?.image}`}
                     alt="アバター"

@@ -39,8 +39,12 @@ const ReviewsOfUserProfile = memo(function reviewOfUserProfile({
                   height={100}
                   priority={true}
                 />
-                <p className="m-auto">{review.hotelName}</p>
-                <p className="text-ssm m-auto">{review.hotelFullAddress}</p>
+                <p className="m-auto">
+                  {sliceReviewContent(review.hotelName, 15)}
+                </p>
+                <p className="text-ssm m-auto">
+                  {sliceReviewContent(review.hotelFullAddress, 15)}
+                </p>
               </Link>
               <div className="flex">
                 <Rating

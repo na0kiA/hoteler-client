@@ -245,9 +245,10 @@ export type CurrentUser = {
   name: string;
   nickname?: string;
   image: string;
-  allowPasswordChange: boolean;
-  created_at: Date;
-  updated_at: Date;
+  // allowPasswordChange: boolean;
+  allow_password_change: boolean;
+  created_at: Date | string;
+  updated_at: Date | string;
 };
 
 export type UpdateUserShowParams = {
@@ -269,6 +270,22 @@ export type AuthHeaderType = {
   accessToken: string | undefined;
   clientToken: string | undefined;
   uid: string | undefined;
+};
+
+export type NotificationType = {
+  id: string;
+  message: string;
+  title: string;
+  image: string;
+  kind: string;
+  read: boolean;
+  hotelId: number;
+  senderId: number;
+  userId: number;
+  createdDate: string;
+  hotelName: string;
+  senderName: string;
+  reviewerRating: number;
 };
 
 export type AuthContextType = {

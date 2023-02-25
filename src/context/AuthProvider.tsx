@@ -44,7 +44,7 @@ export const AuthProvider = memo(function authProvider({ children }: any) {
       if (res?.data.is_login === true) {
         setIsSignedIn(true);
         setCurrentUser(res?.data.data);
-        setNotificationCount(res?.data.data.notification_count);
+        setNotificationCount(res?.data.notifications_count);
 
         Cookies.set("_access_token", res.headers["access-token"]);
         Cookies.set("_client", res.headers.client);
