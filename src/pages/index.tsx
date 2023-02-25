@@ -33,7 +33,7 @@ const Home = ({ hotels }: PROPS) => {
                 <Image
                   className="object-fill rounded-lg"
                   src={
-                    hotel.hotelImages
+                    hotel.hotelImages && hotel.hotelImages[0]?.fileUrl
                       ? hotel.hotelImages[0]?.fileUrl
                       : "/noImageHotel.png"
                   }

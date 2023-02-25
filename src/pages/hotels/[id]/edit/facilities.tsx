@@ -143,7 +143,7 @@ const Facilities = ({
   return (
     <Layout title={`${name}の設備編集ページ`}>
       {flag ? (
-        <div className="toast toast-middle toast-end">
+        <div className="toast toast-top toast-end">
           <div className="alert alert-success">
             <div>
               <span>編集が完了しました。</span>
