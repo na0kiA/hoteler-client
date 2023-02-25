@@ -5,6 +5,7 @@ import { GetServerSideProps } from "next";
 import Layout from "components/Layout";
 import { getNotification } from "lib/notification";
 import { NotificationType } from "types/types";
+import NotificationCard from "components/NotificationCard";
 
 type PROPS = {
   notificationList: NotificationType[];
@@ -21,15 +22,21 @@ const Notifications = ({ notificationList }: PROPS) => {
 
   return (
     <Layout title="通知ページ">
+      <div className="hidden md:block">
+        <NotificationCard props={notificationList} />
+      </div>
       {notificationList.map((notification: NotificationType) => (
         <>
-          <div className="md:hidden card card-side bg-base-100 shadow-xl ml-auto">
+          <div
+            className="md:hidden card card-side bg-base-100 shadow-xl ml-auto"
+            key={notification.id}
+          >
             <div className="m-auto pl-3 pt-5">
               <Link
                 href={`${
                   notification.kind === "came_reviews"
                     ? `/users/${notification.senderId}`
-                    : `/hotels${notification.hotelId}`
+                    : `/hotels/${notification.hotelId}`
                 }`}
               >
                 <Image
@@ -50,7 +57,7 @@ const Notifications = ({ notificationList }: PROPS) => {
               href={`${
                 notification.kind === "came_reviews"
                   ? `/hotels/${notification.hotelId}/reviews`
-                  : `/hotels${notification.hotelId}`
+                  : `/hotels/${notification.hotelId}`
               }`}
             >
               <div className="flex flex-col p-5 pb-1">

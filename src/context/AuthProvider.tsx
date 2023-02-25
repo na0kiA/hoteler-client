@@ -60,7 +60,7 @@ export const AuthProvider = memo(function authProvider({ children }: any) {
 
   useEffect(() => {
     handleGetCurrentUser();
-  }, [setCurrentUser]);
+  }, [setCurrentUser || setNotificationCount]);
 
   return (
     <AuthContext.Provider

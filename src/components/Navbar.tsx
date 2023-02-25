@@ -6,6 +6,8 @@ import Cookies from "js-cookie";
 import { signOut } from "lib/auth";
 import { useAuthStateContext } from "context/AuthProvider";
 import { getNotification } from "lib/notification";
+import NotificationCard from "./NotificationCard";
+import { NotificationType } from "types/types";
 
 const Navbar = memo(function navbar() {
   console.log("Navbarが呼ばれたよ");
@@ -15,6 +17,9 @@ const Navbar = memo(function navbar() {
   const [displayMenuStyle, setDisplayMenuStyle] = useState<string>("");
   const [searchWord, setSearchWord] = useState<string>("");
   const [search, setSearch] = useState<boolean>(true);
+  const [showNotificationCard, setShowNotificationCard] =
+    useState<boolean>(true);
+  const [notificationList, setNotificationList] = useState([]);
 
   const {
     currentUser,
@@ -25,7 +30,6 @@ const Navbar = memo(function navbar() {
     notificationCount,
     setNotificationCount,
   } = useAuthStateContext();
-  console.log(notificationCount);
 
   const searchToggle = () => {
     setSearch(!search);
@@ -66,26 +70,33 @@ const Navbar = memo(function navbar() {
     }
   };
 
-  // const buttonRef = useRef(false);
+  const buttonRef = useRef(false);
+  console.log(notificationList);
 
-  // const handleGetNotifications = async (
-  //   e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  // ) => {
-  //   e.preventDefault();
-  //   if (buttonRef.current) return;
-  //   buttonRef.current = true;
-  //   try {
-  //     const res = await getNotification();
-  //     if (res.status === 200) {
-  //       setNotificationCount(0);
-  //       buttonRef.current = false;
-  //     } else {
-  //       throw new Error("通知の取得に失敗しました。");
-  //     }
-  //   } catch (error: any) {
-  //     console.log(error);
-  //   }
-  // };
+  const handleGetNotifications = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    if (buttonRef.current) return;
+    buttonRef.current = true;
+    try {
+      const res = await getNotification(
+        Cookies.get("_access_token"),
+        Cookies.get("_client"),
+        Cookies.get("_uid")
+      );
+      if (res.status === 200) {
+        setNotificationList(res.data);
+        setNotificationCount(0);
+      } else {
+        throw new Error("通知の取得に失敗しました。");
+      }
+    } catch (error: any) {
+      console.log(error);
+    } finally {
+      buttonRef.current = false;
+    }
+  };
 
   return (
     <>
@@ -171,11 +182,10 @@ const Navbar = memo(function navbar() {
         {/* tokenの有無でアバターを表示するかログインや新規登録ボタンを表示するかを切り替える */}
         {isSignedIn && currentUser ? (
           <div className="m-auto">
-            {/* 通知 */}
+            {/* スマホ用の通知 */}
             <button
-              className="btn btn-circle btn-ghost"
+              className="md:hidden btn btn-circle btn-ghost"
               onClick={(e) => {
-                // handleGetNotifications(e);
                 setNotificationCount(0);
                 router.push(`/notifications`);
               }}
@@ -206,6 +216,44 @@ const Navbar = memo(function navbar() {
                 </svg>
               </div>
             </button>
+
+            {/* PC用の通知 */}
+            <button
+              className="hidden md:block btn btn-circle btn-ghost"
+              onClick={(e) => {
+                handleGetNotifications(e);
+                setShowNotificationCard(!showNotificationCard);
+              }}
+            >
+              <div className="indicator m-auto">
+                {notificationCount > 0 ? (
+                  <>
+                    <span className="indicator-item badge badge-xs badge-secondary">
+                      {notificationCount > 9 ? "9+" : notificationCount}
+                    </span>
+                  </>
+                ) : (
+                  <></>
+                )}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                  />
+                </svg>
+              </div>
+            </button>
+            {showNotificationCard && (
+              <NotificationCard props={notificationList} />
+            )}
 
             {/* アイコン */}
             <div className="dropdown dropdown-end" onClick={showMenu}>
