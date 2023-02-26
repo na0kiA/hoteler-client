@@ -1,4 +1,4 @@
-import React, { memo, useRef, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -7,7 +7,6 @@ import { signOut } from "lib/auth";
 import { useAuthStateContext } from "context/AuthProvider";
 import { getNotification } from "lib/notification";
 import NotificationCard from "./NotificationCard";
-import { NotificationType } from "types/types";
 
 const Navbar = memo(function navbar() {
   console.log("Navbarが呼ばれたよ");
@@ -70,15 +69,7 @@ const Navbar = memo(function navbar() {
     }
   };
 
-  const buttonRef = useRef(false);
-  console.log(notificationList);
-
-  const handleGetNotifications = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-    if (buttonRef.current) return;
-    buttonRef.current = true;
+  const handleGetNotifications = async () => {
     try {
       const res = await getNotification(
         Cookies.get("_access_token"),
@@ -87,17 +78,17 @@ const Navbar = memo(function navbar() {
       );
       if (res.status === 200) {
         setNotificationList(res.data);
-        setShowNotificationCard(!showNotificationCard);
-        setNotificationCount(0);
       } else {
         throw new Error("通知の取得に失敗しました。");
       }
     } catch (error: any) {
       console.log(error);
-    } finally {
-      buttonRef.current = false;
     }
   };
+
+  useEffect(() => {
+    handleGetNotifications();
+  }, [setNotificationCount]);
 
   return (
     <>
@@ -224,7 +215,9 @@ const Navbar = memo(function navbar() {
                 className="hidden md:block btn btn-circle btn-ghost"
                 tabIndex={0}
                 onClick={(e) => {
-                  handleGetNotifications(e);
+                  // handleGetNotifications(e);
+                  setNotificationCount(0);
+                  setShowNotificationCard(!showNotificationCard);
                 }}
               >
                 <div className="indicator m-auto">
