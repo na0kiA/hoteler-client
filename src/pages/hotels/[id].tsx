@@ -109,9 +109,9 @@ const HotelDetail = ({
         setError(error.response?.data.errors);
       } else {
         console.log(error);
-      } finally{
-        buttonRef.current = false;
       }
+    } finally {
+      buttonRef.current = false;
     }
   };
   const handleChangeFull = async (

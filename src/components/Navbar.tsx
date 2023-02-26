@@ -18,7 +18,7 @@ const Navbar = memo(function navbar() {
   const [searchWord, setSearchWord] = useState<string>("");
   const [search, setSearch] = useState<boolean>(true);
   const [showNotificationCard, setShowNotificationCard] =
-    useState<boolean>(true);
+    useState<boolean>(false);
   const [notificationList, setNotificationList] = useState([]);
 
   const {
@@ -87,6 +87,7 @@ const Navbar = memo(function navbar() {
       );
       if (res.status === 200) {
         setNotificationList(res.data);
+        setShowNotificationCard(!showNotificationCard);
         setNotificationCount(0);
       } else {
         throw new Error("通知の取得に失敗しました。");
@@ -218,42 +219,49 @@ const Navbar = memo(function navbar() {
             </button>
 
             {/* PC用の通知 */}
-            <button
-              className="hidden md:block btn btn-circle btn-ghost"
-              onClick={(e) => {
-                handleGetNotifications(e);
-                setShowNotificationCard(!showNotificationCard);
-              }}
-            >
-              <div className="indicator m-auto">
-                {notificationCount > 0 ? (
-                  <>
-                    <span className="indicator-item badge badge-xs badge-secondary">
-                      {notificationCount > 9 ? "9+" : notificationCount}
-                    </span>
-                  </>
-                ) : (
-                  <></>
+            <div className="dropdown dropdown-bottom dropdown-end">
+              <button
+                className="hidden md:block btn btn-circle btn-ghost"
+                tabIndex={0}
+                onClick={(e) => {
+                  handleGetNotifications(e);
+                }}
+              >
+                <div className="indicator m-auto">
+                  {notificationCount > 0 ? (
+                    <>
+                      <span className="indicator-item badge badge-xs badge-secondary">
+                        {notificationCount > 9 ? "9+" : notificationCount}
+                      </span>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                    />
+                  </svg>
+                </div>
+              </button>
+              <div
+                tabIndex={0}
+                className="dropdown-content card w-64 p-2 shadow text-primary-content"
+              >
+                {showNotificationCard && (
+                  <NotificationCard props={notificationList} />
                 )}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                  />
-                </svg>
               </div>
-            </button>
-            {showNotificationCard && (
-              <NotificationCard props={notificationList} />
-            )}
+            </div>
 
             {/* アイコン */}
             <div className="dropdown dropdown-end" onClick={showMenu}>
