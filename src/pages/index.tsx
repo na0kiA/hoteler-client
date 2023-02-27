@@ -8,9 +8,8 @@ import StarsRating from "components/StarsRating";
 import ServiceList from "components/serviceList";
 import { GetServerSideProps } from "next";
 import useSWRInfinite from "swr/infinite";
-import { useIntersection } from "hooks/useInterSection";
-import client from "lib/client";
 import axios from "axios";
+import { useIntersection } from "hooks/useIntersection";
 
 type PROPS = {
   hotels: HotelListType[];
@@ -91,7 +90,7 @@ const Home = ({ hotels }: PROPS) => {
 
   return (
     <Layout title={"ホテル一覧"}>
-      <div className="md:grid grid-cols-4 gap-5 p-10 pt-5" id="home">
+      <div className="md:grid grid-cols-4 gap-5 px-10 pt-5 pb-0" id="home">
         {flattenHotelList &&
           flattenHotelList.map((hotel: HotelListType) => (
             <div key={hotel.id}>
@@ -135,17 +134,12 @@ const Home = ({ hotels }: PROPS) => {
             </div>
           ))}
       </div>
-      {/* <div className="absolute bottom-5 right-10">
-        <button className="btn btn-square loading"></button>
-      </div> */}
-      <div ref={ref}>
+
+      <div ref={ref} className="flex justify-center px-10 pb-10">
         {!isReachingEnd ? (
-          // <div className="absolute bottom-5 right-10">
-          //   <button className="btn btn-square loading"></button>
-          // </div>
-          "読み込み中"
+          <button className="btn btn-square loading"></button>
         ) : (
-          <></>
+          <button className="btn btn-wide font-bold">ホテルは以上です。</button>
         )}
         {isEmptyValue ? <></> : null}
       </div>
