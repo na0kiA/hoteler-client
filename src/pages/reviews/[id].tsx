@@ -252,7 +252,7 @@ const UserReviewShow = ({
               ) : (
                 <>
                   <Rating
-                    initialValue={editReviewRating}
+                    initialValue={fiveStarRate}
                     transition
                     size={20}
                     allowFraction
@@ -260,7 +260,7 @@ const UserReviewShow = ({
                     readonly={true}
                     allowTitleTag={false}
                   />{" "}
-                  <span className="align-bottom">({editReviewRating})</span>
+                  <span className="align-bottom">({fiveStarRate})</span>
                 </>
               )}
             </div>
@@ -388,11 +388,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     searchHelpfulness(id, accessToken, clientToken, uid),
   ])) as {
     status: "fulfilled" | "rejected";
-    value: { data: ReviewShowType };
+    value: { data: { review: ReviewShowType; helpful: boolean } };
   }[];
 
-  const reviewDetail = reviewShow?.value?.data;
+  const reviewDetail = reviewShow?.value?.data.review;
   const helpful = helpfulOrNot?.value?.data.helpful;
+  console.log(reviewDetail);
+  console.log(helpful);
 
   if (!reviewDetail || helpful === undefined) {
     return {

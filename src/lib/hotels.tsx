@@ -6,8 +6,10 @@ import {
 } from "types/types";
 import client from "./client";
 
-export const getAllHotel = () => {
-  return client.get("/hotels");
+export const getAllHotel = (page?: number) => {
+  return client.get("/hotels", {
+    params: { page },
+  });
 };
 
 export const searchHotels = (

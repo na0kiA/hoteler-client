@@ -140,9 +140,10 @@ const Home = ({ hotels }: PROPS) => {
       </div> */}
       <div ref={ref}>
         {!isReachingEnd ? (
-          <div className="absolute bottom-5 right-10">
-            <button className="btn btn-square loading"></button>
-          </div>
+          // <div className="absolute bottom-5 right-10">
+          //   <button className="btn btn-square loading"></button>
+          // </div>
+          "読み込み中"
         ) : (
           <></>
         )}

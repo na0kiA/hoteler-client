@@ -110,7 +110,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       clientToken,
       uid
     );
-    const notificationList = await notificationListResponse.data;
+
+    const notificationList = await notificationListResponse.data.notifications;
 
     console.log(notificationList);
 

@@ -332,7 +332,7 @@ const Navbar = memo(function navbar() {
           <></>
         ) : (
           <form
-            className="max-w-md px-4 m-auto mt-5"
+            className="max-w-md px-4 m-auto mt-5 mb-2"
             onSubmit={(e) => {
               e.preventDefault();
               router.push(`search?keyword=${searchWord}`);

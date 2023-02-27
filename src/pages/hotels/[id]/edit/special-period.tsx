@@ -278,10 +278,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const specialPeriod = await specialPeriodResponse?.data;
     console.log(specialPeriod);
 
-    if (currentUser.data.data.id === hotelDetail.data.userId) {
+    if (currentUser.data.data.id === hotelDetail.data.hotel.userId) {
       return {
         props: {
-          ...hotelDetail.data,
+          ...hotelDetail.data.hotel,
           specialPeriod,
         },
       };

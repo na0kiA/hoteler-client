@@ -45,7 +45,7 @@ export type UserFavoritesType = {
   hotelId: number;
   hotelFullAddress: string;
   hotelReviewsCount: number;
-  hotelTopImage: string;
+  hotelTopImage: HotelImagesType;
   fiveStarRate: number;
   createdDate: string;
 };

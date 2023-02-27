@@ -294,10 +294,10 @@ export const getServerSideProps = async (ctx: any) => {
     ]);
     console.log(hotelDetail);
 
-    if (currentUser.data.data.id === hotelDetail.data.userId) {
+    if (currentUser.data.data.id === hotelDetail.data.hotel.userId) {
       return {
         props: {
-          ...hotelDetail.data,
+          ...hotelDetail.data.hotel,
         },
       };
     } else {
