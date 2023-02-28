@@ -115,7 +115,7 @@ const Navbar = memo(function navbar() {
           className="hidden md:block md:navbar-end m-auto"
           onSubmit={(e) => {
             e.preventDefault();
-            router.push(`search?keyword=${searchWord}`);
+            router.push(`/search?keyword=${searchWord}`);
           }}
         >
           {/* <form className="hidden md:block md:navbar-center"> */}
@@ -335,7 +335,7 @@ const Navbar = memo(function navbar() {
             className="max-w-md px-4 m-auto mt-5 mb-2"
             onSubmit={(e) => {
               e.preventDefault();
-              router.push(`search?keyword=${searchWord}`);
+              router.push(`/search?keyword=${searchWord}`);
             }}
           >
             <div className="relative text-center">

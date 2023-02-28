@@ -90,7 +90,7 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
                     onChangeSort(e);
                   }}
                 >
-                  <option disabled>標準</option>
+                  <option value="">標準</option>
                   <option value="low_rest">休憩安い順</option>
                   <option value="low_stay">宿泊安い順</option>
                   <option value="high_rest">休憩高い順</option>
@@ -118,7 +118,7 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
                 <Image
                   className="object-fill rounded-lg md:w-4/5 md:h-4/5 md:m-auto"
                   src={
-                    hotel.hotelImages
+                    hotel?.hotelImages?.[0]?.fileUrl
                       ? hotel.hotelImages[0]?.fileUrl
                       : "/noImageHotel.png"
                   }
@@ -192,7 +192,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       sort,
       hotelFacilities
     );
-    const searchedHotelList = await searchHotelResponse.data.hotel;
+    console.log(searchHotelResponse.data);
+    const searchedHotelList = await searchHotelResponse.data.hotels;
 
     if (!searchedHotelList || typeof searchedHotelList === "string") {
       return {

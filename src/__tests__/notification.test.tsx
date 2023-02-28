@@ -78,7 +78,7 @@ describe("Navbar", () => {
     });
   });
 
-  describe.only("10件来ている通知のボタンを押下した場合", () => {
+  describe("10件来ている通知のボタンを押下した場合", () => {
     test("通知の件数が0になりコンポーネントが開かれること", async () => {
       const user = userEvent.setup();
       render(

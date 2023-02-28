@@ -82,11 +82,15 @@ const Home = ({ hotels }: PROPS) => {
     }
   }, [intersection, isReachingEnd]);
 
-  if (error) return "failed to load";
-  if (!hotelList) return "loading";
+  if (error) return <div>failed to load</div>;
+  if (!hotelList)
+    return (
+      <div className="absolute bottom-5 right-10">
+        <button className="btn btn-square loading"></button>
+      </div>
+    );
 
   const flattenHotelList = hotelList.flat();
-  console.log(flattenHotelList);
 
   return (
     <Layout title={"ホテル一覧"}>
