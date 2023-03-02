@@ -23,7 +23,7 @@ describe("Navbar", () => {
   };
 
   describe("ログインしている場合", () => {
-    test("ユーザーのプロフィール画像が表示されること", () => {
+    it("ユーザーのプロフィール画像が表示されること", () => {
       render(
         <AuthContext.Provider
           value={
@@ -41,7 +41,7 @@ describe("Navbar", () => {
   });
 
   describe("通知が10件送られてきた場合", () => {
-    test("通知用のバッジが9+になること", () => {
+    it("通知用のバッジが9+になること", () => {
       render(
         <AuthContext.Provider
           value={
@@ -60,7 +60,7 @@ describe("Navbar", () => {
   });
 
   describe("通知がない場合", () => {
-    test("通知用のバッジが非表示になっていること", () => {
+    it("通知用のバッジが非表示になっていること", () => {
       render(
         <AuthContext.Provider
           value={
@@ -79,7 +79,7 @@ describe("Navbar", () => {
   });
 
   describe("10件来ている通知のボタンを押下した場合", () => {
-    test("通知の件数が0になりコンポーネントが開かれること", async () => {
+    it("通知の件数が0になりコンポーネントが開かれること", async () => {
       const user = userEvent.setup();
       render(
         <AuthContext.Provider

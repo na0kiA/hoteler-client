@@ -10,7 +10,7 @@ jest.mock("next/router", () => ({ useRouter: jest.fn() }));
 
 describe("HotelSearch", () => {
   describe("検索ができる場合", () => {
-    test("該当するホテルが出力されること", () => {
+    it("該当するホテルが出力されること", () => {
       render(<HotelSearch searchedHotelList={[]} />);
       expect(screen.getByText("アバター")).toBeInTheDocument();
     });

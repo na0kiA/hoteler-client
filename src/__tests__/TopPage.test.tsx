@@ -61,11 +61,13 @@ afterAll(() => {
 });
 
 jest.mock("next/router", () => ({ useRouter: jest.fn() }));
-// jest.mock("next/router", () => ({ useRouter: jest.fn() }));
 
 describe.only("Home", () => {
   it("ホームページが取得できること", async () => {
+    const ref = jest.fn().mockReturnValue({ current: null });
+    useIntersection(ref as any);
     const { getByText } = render(<Home hotels={[] as any} />);
+    screen.debug();
     expect(getByText("ベルリーニ")).toBeInTheDocument();
   });
 });
