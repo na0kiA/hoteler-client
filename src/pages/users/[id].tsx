@@ -71,26 +71,24 @@ export const getServerSideProps = async (ctx: any) => {
 
   const { id } = ctx.query;
 
-  const response = await client.get(`/users/${id}`, {
-    headers: {
-      "Content-Type": "application/json",
-      uid: ctx.req.cookies._uid,
-      client: ctx.req.cookies._client,
-      "access-token": ctx.req.cookies._access_token,
-    },
-  });
-
-  const UserDetail: UserDetailType = response.data.user;
-
-  if (!UserDetail) {
+  try {
+    const response = await client.get(`/users/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        uid: ctx.req.cookies._uid,
+        client: ctx.req.cookies._client,
+        "access-token": ctx.req.cookies._access_token,
+      },
+    });
+    const UserDetail: UserDetailType = response?.data?.user;
+    return {
+      props: {
+        ...UserDetail,
+      },
+    };
+  } catch (e) {
     return {
       notFound: true,
     };
   }
-
-  return {
-    props: {
-      ...UserDetail,
-    },
-  };
 };
