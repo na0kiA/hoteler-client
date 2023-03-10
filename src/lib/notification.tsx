@@ -8,7 +8,7 @@ export const getNotification = (
 ) => {
   return client.get(`/notifications`, {
     headers: {
-      access_token: accessToken,
+      "access-token": accessToken,
       client: clientToken,
       uid,
     },
@@ -18,7 +18,7 @@ export const getNotification = (
 export const getNotificationCount = () => {
   return client.get(`/notification_or_not`, {
     headers: {
-      access_token: Cookies.get("_access_token"),
+      "access-token": Cookies.get("_access_token"),
       client: Cookies.get("_client"),
       uid: Cookies.get("_uid"),
     },

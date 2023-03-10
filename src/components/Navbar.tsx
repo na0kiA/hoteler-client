@@ -70,6 +70,8 @@ const Navbar = memo(function navbar() {
   };
 
   const handleGetNotifications = async () => {
+    console.log(document.cookie);
+
     try {
       const res = await getNotification(
         Cookies.get("_access_token"),
