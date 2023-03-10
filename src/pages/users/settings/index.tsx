@@ -92,7 +92,7 @@ const Home = ({
         {editToggle ? (
           <>
             <Image
-              src={`https://hoteler-image.s3.ap-northeast-1.amazonaws.com/${image}`}
+              src={`https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/${image}`}
               alt="ユーザー画像"
               width={50}
               height={50}

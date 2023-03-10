@@ -261,7 +261,7 @@ const Navbar = memo(function navbar() {
               <div tabIndex={1} className="btn btn-ghost btn-circle avatar">
                 <div className="w-10 rounded-full" id="AvatarImage">
                   <Image
-                    src={`https://hoteler-image.s3.ap-northeast-1.amazonaws.com/${currentUser?.image}`}
+                    src={`https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/${currentUser?.image}`}
                     alt="アバター"
                     width={50}
                     height={50}

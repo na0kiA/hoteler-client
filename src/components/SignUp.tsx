@@ -120,9 +120,9 @@ export const SignUp = () => {
                       required: "必須項目です",
                     })}
                   />
-                  {error.email && (
+                  {error?.email && (
                     <p className="text-red-600 text-sm md:text-sm mt-2">
-                      {error.email}
+                      {error?.email}
                     </p>
                   )}
                 </div>
@@ -137,9 +137,9 @@ export const SignUp = () => {
                     })}
                     className="input input-bordered"
                   />
-                  {error.password && (
+                  {error?.password && (
                     <p className="text-red-600 text-sm md:text-sm mt-2">
-                      {error.password}
+                      {error?.password}
                     </p>
                   )}
                 </div>
@@ -154,9 +154,9 @@ export const SignUp = () => {
                     })}
                     className="input input-bordered"
                   />
-                  {error.password_confirmation && (
+                  {error?.password_confirmation && (
                     <p className="text-red-600 text-sm md:text-sm mt-2">
-                      {error.password_confirmation}
+                      {error?.password_confirmation}
                     </p>
                   )}
                   <label className="label">
