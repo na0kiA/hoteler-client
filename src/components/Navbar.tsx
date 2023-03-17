@@ -64,14 +64,12 @@ const Navbar = memo(function navbar() {
           "ログアウトに失敗しました。画面をご確認の上もう一度実行してください。"
         );
       }
-    } catch (error: any) {
-      console.log(error);
+    } catch (e: any) {
+      console.log(e);
     }
   };
 
   const handleGetNotifications = async () => {
-    console.log(document.cookie);
-
     try {
       const res = await getNotification(
         Cookies.get("_access_token"),
@@ -217,7 +215,6 @@ const Navbar = memo(function navbar() {
                 className="hidden md:block btn btn-circle btn-ghost"
                 tabIndex={0}
                 onClick={(e) => {
-                  // handleGetNotifications(e);
                   setNotificationCount(0);
                   setShowNotificationCard(!showNotificationCard);
                 }}

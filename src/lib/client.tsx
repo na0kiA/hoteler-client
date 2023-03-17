@@ -5,8 +5,8 @@ const client: AxiosInstance | any = axios.create({
 });
 
 // CSRF対策をすること
-axios.defaults.xsrfCookieName = "CSRF-TOKEN";
-axios.defaults.xsrfHeaderName = "X-CSRF-Token";
+// axios.defaults.xsrfCookieName = "CSRF-TOKEN";
+// axios.defaults.xsrfHeaderName = "X-CSRF-Token";
 
 client.defaults.withCredentials = true;
 
