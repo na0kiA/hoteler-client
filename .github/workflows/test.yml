@@ -1,0 +1,23 @@
+name: Sample Test
+
+on:
+  push:
+    branches:
+      - feature7
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install and cache nodejs
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: "yarn"
+          cache-dependency-path: "**/yarn.lock"
+      - name: Install packages
+        run: yarn install
+      - name: jest
+        run: yarn jest

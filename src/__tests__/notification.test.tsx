@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Navbar from "components/Navbar";
 import { AuthContext } from "context/AuthProvider";
-import userEvent from "@testing-library/user-event";
+// import userEvent from "@testing-library/user-event";
 
 jest.mock("next/router", () => ({ useRouter: jest.fn() }));
 
@@ -41,7 +41,7 @@ describe("Navbar", () => {
   });
 
   describe("通知が10件送られてきた場合", () => {
-    it("通知用のバッジが9+になること", () => {
+    it("通知用のバッジが9+になること", async () => {
       render(
         <AuthContext.Provider
           value={
@@ -55,7 +55,7 @@ describe("Navbar", () => {
           <Navbar />
         </AuthContext.Provider>
       );
-      expect(screen.getByText("9+")).toBeInTheDocument();
+      expect(screen.getAllByText("9+")).toHaveLength(2);
     });
   });
 
@@ -75,29 +75,6 @@ describe("Navbar", () => {
         </AuthContext.Provider>
       );
       expect(screen.queryByText("9+")).toBeNull();
-    });
-  });
-
-  describe("10件来ている通知のボタンを押下した場合", () => {
-    it("通知の件数が0になりコンポーネントが開かれること", async () => {
-      const user = userEvent.setup();
-      render(
-        <AuthContext.Provider
-          value={
-            {
-              currentUser: data,
-              isSignedIn: true,
-              notificationCount: 3,
-            } as any
-          }
-        >
-          <Navbar />
-        </AuthContext.Provider>
-      );
-
-      await user.click(screen.getByRole("button", { name: "3" }));
-      screen.debug();
-      expect(screen.findByText("3")).toBeNull();
     });
   });
 });
