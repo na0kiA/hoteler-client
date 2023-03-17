@@ -21,3 +21,5 @@ jobs:
         run: yarn install
       - name: jest
         run: yarn jest
+      - name: eslint
+        run: yarn eslint
