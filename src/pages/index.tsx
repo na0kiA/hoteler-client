@@ -103,21 +103,25 @@ const Home = ({ hotels }: PROPS) => {
 
   return (
     <Layout title={"ホテル一覧"}>
-      <div className="md:grid grid-cols-4 gap-5 px-10 pt-5 pb-0" id="home">
+      <div className="md:grid grid-cols-4 gap-5 px-10 pt-5 pb-0">
         {flattenHotelList &&
           flattenHotelList.map((hotel: HotelListType) => (
-            <div key={hotel.id}>
-              <figure>
+            <div key={hotel.id} className="my-1 pb-5">
+              <figure className="relative max-w-full h-3/5 py-20">
                 <Image
-                  className="object-fill rounded-lg"
+                  className="rounded-lg"
                   src={
                     hotel.hotelImages
                       ? hotel.hotelImages.fileUrl
                       : "/noImageHotel.png"
                   }
                   alt="ホテル画像"
-                  width={640}
-                  height={480}
+                  // width={600}
+                  // height={480}
+                  // width={1280}
+                  // height={720}
+                  style={{ objectFit: "cover" }}
+                  fill
                   priority={true}
                 />
               </figure>
