@@ -82,7 +82,7 @@ const Home = ({ hotels }: PROPS) => {
     }
   }, [intersection, isReachingEnd]);
 
-  if (error) return <div>failed to load</div>;
+  if (error) return <div></div>;
   if (!hotelList)
     return (
       <div className="absolute bottom-5 right-10">

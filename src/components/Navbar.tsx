@@ -9,7 +9,6 @@ import { getNotification } from "lib/notification";
 import NotificationCard from "./NotificationCard";
 
 const Navbar = memo(function navbar() {
-  console.log("Navbarが呼ばれたよ");
   const router = useRouter();
 
   const [menuDisplay, setMenuDisplay] = useState<boolean>(true);
@@ -213,6 +212,7 @@ const Navbar = memo(function navbar() {
             <div className="dropdown dropdown-bottom dropdown-end">
               <button
                 className="hidden md:block btn btn-circle btn-ghost"
+                data-testid="notification-button-by-pc"
                 tabIndex={0}
                 onClick={(e) => {
                   setNotificationCount(0);
