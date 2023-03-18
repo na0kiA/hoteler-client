@@ -82,7 +82,16 @@ const Home = ({ hotels }: PROPS) => {
     }
   }, [intersection, isReachingEnd]);
 
-  if (error) return <div></div>;
+  if (error)
+    return (
+      <Layout title={"ホテル一覧"}>
+        <div
+          className="md:grid grid-cols-4 gap-5 px-10 pt-5 pb-0"
+          id="home"
+        ></div>
+      </Layout>
+    );
+
   if (!hotelList)
     return (
       <div className="absolute bottom-5 right-10">
@@ -102,8 +111,8 @@ const Home = ({ hotels }: PROPS) => {
                 <Image
                   className="object-fill rounded-lg"
                   src={
-                    hotel.hotelImages && hotel.hotelImages[0]?.fileUrl
-                      ? hotel.hotelImages[0]?.fileUrl
+                    hotel.hotelImages
+                      ? hotel.hotelImages.fileUrl
                       : "/noImageHotel.png"
                   }
                   alt="ホテル画像"
@@ -159,6 +168,8 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 
   const apiResponse = await getAllHotel(1);
   const hotels = await apiResponse.data.hotels;
+  console.log(hotels);
+
   const meta = await apiResponse.data.meta;
   console.log(meta);
 

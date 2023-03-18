@@ -186,7 +186,7 @@ export type HotelListType = {
   full: boolean;
   averageRating: number;
   reviewsCount: number;
-  hotelImages: HotelImagesType[];
+  hotelImages: HotelImagesType;
   dayOfTheWeek?: string;
   restRates: ServiceRateType;
   stayRates: ServiceRateType;
