@@ -103,10 +103,12 @@ const HotelOfUserProfile = ({ props }: PROPS) => {
                   )}
                 </div>
               </div>
-              <h2 className="card-title text-xl mt-1 mb-1 font-bold">
-                {hotel.name}
-              </h2>
-              <h3 className="text-ssm m-auto">{hotel.fullAddress}</h3>
+              <Link href={`/hotels/${hotel.id}`}>
+                <h2 className="card-title text-xl mt-1 mb-1 font-bold">
+                  {hotel.name}
+                </h2>
+                <h3 className="text-ssm m-auto">{hotel.fullAddress}</h3>
+              </Link>
             </div>
           </div>
         ))}

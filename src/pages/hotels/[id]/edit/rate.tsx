@@ -168,22 +168,20 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
             設備
           </Link>
         </div>
-        {flag ? (
-          <div className="toast toast-middle toast-end">
+      </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
+        <div className="mb-5 font-bold text-xl underline">
+          既存の料金を編集する
+        </div>
+        {flag && (
+          <div className="toast toast-top toast-end">
             <div className="alert alert-success">
               <div>
                 <span>編集が完了しました。</span>
               </div>
             </div>
           </div>
-        ) : (
-          <></>
         )}
-      </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
-        <div className="mb-5 font-bold text-xl underline">
-          既存の料金を編集する
-        </div>
         <div className="overflow-x-auto">
           <table className="table table-compact w-full">
             <thead>
@@ -209,9 +207,7 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
                           {...register(`rates.${index}.day`)}
                           className="select select-bordered select-sm max-w-xs"
                         >
-                          <option disabled selected>
-                            曜日を選択
-                          </option>
+                          <option disabled>曜日を選択</option>
                           <option value="月曜から木曜">月曜から木曜</option>
                           <option value="金曜">金曜</option>
                           <option value="土曜">土曜</option>
@@ -227,9 +223,7 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
                         {...register(`rates.${index}.service`)}
                         className="select select-bordered select-sm max-w-xs"
                       >
-                        <option disabled selected>
-                          サービスを選択
-                        </option>
+                        <option disabled>サービスを選択</option>
                         <option value="休憩">休憩</option>
                         <option value="宿泊">宿泊</option>
                       </select>
@@ -370,10 +364,10 @@ export const getServerSideProps = async (ctx: any) => {
     ]);
     console.log(serviceList);
 
-    if (currentUser.data.data.id === hotelDetail.data.userId) {
+    if (currentUser.data.data.id === hotelDetail.data.hotel.userId) {
       return {
         props: {
-          ...hotelDetail.data,
+          ...hotelDetail.data.hotel,
           serviceList,
         },
       };

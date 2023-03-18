@@ -11,6 +11,8 @@ type PROPS = {
 const FavoritesOfUserProfile = memo(function favoriteOfUserProfile({
   props,
 }: PROPS) {
+  console.log(props);
+
   return (
     <>
       {props.map((favorite: UserFavoritesType) => (
@@ -21,8 +23,8 @@ const FavoritesOfUserProfile = memo(function favoriteOfUserProfile({
                 <Image
                   className="md:hidden rounded-lg"
                   src={
-                    favorite.hotelTopImage
-                      ? favorite.hotelTopImage
+                    favorite.hotelTopImage.fileUrl
+                      ? favorite.hotelTopImage.fileUrl
                       : "/noImageHotel.png"
                   }
                   alt="ホテル画像"
@@ -68,8 +70,8 @@ const FavoritesOfUserProfile = memo(function favoriteOfUserProfile({
                 <Image
                   className="rounded-lg"
                   src={
-                    favorite.hotelTopImage
-                      ? favorite.hotelTopImage
+                    favorite.hotelTopImage.fileUrl
+                      ? favorite.hotelTopImage.fileUrl
                       : "/noImageHotel.png"
                   }
                   alt="ホテル画像"

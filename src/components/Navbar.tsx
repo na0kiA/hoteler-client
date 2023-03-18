@@ -1,34 +1,46 @@
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { signOut } from "lib/auth";
 import { useAuthStateContext } from "context/AuthProvider";
+import { getNotification } from "lib/notification";
+import NotificationCard from "./NotificationCard";
 
 const Navbar = memo(function navbar() {
-  console.log("Navbarが呼ばれたよ");
   const router = useRouter();
 
-  const [menuDisplay, setmenuDisplay] = useState(true);
-  const [displayMenuStyle, setdisplayMenuStyle] = useState("");
-  const [search, setSearch] = useState(true);
+  const [menuDisplay, setMenuDisplay] = useState<boolean>(true);
+  const [displayMenuStyle, setDisplayMenuStyle] = useState<string>("");
+  const [searchWord, setSearchWord] = useState<string>("");
+  const [search, setSearch] = useState<boolean>(true);
+  const [showNotificationCard, setShowNotificationCard] =
+    useState<boolean>(false);
+  const [notificationList, setNotificationList] = useState([]);
 
-  const { currentUser, isSignedIn, loading, setIsSignedIn, setCurrentUser } =
-    useAuthStateContext();
+  const {
+    currentUser,
+    isSignedIn,
+    loading,
+    setIsSignedIn,
+    setCurrentUser,
+    notificationCount,
+    setNotificationCount,
+  } = useAuthStateContext();
 
   const searchToggle = () => {
     setSearch(!search);
   };
 
   const showMenu = () => {
-    setmenuDisplay(!menuDisplay);
+    setMenuDisplay(!menuDisplay);
     if (menuDisplay) {
-      setdisplayMenuStyle("");
+      setDisplayMenuStyle("");
     } else {
-      setdisplayMenuStyle("none");
+      setDisplayMenuStyle("none");
     }
-    return setdisplayMenuStyle;
+    return setDisplayMenuStyle;
   };
 
   const handleSignOutSubmit = async (
@@ -51,10 +63,31 @@ const Navbar = memo(function navbar() {
           "ログアウトに失敗しました。画面をご確認の上もう一度実行してください。"
         );
       }
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+
+  const handleGetNotifications = async () => {
+    try {
+      const res = await getNotification(
+        Cookies.get("_access_token"),
+        Cookies.get("_client"),
+        Cookies.get("_uid")
+      );
+      if (res.status === 200) {
+        setNotificationList(res.data);
+      } else {
+        throw new Error("通知の取得に失敗しました。");
+      }
     } catch (error: any) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    handleGetNotifications();
+  }, [setNotificationCount]);
 
   return (
     <>
@@ -77,7 +110,13 @@ const Navbar = memo(function navbar() {
         </div>
 
         {/* PCで表示する検索バー */}
-        <form className="hidden md:block md:navbar-end m-auto">
+        <form
+          className="hidden md:block md:navbar-end m-auto"
+          onSubmit={(e) => {
+            e.preventDefault();
+            router.push(`/search?keyword=${searchWord}`);
+          }}
+        >
           {/* <form className="hidden md:block md:navbar-center"> */}
           <div className="relative">
             <svg
@@ -98,14 +137,18 @@ const Navbar = memo(function navbar() {
               type="text"
               placeholder="ホテルを検索"
               className="input input-bordered md:w-80 h-9 py-3 pl-8"
+              value={searchWord}
+              onChange={(e) => {
+                setSearchWord(e.target.value);
+              }}
             />
           </div>
         </form>
 
         {/* スマホで表示する検索バー */}
         <div className="md:hidden navbar-center m-auto">
-          <div className="relative" onClick={searchToggle}>
-            <button className="btn btn-ghost btn-circle">
+          <div className="relative">
+            <button className="btn btn-ghost btn-circle" onClick={searchToggle}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6 inline-block absolute mb-1"
@@ -130,12 +173,27 @@ const Navbar = memo(function navbar() {
         {/* tokenの有無でアバターを表示するかログインや新規登録ボタンを表示するかを切り替える */}
         {isSignedIn && currentUser ? (
           <div className="m-auto">
-            {/* 通知 */}
-            <button className="btn btn-ghost btn-circle">
+            {/* スマホ用の通知 */}
+            <button
+              className="md:hidden btn btn-circle btn-ghost"
+              onClick={(e) => {
+                setNotificationCount(0);
+                router.push(`/notifications`);
+              }}
+            >
               <div className="indicator m-auto">
+                {notificationCount > 0 ? (
+                  <>
+                    <span className="indicator-item badge badge-xs badge-secondary">
+                      {notificationCount > 9 ? "9+" : notificationCount}
+                    </span>
+                  </>
+                ) : (
+                  <></>
+                )}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
+                  className="h-6 w-6"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -147,16 +205,62 @@ const Navbar = memo(function navbar() {
                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                   />
                 </svg>
-                <span className="badge badge-xs badge-primary indicator-item"></span>
               </div>
             </button>
+
+            {/* PC用の通知 */}
+            <div className="dropdown dropdown-bottom dropdown-end">
+              <button
+                className="hidden md:block btn btn-circle btn-ghost"
+                data-testid="notification-button-by-pc"
+                tabIndex={0}
+                onClick={(e) => {
+                  setNotificationCount(0);
+                  setShowNotificationCard(!showNotificationCard);
+                }}
+              >
+                <div className="indicator m-auto">
+                  {notificationCount > 0 ? (
+                    <>
+                      <span className="indicator-item badge badge-xs badge-secondary">
+                        {notificationCount > 9 ? "9+" : notificationCount}
+                      </span>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                    />
+                  </svg>
+                </div>
+              </button>
+              <div
+                tabIndex={0}
+                className="dropdown-content card w-64 p-2 shadow text-primary-content"
+              >
+                {showNotificationCard && (
+                  <NotificationCard props={notificationList} />
+                )}
+              </div>
+            </div>
 
             {/* アイコン */}
             <div className="dropdown dropdown-end" onClick={showMenu}>
               <div tabIndex={1} className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full">
+                <div className="w-10 rounded-full" id="AvatarImage">
                   <Image
-                    src={`https://hoteler-image.s3.ap-northeast-1.amazonaws.com/${currentUser?.image}`}
+                    src={`https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/${currentUser?.image}`}
                     alt="アバター"
                     width={50}
                     height={50}
@@ -226,7 +330,13 @@ const Navbar = memo(function navbar() {
         {search ? (
           <></>
         ) : (
-          <form className="max-w-md px-4 m-auto mt-5">
+          <form
+            className="max-w-md px-4 m-auto mt-5 mb-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              router.push(`/search?keyword=${searchWord}`);
+            }}
+          >
             <div className="relative text-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -246,6 +356,10 @@ const Navbar = memo(function navbar() {
                 type="text"
                 placeholder="ホテルを検索"
                 className="input input-bordered w-full h-10 py-3 pl-12 pr-4  border rounded-md outline-none"
+                value={searchWord}
+                onChange={(e) => {
+                  setSearchWord(e.target.value);
+                }}
               />
             </div>
           </form>

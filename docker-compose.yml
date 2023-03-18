@@ -7,7 +7,6 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./:/usr/src/app
-    # command: 'yarn dev'
-    command: 'yarn start'
+    command: 'yarn dev'
     ports:
       - '3000:3000'

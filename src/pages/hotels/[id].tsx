@@ -99,11 +99,9 @@ const HotelDetail = ({
       if (isFavorite) {
         await deleteFavorite(id);
         setIsFavorite(false);
-        buttonRef.current = false;
       } else {
         await postFavorite(id);
         setIsFavorite(true);
-        buttonRef.current = false;
       }
     } catch (error: any) {
       console.log(error);
@@ -112,6 +110,8 @@ const HotelDetail = ({
       } else {
         console.log(error);
       }
+    } finally {
+      buttonRef.current = false;
     }
   };
   const handleChangeFull = async (
@@ -274,34 +274,29 @@ const HotelDetail = ({
             提供されるアメニティ・設備
           </div>
           <div className="flex flex-wrap">
-            {facilityBadge(hotelFacilities.wifiEnabled, "Wi-Fi", "/Wi-Fi.svg")}
+            {facilityBadge(hotelFacilities?.wifiEnabled, "Wi-Fi", "/Wi-Fi.svg")}
             {facilityBadge(
-              hotelFacilities.parkingEnabled,
+              hotelFacilities?.parkingEnabled,
               "駐車場",
               "/駐車場.svg"
             )}
             {facilityBadge(
-              hotelFacilities.couponEnabled,
+              hotelFacilities?.couponEnabled,
               "クーポン",
               "/クーポン.svg"
             )}
             {facilityBadge(
-              hotelFacilities.phoneReservationEnabled,
+              hotelFacilities?.phoneReservationEnabled,
               "電話予約",
               "/電話予約.svg"
             )}
-            {/* {facilityBadge(
-              hotelFacilities.creditCardEnabled,
-              "クレジットカード",
-              "/クレジットカードのフリーアイコン (1).svg"
-            )} */}
             {facilityBadge(
-              hotelFacilities.netReservationEnabled,
+              hotelFacilities?.netReservationEnabled,
               "ネット予約",
               "/ネット予約.svg"
             )}
             {/* カードのSVGファイルが本番環境でなぜか表示できなかったのでコードに変更 */}
-            {hotelFacilities.secretPaymentEnabled && (
+            {hotelFacilities?.secretPaymentEnabled && (
               <div className="flex text-base w-full my-1 md:w-1/2 md:p-3 md:m-auto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -321,17 +316,21 @@ const HotelDetail = ({
               </div>
             )}
             {facilityBadge(
-              hotelFacilities.breakfastEnabled,
+              hotelFacilities?.breakfastEnabled,
               "朝食",
               "/朝食.svg"
             )}
-            {facilityBadge(hotelFacilities.cookingEnabled, "料理", "/料理.svg")}
             {facilityBadge(
-              hotelFacilities.tripleRoomsEnabled,
+              hotelFacilities?.cookingEnabled,
+              "料理",
+              "/料理.svg"
+            )}
+            {facilityBadge(
+              hotelFacilities?.tripleRoomsEnabled,
               "3人以上の利用",
               "/3人以上.svg"
             )}
-            {hotelFacilities.secretPaymentEnabled && (
+            {hotelFacilities?.secretPaymentEnabled && (
               <div className="flex text-base w-full my-1 md:w-1/2 md:p-3 md:mr-auto">
                 <Image
                   src="/シークレットペイメント.svg"
@@ -474,24 +473,34 @@ export const getServerSideProps = async (ctx: any) => {
       client.get(`/hotels/${id}`, {
         headers: {
           "Content-Type": "application/json",
-          uid: ctx.req.cookies._uid || undefined,
-          client: ctx.req.cookies._client || undefined,
-          "access-token": ctx.req.cookies._access_token || undefined,
+          uid: ctx.req.cookies._uid || null,
+          client: ctx.req.cookies._client || null,
+          "access-token": ctx.req.cookies._access_token || null,
         },
       }),
       client.get(`/hotels/${id}/favorites`, {
         headers: {
           "Content-Type": "application/json",
-          uid: ctx.req.cookies._uid,
-          client: ctx.req.cookies._client,
-          "access-token": ctx.req.cookies._access_token,
+          uid: ctx.req.cookies._uid || null,
+          client: ctx.req.cookies._client || null,
+          "access-token": ctx.req.cookies._access_token || null,
         },
       }),
     ]);
 
-    const hotelDetail: HotelDetailType = await hotelDetailResponse?.value?.data;
-    const isFavoriteOrNot: boolean = favoriteOrNot.value?.data?.favorite;
-    console.log(isFavoriteOrNot);
+    const hotelDetail: HotelDetailType = await hotelDetailResponse?.value?.data
+      ?.hotel;
+
+    if (favoriteOrNot.status === "rejected") {
+      return {
+        props: {
+          ...hotelDetail,
+          isFavoriteOrNot: false,
+        },
+      };
+    }
+
+    const isFavoriteOrNot: boolean = favoriteOrNot.value.data.favorite;
 
     if (!hotelDetail) {
       return {

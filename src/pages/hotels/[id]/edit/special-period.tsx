@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { GetServerSideProps } from "next";
 import Layout from "components/Layout";
 import SpecialPeriodForm from "components/SpecialPeriodForm";
+import Link from "next/link";
 
 type PROPS = {
   name: string;
@@ -112,8 +113,28 @@ const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
 
   return (
     <Layout title={`${name}の特別期間編集ページ`}>
+      <div className="flex justify-center mt-3">
+        <div className="tabs">
+          <Link
+            className="tab tab-md md:tab-lg tab-bordered"
+            href={`/hotels/${id}/edit`}
+          >
+            詳細
+          </Link>
+          <div className="tab tab-md md:tab-lg tab-bordered ">料金</div>
+          <div className="tab tab-md md:tab-lg tab-bordered tab-active">
+            特別期間
+          </div>
+          <Link
+            href={`/hotels/${id}/edit/facilities`}
+            className="tab tab-md md:tab-lg tab-bordered"
+          >
+            設備
+          </Link>
+        </div>
+      </div>
       {flag ? (
-        <div className="toast toast-middle toast-end">
+        <div className="toast toast-top toast-end">
           <div className="alert alert-success">
             <div>
               <span>編集が完了しました。</span>
@@ -257,10 +278,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const specialPeriod = await specialPeriodResponse?.data;
     console.log(specialPeriod);
 
-    if (currentUser.data.data.id === hotelDetail.data.userId) {
+    if (currentUser.data.data.id === hotelDetail.data.hotel.userId) {
       return {
         props: {
-          ...hotelDetail.data,
+          ...hotelDetail.data.hotel,
           specialPeriod,
         },
       };

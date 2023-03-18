@@ -80,7 +80,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     },
   });
 
-  const UserDetail: UserDetailType = apiResponse.data;
+  const UserDetail: UserDetailType = apiResponse.data.user;
 
   if (!UserDetail) {
     return {

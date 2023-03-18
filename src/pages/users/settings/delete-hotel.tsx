@@ -44,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     },
   });
 
-  const userDetail: UserDetailType = userShow.data;
+  const userDetail: UserDetailType = userShow.data.user;
 
   if (!userDetail) {
     return {

@@ -36,6 +36,9 @@ const Home = () => {
           streetAddress={""}
           phoneNumber={""}
           postalCode={""}
+          notification={{
+            message: "",
+          }}
         />
       </HotelFormProvider>
     </Layout>

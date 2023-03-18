@@ -55,6 +55,9 @@ const Edit = ({
         streetAddress={streetAddress}
         phoneNumber={phoneNumber}
         id={id}
+        notification={{
+          message: "",
+        }}
       />
     </Layout>
   );
@@ -84,10 +87,11 @@ export const getServerSideProps = async (ctx: any) => {
         },
       }),
     ]);
-    if (currentUser.data.data.id === hotelDetail.data.userId) {
+
+    if (currentUser.data.data.id === hotelDetail.data.hotel.userId) {
       return {
         props: {
-          ...hotelDetail.data,
+          ...hotelDetail.data.hotel,
         },
       };
     } else {

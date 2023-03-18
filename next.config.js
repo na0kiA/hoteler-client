@@ -5,10 +5,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'hoteler-image.s3.ap-northeast-1.amazonaws.com',
+        hostname: 'hoteler-image-list.s3.ap-northeast-1.amazonaws.com',
         // pathname: '/*/**',
       }
     ],
+    unoptimized: true,
   },
 }
 

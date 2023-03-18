@@ -70,8 +70,7 @@ export const getServerSideProps = async (ctx: any) => {
         "access-token": ctx.req.cookies._access_token,
       },
     });
-    const hotelImages: HotelImagesType = await res.data;
-    console.log(hotelImages);
+    const hotelImages: HotelImagesType = await res.data.hotelImages;
 
     return {
       props: {

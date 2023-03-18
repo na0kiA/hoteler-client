@@ -24,20 +24,28 @@ const Facilities = ({
   });
   const hotelId = id.toString();
 
-  const image = hotelImages?.map((image) => {
-    if (!image.fileUrl) return "";
-    return image.fileUrl;
-  });
-  const defaultKeyList = hotelImages?.map((image) => {
-    if (!image.key) return "";
-    return image.key;
-  });
+  const image = hotelImages ? hotelImages.map((image) => image.fileUrl) : [];
+  // const image = hotelImages?.map((image) => {
+  //   if (!image.fileUrl) return "";
+  //   return image.fileUrl;
+  // });
+
+  const defaultKeyList = hotelImages
+    ? hotelImages.map((image) => image.key)
+    : [];
+
+  // const defaultKeyList = hotelImages?.map((image) => {
+  //   if (!image.key) return "";
+  //   return image.key;
+  // });
 
   const router = useRouter();
   const [keyList, setKeyList] = useState<string[]>(defaultKeyList);
   const [imageList, setImageList] = useState<string[]>(image);
   const maxImagesUpload = 10;
   const inputId = Math.random().toString(32).substring(2);
+  console.log(imageList);
+  console.log(keyList);
 
   const closeConfirmFlag = () => {
     setFlag(true);
@@ -135,7 +143,7 @@ const Facilities = ({
   return (
     <Layout title={`${name}の設備編集ページ`}>
       {flag ? (
-        <div className="toast toast-middle toast-end">
+        <div className="toast toast-top toast-end">
           <div className="alert alert-success">
             <div>
               <span>編集が完了しました。</span>
@@ -222,9 +230,7 @@ const Facilities = ({
             disabled={imageList.length >= maxImagesUpload}
             className="file-input file-input-bordered file-input-xs w-5/6 max-w-xs m-auto ml-1"
             multiple
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleChangeImage(e)
-            }
+            onChange={(e) => handleChangeImage(e)}
           />
         </label>
       </div>
@@ -288,10 +294,10 @@ export const getServerSideProps = async (ctx: any) => {
     ]);
     console.log(hotelDetail);
 
-    if (currentUser.data.data.id === hotelDetail.data.userId) {
+    if (currentUser.data.data.id === hotelDetail.data.hotel.userId) {
       return {
         props: {
-          ...hotelDetail.data,
+          ...hotelDetail.data.hotel,
         },
       };
     } else {
