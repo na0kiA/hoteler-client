@@ -473,25 +473,34 @@ export const getServerSideProps = async (ctx: any) => {
       client.get(`/hotels/${id}`, {
         headers: {
           "Content-Type": "application/json",
-          uid: ctx.req.cookies._uid || undefined,
-          client: ctx.req.cookies._client || undefined,
-          "access-token": ctx.req.cookies._access_token || undefined,
+          uid: ctx.req.cookies._uid || null,
+          client: ctx.req.cookies._client || null,
+          "access-token": ctx.req.cookies._access_token || null,
         },
       }),
       client.get(`/hotels/${id}/favorites`, {
         headers: {
           "Content-Type": "application/json",
-          uid: ctx.req.cookies._uid,
-          client: ctx.req.cookies._client,
-          "access-token": ctx.req.cookies._access_token,
+          uid: ctx.req.cookies._uid || null,
+          client: ctx.req.cookies._client || null,
+          "access-token": ctx.req.cookies._access_token || null,
         },
       }),
     ]);
 
     const hotelDetail: HotelDetailType = await hotelDetailResponse?.value?.data
       ?.hotel;
-    const isFavoriteOrNot: boolean = favoriteOrNot.value?.data?.favorite;
-    console.log(hotelDetail);
+
+    if (favoriteOrNot.status === "rejected") {
+      return {
+        props: {
+          ...hotelDetail,
+          isFavoriteOrNot: false,
+        },
+      };
+    }
+
+    const isFavoriteOrNot: boolean = favoriteOrNot.value.data.favorite;
 
     if (!hotelDetail) {
       return {
