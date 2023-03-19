@@ -114,17 +114,17 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
               key={hotel.id}
               className="md:flex md:justify-center md:ml-auto md:w-2/3 md:h-2/3"
             >
-              <figure className="md:w-4/5 md:h-4/5">
+              <figure className="relative w-max-full h-64 mt-5 md:mt-0 md:h-56 md:w-56 md:mb-5 md:mr-5">
                 <Image
-                  className="object-fill rounded-lg md:w-4/5 md:h-4/5 md:m-auto"
+                  className="rounded-lg"
                   src={
                     hotel?.hotelImages?.fileUrl
                       ? hotel.hotelImages?.fileUrl
                       : "/noImageHotel.png"
                   }
                   alt="ホテル画像"
-                  width={640}
-                  height={480}
+                  style={{ objectFit: "cover" }}
+                  fill
                   priority={true}
                 />
               </figure>

@@ -107,7 +107,7 @@ const Home = ({ hotels }: PROPS) => {
         {flattenHotelList &&
           flattenHotelList.map((hotel: HotelListType) => (
             <div key={hotel.id} className="my-1 pb-5">
-              <figure className="relative max-w-full h-3/5 py-20">
+              <figure className="relative max-w-full h-56 md:h-1/5 md:py-20">
                 <Image
                   className="rounded-lg"
                   src={
@@ -116,16 +116,12 @@ const Home = ({ hotels }: PROPS) => {
                       : "/noImageHotel.png"
                   }
                   alt="ホテル画像"
-                  // width={600}
-                  // height={480}
-                  // width={1280}
-                  // height={720}
                   style={{ objectFit: "cover" }}
                   fill
                   priority={true}
                 />
               </figure>
-              <div className="p-0 mb-10">
+              <div className="p-0 mb-1">
                 <Link href={`/hotels/${hotel.id}`}>
                   <div className="inline-block mt-1 text-base font-bold font-mono">
                     {sliceNameOrNot(hotel.name)}
