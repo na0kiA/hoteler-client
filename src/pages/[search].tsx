@@ -179,7 +179,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   );
 
   const query = ctx.query;
-  console.log(query);
 
   const keyword = query.keyword;
   const sort = query.sort;
@@ -187,6 +186,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     typeof query["hotel_facilities[]"] === "string"
       ? [query["hotel_facilities[]"]]
       : query["hotel_facilities[]"];
+
+  if (!ctx.resolvedUrl.startsWith("/search")) {
+    return {
+      notFound: true,
+    };
+  }
 
   try {
     const searchHotelResponse = await searchHotels(
@@ -211,7 +216,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   } catch (error) {
-    console.log(error);
     return {
       props: {
         notFound: true,
