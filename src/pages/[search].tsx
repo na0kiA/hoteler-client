@@ -56,7 +56,7 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
 
   return (
     <Layout title={`${keyword}の検索結果`}>
-      <div className="p-10 pt-5" id="home">
+      <div className="p-10 pt-5">
         {searchedHotelList && (
           <>
             <form>
@@ -155,8 +155,8 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
           ))
         ) : (
           <div className="text-center">
-            <div className="w-full">
-              <p className="text-sm md:text-base py-6 font-bold">
+            <div className="md:w-3/5 md:ml-auto">
+              <p className="text-sm md:text-base py-6 font-bold ml-auto">
                 「{keyword}」に該当するホテルがありませんでした。
               </p>
               <button className="btn btn-primary" onClick={() => router.back()}>
@@ -179,6 +179,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   );
 
   const query = ctx.query;
+  console.log(query);
+
   const keyword = query.keyword;
   const sort = query.sort;
   const hotelFacilities =
