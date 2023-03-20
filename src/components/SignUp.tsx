@@ -89,7 +89,9 @@ export const SignUp = () => {
               <div className="toast toast-top toast-end">
                 <div className="alert alert-success">
                   <div>
-                    <span>認証用のメールを送信しました。</span>
+                    <span>
+                      認証用のメールを送信しました。届くのに数分かかる場合があります。
+                    </span>
                   </div>
                 </div>
               </div>
