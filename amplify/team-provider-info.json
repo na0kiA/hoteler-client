@@ -1,0 +1,15 @@
+{
+  "prd": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-hotelerclient-prd-174443-authRole",
+      "UnauthRoleArn": "arn:aws:iam::972542789095:role/amplify-hotelerclient-prd-174443-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::972542789095:role/amplify-hotelerclient-prd-174443-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-hotelerclient-prd-174443-deployment",
+      "UnauthRoleName": "amplify-hotelerclient-prd-174443-unauthRole",
+      "StackName": "amplify-hotelerclient-prd-174443",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:972542789095:stack/amplify-hotelerclient-prd-174443/76e14880-c6fb-11ed-a274-0a6889787477",
+      "AmplifyAppId": "dvwxl20i7v4ih"
+    }
+  }
+}

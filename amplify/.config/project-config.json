@@ -1,0 +1,17 @@
+{
+  "projectName": "hotelerclient",
+  "version": "3.1",
+  "frontend": "javascript",
+  "javascript": {
+    "framework": "react",
+    "config": {
+      "SourceDir": "src",
+      "DistributionDir": "build",
+      "BuildCommand": "build",
+      "StartCommand": "start"
+    }
+  },
+  "providers": [
+    "awscloudformation"
+  ]
+}
