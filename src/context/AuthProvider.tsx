@@ -8,6 +8,7 @@ import React, {
 import Cookies from "js-cookie";
 import { getCurrentUser } from "lib/auth";
 import { CurrentUser } from "types/types";
+import client from "lib/client";
 
 type AuthContextType = {
   loading: boolean;
@@ -37,6 +38,8 @@ export const AuthProvider = memo(function authProvider({ children }: any) {
     try {
       const res = await getCurrentUser();
       console.log(res);
+      client.defaults.headers.common["CSRF-Token"] =
+        res.headers["x-csrf-token"];
 
       if (res?.data.is_login === true) {
         setIsSignedIn(true);
