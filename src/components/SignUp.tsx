@@ -19,8 +19,10 @@ export const SignUp = () => {
       email: "",
       password: "",
       name: "名無しさん",
+      image:
+        "uploads/hoteler/4786f605-a290-4849-929f-cafbacb46beb/blank-profile-picture-g89cfeb4dc_640.png",
       passwordConfirmation: "",
-      confirmSuccessUrl: "http://localhost:3000/signin",
+      confirmSuccessUrl: "https://jp.lovehoteler.com/signin",
     },
   });
 
