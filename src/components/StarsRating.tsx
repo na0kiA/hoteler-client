@@ -21,7 +21,7 @@ const StarsRating = ({ props }: PROPS) => {
       />
       <span className="align-middle text-sm">
         ({props.averageRating}){" "}
-        <Link href={`/hotel/${props.id}/reviews`} className="text-blue-link">
+        <Link href={`/hotels/${props.id}/reviews`} className="text-blue-link">
           {props.reviewsCount}件
         </Link>
       </span>
