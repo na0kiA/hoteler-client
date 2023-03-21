@@ -17,8 +17,8 @@ const Layout = memo(function layout({ children, title }: TITLE) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta
           property="og:image"
-          // content="https://jp.lovehoteler.com/hartIcon.png"
-          content="https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/hartIcon.png"
+          content="https://jp.lovehoteler.com/hartIcon.png"
+          // content="https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/hartIcon.png"
         />
       </Head>
       <main>
