@@ -396,16 +396,26 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   console.log(reviewDetail);
   console.log(helpful);
 
-  if (!reviewDetail || helpful === undefined) {
+  if (!reviewDetail) {
     return {
       notFound: true,
     };
   }
 
-  return {
-    props: {
-      ...reviewDetail,
-      helpful,
-    },
-  };
+  if (helpful === undefined) {
+    const helpful = false;
+    return {
+      props: {
+        ...reviewDetail,
+        helpful,
+      },
+    };
+  } else {
+    return {
+      props: {
+        ...reviewDetail,
+        helpful,
+      },
+    };
+  }
 };
