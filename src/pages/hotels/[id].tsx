@@ -423,7 +423,7 @@ const HotelDetail = ({
                           readonly={true}
                           allowTitleTag={false}
                         />
-                        <span className="align-bottom">
+                        <span className="align-bottom ml-2 font-bold">
                           {sliceString(`${review.title}`, 10)}
                         </span>
                       </span>
