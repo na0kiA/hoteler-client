@@ -339,7 +339,7 @@ const Navbar = memo(function navbar() {
               <></>
             ) : (
               <>
-                <div className="gap-3">
+                <div className="md:gap-3 gap-2">
                   <button
                     className="btn btn-primary btn-xs"
                     onClick={(e) => handleSignInByGuestUser(e)}
