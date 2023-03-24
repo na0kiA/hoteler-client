@@ -112,9 +112,9 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
           searchedHotelList.map((hotel: HotelListType) => (
             <div
               key={hotel.id}
-              className="md:flex md:justify-center md:ml-auto md:w-2/3 md:h-2/3"
+              className="md:flex md:justify-center md:ml-auto md:w-2/3 md:h-2/3 my-5"
             >
-              <figure className="relative w-max-full h-64 mt-5 md:mt-0 md:h-56 md:w-56 md:mb-5 md:mr-5">
+              <figure className="relative lg:w-80 h-64 mt-5 md:mt-0 md:h-56 md:w-56 md:mb-5 md:mr-5">
                 <Image
                   className="rounded-lg"
                   src={

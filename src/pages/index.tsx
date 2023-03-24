@@ -107,7 +107,7 @@ const Home = ({ hotels }: PROPS) => {
         {flattenHotelList &&
           flattenHotelList.map((hotel: HotelListType) => (
             <div key={hotel.id} className="my-1 pb-5">
-              <figure className="relative max-w-full h-56 md:h-1/5 md:py-20">
+              <figure className="relative max-w-full h-56 md:h-1/5 md:py-20 lg:h-64">
                 <Image
                   className="rounded-lg"
                   src={
