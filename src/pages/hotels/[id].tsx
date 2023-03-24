@@ -433,8 +433,11 @@ const HotelDetail = ({
                     {review.createdDate}に口コミを投稿
                   </div>
                   <div className="max-x-sm">
+                    {sliceString(`${review.content}`, 50)}
                     <Link href={`/reviews/${review.id}`}>
-                      {sliceString(`${review.content}`, 50)}
+                      <span className="text-blue-link text-sm align-middle ml-2 font-bold">
+                        続きを読む
+                      </span>
                     </Link>
                   </div>
                 </>
