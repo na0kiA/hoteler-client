@@ -40,11 +40,16 @@ export const UpdatePassword = () => {
 
     try {
       const res = await updatePassword(params, query);
+      console.log(res);
+
       if (res.status === 200) {
         closeConfirmAlarm();
         router.push("/signin");
       }
     } catch (error: any) {
+      if (error.response.status === 403) {
+        return alert(`${error.response.data.errors.message}`);
+      }
       if (error.response?.data.errors === "Unauthorized") {
         setError("認証情報が無効です。");
       } else if (error.response?.data) {

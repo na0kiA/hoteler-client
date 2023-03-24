@@ -24,6 +24,7 @@ const DeleteAccount = () => {
 
     try {
       const res = await deleteAccount();
+      console.log(res);
       if (res.status === 200) {
         Cookies.remove("_access_token");
         Cookies.remove("_client");
@@ -39,7 +40,9 @@ const DeleteAccount = () => {
         );
       }
     } catch (error: any) {
-      console.log(error);
+      if (error.response.status === 403) {
+        return alert(`${error.response.data.errors.message}`);
+      }
     }
   };
 

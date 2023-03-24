@@ -7,8 +7,10 @@ export const ResetPassword = () => {
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [confirmAlarm, setConfirmAlarm] = useState(false);
-  const redirectUrl =
-    "https://jp.lovehoteler.com/users/settings/update-password";
+  // const redirectUrl =
+  //   "https://jp.lovehoteler.com/users/settings/update-password";
+  const redirectUrl = "http://localhost:3000/users/settings/update-password";
+  const [pageLoading, setPageLoading] = useState<boolean>(false);
 
   const generateParams = () => {
     const signInParams: PostResetPasswordParams = {
@@ -30,16 +32,23 @@ export const ResetPassword = () => {
   ) => {
     event.preventDefault();
     const params = generateParams();
+    setPageLoading(true);
 
     try {
-      await postResetPassword(params);
-      closeConfirmAlarm();
-    } catch (error: any) {
-      if (error.response?.data) {
-        setError(error.response?.data.errors);
-      } else {
-        console.log(error);
+      const res = await postResetPassword(params);
+      console.log(res);
+
+      if (res.status === 200) {
+        closeConfirmAlarm();
+        setPageLoading(false);
       }
+    } catch (error: any) {
+      if (error.response.status === 403) {
+        setError(error.response?.data.errors.message);
+      } else {
+        setError(error.response?.data.errors);
+      }
+      setPageLoading(false);
     }
   };
 
@@ -83,14 +92,18 @@ export const ResetPassword = () => {
                 />
               </div>
               <div className="form-control mt-6">
-                <button
-                  className="btn btn-primary"
-                  onClick={(event) => {
-                    handlePostMail(event);
-                  }}
-                >
-                  送信
-                </button>
+                {pageLoading ? (
+                  <button className="m-auto btn btn-square loading"></button>
+                ) : (
+                  <button
+                    className="btn btn-primary"
+                    onClick={(event) => {
+                      handlePostMail(event);
+                    }}
+                  >
+                    送信
+                  </button>
+                )}
               </div>
             </div>
           </div>
