@@ -114,6 +114,7 @@ const Navbar = memo(function navbar() {
       );
       if (res.status === 200) {
         setNotificationList(res.data);
+        console.log(notificationList);
       } else {
         throw new Error("通知の取得に失敗しました。");
       }
@@ -284,7 +285,7 @@ const Navbar = memo(function navbar() {
               </button>
               <div
                 tabIndex={0}
-                className="dropdown-content card w-64 p-2 shadow text-primary-content"
+                className="dropdown-content card  w-72 p-2 shadow text-primary-content"
               >
                 {showNotificationCard && (
                   <NotificationCard props={notificationList} />
@@ -341,7 +342,7 @@ const Navbar = memo(function navbar() {
               <>
                 <div className="md:gap-3 gap-2">
                   <button
-                    className="btn btn-primary btn-xs"
+                    className="hidden md:block btn btn-primary btn-xs"
                     onClick={(e) => handleSignInByGuestUser(e)}
                   >
                     <span className="text-ssm font-bold font-mono">
