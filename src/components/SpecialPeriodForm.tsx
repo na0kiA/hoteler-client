@@ -11,6 +11,9 @@ type PROPS = {
 };
 
 const SpecialPeriodForm = ({ id }: PROPS) => {
+  console.log(id);
+  console.log(document.cookie);
+
   const router = useRouter();
   const {
     register,
@@ -51,8 +54,6 @@ const SpecialPeriodForm = ({ id }: PROPS) => {
   };
 
   const onSubmit = async (data: DATA) => {
-    console.log(data.periods);
-
     const periods = data.periods.map((periodParams: SpecialPeriodType) => {
       const convertNumberToDate: SpecialPeriodType = {
         period: convertStringToAlphabet(periodParams.period),
@@ -66,7 +67,8 @@ const SpecialPeriodForm = ({ id }: PROPS) => {
     try {
       const hotelId = Cookies.get("_hotel_id") || id;
       const hotelDays = await getDays(hotelId);
-      const specialDay = hotelDays.data?.[6]?.id;
+      const specialDay = hotelDays.data.days?.[6].id;
+
       await Promise.all([
         periods.forEach((periodParams: SpecialPeriodType) => {
           createSpecialPeriod(periodParams, specialDay);
