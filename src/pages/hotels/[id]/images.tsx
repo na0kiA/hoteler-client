@@ -65,9 +65,9 @@ export const getServerSideProps = async (ctx: any) => {
     const res = await client.get(`/hotels/${id}/images`, {
       headers: {
         "Content-Type": "application/json",
-        uid: ctx.req.cookies._uid,
-        client: ctx.req.cookies._client,
-        "access-token": ctx.req.cookies._access_token,
+        uid: ctx.req.cookies._uid || "",
+        client: ctx.req.cookies._client || "",
+        "access-token": ctx.req.cookies._access_token || "",
       },
     });
     const hotelImages: HotelImagesType = await res.data.hotelImages;
