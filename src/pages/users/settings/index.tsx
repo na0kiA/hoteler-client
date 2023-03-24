@@ -119,7 +119,7 @@ const Home = ({
         ) : (
           <>
             <Image
-              src={`https://hoteler-image.s3.ap-northeast-1.amazonaws.com/${userImageKey}`}
+              src={`https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/${userImageKey}`}
               alt="ユーザー画像"
               width={50}
               height={50}
