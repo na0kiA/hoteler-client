@@ -11,9 +11,6 @@ type PROPS = {
 };
 
 const SpecialPeriodForm = ({ id }: PROPS) => {
-  console.log(id);
-  console.log(document.cookie);
-
   const router = useRouter();
   const {
     register,
