@@ -382,7 +382,7 @@ const HotelDetail = ({
               <span className="text-xl align-middle">
                 ({averageRating}){" "}
                 <Link
-                  href={`/hotel/${id}/reviews`}
+                  href={`/hotels/${id}/reviews`}
                   className="text-blue-link text-lg"
                 >
                   {reviewsCount}件

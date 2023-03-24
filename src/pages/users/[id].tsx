@@ -75,9 +75,9 @@ export const getServerSideProps = async (ctx: any) => {
     const response = await client.get(`/users/${id}`, {
       headers: {
         "Content-Type": "application/json",
-        uid: ctx.req.cookies._uid,
-        client: ctx.req.cookies._client,
-        "access-token": ctx.req.cookies._access_token,
+        uid: ctx.req.cookies._uid || "",
+        client: ctx.req.cookies._client || "",
+        "access-token": ctx.req.cookies._access_token || "",
       },
     });
     const UserDetail: UserDetailType = response?.data?.user;
