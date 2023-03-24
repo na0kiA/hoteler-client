@@ -1,11 +1,11 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import { signOut } from "lib/auth";
-import { useAuthStateContext } from "context/AuthProvider";
+import { signIn, signOut } from "lib/auth";
 import { getNotification } from "lib/notification";
+import { useAuthStateContext } from "context/AuthProvider";
 import NotificationCard from "./NotificationCard";
 
 const Navbar = memo(function navbar() {
@@ -43,10 +43,15 @@ const Navbar = memo(function navbar() {
     return setDisplayMenuStyle;
   };
 
+  const buttonRef = useRef(false);
+
   const handleSignOutSubmit = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
+
+    if (buttonRef.current) return;
+    buttonRef.current = true;
 
     try {
       const res = await signOut();
@@ -65,6 +70,38 @@ const Navbar = memo(function navbar() {
       }
     } catch (e: any) {
       console.log(e);
+    } finally {
+      buttonRef.current = false;
+    }
+  };
+
+  const handleSignInByGuestUser = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    if (buttonRef.current) return;
+    buttonRef.current = true;
+
+    try {
+      const res = await signIn({
+        email: "iam_guest_user@eripo.net",
+        password: "guestUser1998",
+      });
+      console.log(res);
+      if (res.status === 200) {
+        Cookies.set("_access_token", res.headers["access-token"]);
+        Cookies.set("_client", res.headers.client);
+        Cookies.set("_uid", res.headers.uid);
+
+        setIsSignedIn(true);
+        setCurrentUser(res.data.data);
+
+        router.push("/");
+      }
+    } catch (error: any) {
+      console.log(error);
+    } finally {
+      buttonRef.current = false;
     }
   };
 
@@ -303,6 +340,14 @@ const Navbar = memo(function navbar() {
             ) : (
               <>
                 <div className="gap-3">
+                  <button
+                    className="btn btn-primary btn-xs"
+                    onClick={(e) => handleSignInByGuestUser(e)}
+                  >
+                    <span className="text-ssm font-bold font-mono">
+                      ゲストログイン
+                    </span>
+                  </button>
                   <button className="btn btn-primary btn-xs">
                     <Link href="/signin">
                       <span className="text-ssm font-bold font-mono">
@@ -323,7 +368,6 @@ const Navbar = memo(function navbar() {
           </>
         )}
       </div>
-      {/* </div> */}
 
       {/* スマホ用の検索トグルバー */}
       <div>
