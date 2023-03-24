@@ -23,6 +23,7 @@ export const SignUp = () => {
         "uploads/hoteler/4786f605-a290-4849-929f-cafbacb46beb/blank-profile-picture-g89cfeb4dc_640.png",
       passwordConfirmation: "",
       confirmSuccessUrl: "https://jp.lovehoteler.com/signin",
+      // confirmSuccessUrl: "http://localhost:3000/signin",
     },
   });
 
@@ -80,11 +81,6 @@ export const SignUp = () => {
     <>
       <HomeIcon title={"新規登録"} />
       <form onSubmit={handleSubmit(onSubmit)}>
-        {pageLoading && (
-          <div className="md:hidden absolute bottom-5 right-10">
-            <button className="md:hidden btn btn-square loading"></button>
-          </div>
-        )}
         <div className="hero min-h-screen bg-base-200">
           <div className="hero-content flex-col w-full mb-auto">
             {confirmAlarm && (
@@ -174,19 +170,23 @@ export const SignUp = () => {
                   </label>
                 </div>
                 <div className="form-control mt-6">
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    disabled={
-                      !(
-                        dirtyFields.email &&
-                        dirtyFields.password &&
-                        dirtyFields.passwordConfirmation
-                      )
-                    }
-                  >
-                    登録する
-                  </button>
+                  {pageLoading ? (
+                    <button className="m-auto btn btn-square loading"></button>
+                  ) : (
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      disabled={
+                        !(
+                          dirtyFields.email &&
+                          dirtyFields.password &&
+                          dirtyFields.passwordConfirmation
+                        )
+                      }
+                    >
+                      登録する
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
