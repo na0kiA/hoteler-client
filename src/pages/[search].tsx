@@ -105,7 +105,7 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
             </div>
           </>
         )}
-        <div className="hidden md:block w-1/3 absolute left-3">
+        <div className="hidden md:block w-1/3 absolute left-3 lg:left-20">
           <FilterCondition />
         </div>
         {searchedHotelList ? (
