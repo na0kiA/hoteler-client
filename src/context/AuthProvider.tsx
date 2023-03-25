@@ -38,7 +38,7 @@ export const AuthProvider = memo(function authProvider({ children }: any) {
     try {
       const res = await getCurrentUser();
       console.log(res);
-      client.defaults.headers.common["CSRF-Token"] =
+      client.defaults.headers.common["X-CSRF-Token"] =
         res.headers["x-csrf-token"];
 
       if (res?.data.is_login === true) {
