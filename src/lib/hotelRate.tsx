@@ -135,6 +135,7 @@ export const getServiceList = async (
     });
 
     const [results] = await Promise.all([getEachServiceList]);
+
     const serviceList = [
       await results[0],
       await results[1],
@@ -149,9 +150,13 @@ export const getServiceList = async (
       .flat()
       .filter((item: any) => item.status === 200)
       .map((item: any) => {
-        return item.data;
+        return [item.data.restRates, item.data.stayRates]
+          .filter((val) => val !== undefined)
+          .flat();
       });
     const result: ServiceRateType[][] = filteredServiceList.flat();
+    console.log(result);
+
     return result;
   } catch (error) {
     console.log(error);
