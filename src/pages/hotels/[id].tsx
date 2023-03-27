@@ -218,7 +218,7 @@ const HotelDetail = ({
         <div className="hidden md:flex">
           {hotelImageViews(
             0,
-            "flex md:w-4/5 lg:w-4/5 rounded-lg p-1",
+            "flex lg:w-11/12 md:w-6/12  rounded-lg p-1",
             "サムネイル画像"
           )}
           <div className="flex flex-wrap items-stretch">
