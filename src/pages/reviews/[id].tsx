@@ -92,7 +92,7 @@ const UserReviewShow = ({
 
       if (res.status === 200) {
         console.log("口コミ編集に成功");
-        router.push(`/reviews/${id}`);
+        router.reload();
       } else {
         throw new Error(
           "口コミ削除に失敗しました。画面をご確認の上もう一度実行してください。"
@@ -373,11 +373,6 @@ const UserReviewShow = ({
 export default UserReviewShow;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  ctx.res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=1800, stale-while-revalidate=180"
-  );
-
   const { id } = ctx.query;
   const accessToken = ctx.req.cookies._access_token;
   const clientToken = ctx.req.cookies._client;
