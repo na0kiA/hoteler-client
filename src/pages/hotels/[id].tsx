@@ -46,7 +46,7 @@ const HotelDetail = ({
   ) => {
     return (
       facility && (
-        <div className="flex text-base w-full my-1 md:w-1/2 md:p-3 md:m-auto">
+        <div className="flex text-base w-full my-1 md:w-1/2 md:p-3 mr-auto">
           <Image src={imageSrc} width={24} height={24} alt="アイコン" />
           <div className="ml-3">{property}</div>
         </div>
