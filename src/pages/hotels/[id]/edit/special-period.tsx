@@ -97,7 +97,7 @@ const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
     try {
       const hotelId = Cookies.get("_hotel_id") || id;
       const hotelDays = await getDays(hotelId);
-      const specialDay: number = hotelDays.data?.[6]?.id;
+      const specialDay: number = hotelDays.data?.days?.[6]?.id;
 
       await Promise.all([
         periods.forEach((periodParams: SpecialPeriodType) => {
@@ -121,7 +121,12 @@ const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
           >
             詳細
           </Link>
-          <div className="tab tab-md md:tab-lg tab-bordered ">料金</div>
+          <Link
+            className="tab tab-md md:tab-lg tab-bordered"
+            href={`/hotels/${id}/edit/rate`}
+          >
+            料金
+          </Link>
           <div className="tab tab-md md:tab-lg tab-bordered tab-active">
             特別期間
           </div>
@@ -262,7 +267,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }),
       getDays(id),
     ]);
-    const specialPeriodId = await hotelDays.data?.[6]?.id;
+    const specialPeriodId = await hotelDays.data.days?.[6].id;
     const specialPeriodResponse = await client.get(
       `/days/${specialPeriodId}/special_periods`,
       {

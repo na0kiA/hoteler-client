@@ -117,13 +117,13 @@ export const getServiceList = async (
     });
 
     const weekDayIdList = [
-      hotelDays.data[0]?.id,
-      hotelDays.data[1]?.id,
-      hotelDays.data[2]?.id,
-      hotelDays.data[3]?.id,
-      hotelDays.data[4]?.id,
-      hotelDays.data[5]?.id,
-      hotelDays.data[6]?.id,
+      hotelDays.data.days?.[0]?.id,
+      hotelDays.data.days?.[1]?.id,
+      hotelDays.data.days?.[2]?.id,
+      hotelDays.data.days?.[3]?.id,
+      hotelDays.data.days?.[4]?.id,
+      hotelDays.data.days?.[5]?.id,
+      hotelDays.data.days?.[6]?.id,
     ];
 
     const getEachServiceList = weekDayIdList.flatMap(async (id) => {
