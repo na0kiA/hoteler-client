@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { useAuthStateContext } from "context/AuthProvider";
 import { updateUserShow } from "lib/auth";
@@ -36,9 +36,13 @@ const UpdateUserProfile = ({ name, image, uid }: UpdateUserProfileType) => {
     return editProfileParams;
   };
 
+  const buttonRef = useRef(false);
+
   const handleUpdateUserProfile = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    if (buttonRef.current) return;
+    buttonRef.current = true;
     event.preventDefault();
     const params = generateParams();
 
@@ -51,6 +55,8 @@ const UpdateUserProfile = ({ name, image, uid }: UpdateUserProfileType) => {
       } else {
         console.log(error.response);
       }
+    } finally {
+      buttonRef.current = false;
     }
   };
 

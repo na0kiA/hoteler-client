@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
 import { useForm, useFieldArray } from "react-hook-form";
 import HotelRateTable from "components/HotelRateTable";
@@ -13,9 +13,11 @@ import {
 } from "lib/hotelRate";
 import { getDays } from "lib/hotels";
 import { HotelEditType, HotelRateParams } from "types/types";
+import { useRouter } from "next/router";
 
 const Rate = ({ name, id, serviceList }: HotelEditType) => {
-  const [flag, setFlag] = useState<boolean>(false);
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -33,13 +35,6 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
     name: filedArrayName,
   });
 
-  const closeConfirmFlag = () => {
-    setFlag(true);
-    setTimeout(() => {
-      setFlag(false);
-    }, 5000);
-  };
-
   const removeRestRate = async (index: number, field: any) => {
     try {
       if (field.service === "休憩") {
@@ -55,7 +50,12 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
 
   type UpdateServiceType = HotelRateParams & { id: number };
 
+  const buttonRef = useRef(false);
+
   const onSubmit = async (data: any) => {
+    if (buttonRef.current) return;
+    buttonRef.current = true;
+
     const services = data.rates.map((service: any) => {
       const converNumberToDate: UpdateServiceType = {
         plan: service.plan,
@@ -78,9 +78,11 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
         }),
       ]);
 
-      closeConfirmFlag();
+      router.reload();
     } catch (error: any) {
       console.log(error);
+    } finally {
+      buttonRef.current = false;
     }
   };
 
@@ -91,25 +93,25 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
     if (service.service === "休憩") {
       switch (service.day) {
         case "月曜から木曜":
-          updateRestRate(service, hotelDays[0].id, service.id);
+          updateRestRate(service, hotelDays.days?.[0].id, service.id);
           break;
         case "金曜":
-          updateRestRate(service, hotelDays[1].id, service.id);
+          updateRestRate(service, hotelDays.days?.[1].id, service.id);
           break;
         case "土曜":
-          updateRestRate(service, hotelDays[2].id, service.id);
+          updateRestRate(service, hotelDays.days?.[2].id, service.id);
           break;
         case "日曜":
-          updateRestRate(service, hotelDays[3].id, service.id);
+          updateRestRate(service, hotelDays.days?.[3].id, service.id);
           break;
         case "祝日":
-          updateRestRate(service, hotelDays[4].id, service.id);
+          updateRestRate(service, hotelDays.days?.[4].id, service.id);
           break;
         case "祝前日":
-          updateRestRate(service, hotelDays[5].id, service.id);
+          updateRestRate(service, hotelDays.days?.[5].id, service.id);
           break;
         case "特別期間":
-          updateRestRate(service, hotelDays[6].id, service.id);
+          updateRestRate(service, hotelDays.days?.[6].id, service.id);
           break;
         default:
           console.log("不一致");
@@ -173,15 +175,6 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
         <div className="mb-5 font-bold text-xl underline">
           既存の料金を編集する
         </div>
-        {flag && (
-          <div className="toast toast-top toast-end">
-            <div className="alert alert-success">
-              <div>
-                <span>編集が完了しました。</span>
-              </div>
-            </div>
-          </div>
-        )}
         <div className="overflow-x-auto">
           <table className="table table-compact w-full">
             <thead>
@@ -197,122 +190,120 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
               </tr>
             </thead>
             {fields.map((field, index) => (
-              <>
-                <tbody key={field.id}>
-                  <tr>
-                    <th>{index + 1}</th>
-                    <td>
-                      <div>
-                        <select
-                          {...register(`rates.${index}.day`)}
-                          className="select select-bordered select-sm max-w-xs"
-                        >
-                          <option disabled>曜日を選択</option>
-                          <option value="月曜から木曜">月曜から木曜</option>
-                          <option value="金曜">金曜</option>
-                          <option value="土曜">土曜</option>
-                          <option value="日曜">日曜</option>
-                          <option value="祝日">祝日</option>
-                          <option value="祝前日">祝前日</option>
-                          <option value="特別期間">特別期間</option>
-                        </select>
-                      </div>
-                    </td>
-                    <td>
+              <tbody key={field.id}>
+                <tr>
+                  <th>{index + 1}</th>
+                  <td>
+                    <div>
                       <select
-                        {...register(`rates.${index}.service`)}
+                        {...register(`rates.${index}.day`)}
                         className="select select-bordered select-sm max-w-xs"
                       >
-                        <option disabled>サービスを選択</option>
-                        <option value="休憩">休憩</option>
-                        <option value="宿泊">宿泊</option>
+                        <option disabled>曜日を選択</option>
+                        <option value="月曜から木曜">月曜から木曜</option>
+                        <option value="金曜">金曜</option>
+                        <option value="土曜">土曜</option>
+                        <option value="日曜">日曜</option>
+                        <option value="祝日">祝日</option>
+                        <option value="祝前日">祝前日</option>
+                        <option value="特別期間">特別期間</option>
                       </select>
-                    </td>
-                    <td>
-                      <div>
-                        <input
-                          key={field.id}
-                          type="text"
-                          className="input input-bordered input-sm"
-                          {...register(`rates.${index}.plan`, {
-                            required: "必須項目です",
-                            maxLength: 10,
-                          })}
-                        />
+                    </div>
+                  </td>
+                  <td>
+                    <select
+                      {...register(`rates.${index}.service`)}
+                      className="select select-bordered select-sm max-w-xs"
+                    >
+                      <option disabled>サービスを選択</option>
+                      <option value="休憩">休憩</option>
+                      <option value="宿泊">宿泊</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div>
+                      <input
+                        key={field.id}
+                        type="text"
+                        className="input input-bordered input-sm"
+                        {...register(`rates.${index}.plan`, {
+                          required: "必須項目です",
+                          maxLength: 10,
+                        })}
+                      />
+                    </div>
+                    {errors.rates?.[index]?.plan && (
+                      <div className="text-red-600 text-ssm md:text-sm my-auto">
+                        プラン名は10文字以下で入力してください。
                       </div>
-                      {errors.rates?.[index]?.plan && (
-                        <div className="text-red-600 text-ssm md:text-sm my-auto">
-                          プラン名は10文字以下で入力してください。
-                        </div>
-                      )}
-                    </td>
-                    <td>
-                      <div>
-                        <input
-                          key={field.id}
-                          type="text"
-                          className="input input-bordered input-sm"
-                          {...register(`rates.${index}.rate`, {
-                            required: true,
-                            pattern: /^[0-9]+$/,
-                          })}
-                        />
-                      </div>
-                      {errors.rates?.[index]?.rate && (
-                        <span className="text-red-600 text-ssm md:text-sm mt-2">
-                          半角数字で入力してください。
-                        </span>
-                      )}
-                    </td>
-                    <td>
-                      <div>
-                        <input
-                          key={field.id}
-                          className="input input-bordered input-sm"
-                          {...register(`rates.${index}.startTime`, {
-                            required: true,
-                            min: 0,
-                            max: 24,
-                            pattern: /^[0-9]+$/,
-                          })}
-                        />
-                      </div>
-                      {errors.rates?.[index]?.startTime && (
-                        <span className="text-red-600 text-ssm md:text-sm mt-2">
-                          0時から24時の半角数字で入力してください。
-                        </span>
-                      )}
-                    </td>
-                    <td>
-                      <div>
-                        <input
-                          key={field.id}
-                          className="input input-bordered input-sm"
-                          {...register(`rates.${index}.endTime`, {
-                            required: true,
-                            min: 0,
-                            max: 24,
-                            pattern: /^[0-9]+$/,
-                          })}
-                        />
-                      </div>
-                      {errors.rates?.[index]?.endTime && (
-                        <span className="text-red-600 text-ssm md:text-sm mt-2">
-                          0時から24時の半角数字で入力してください。
-                        </span>
-                      )}
-                    </td>
-                    <td>
-                      <button
-                        className="btn btn-sm m-auto"
-                        onClick={(e) => removeRestRate(index, field)}
-                      >
-                        削除
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </>
+                    )}
+                  </td>
+                  <td>
+                    <div>
+                      <input
+                        key={field.id}
+                        type="text"
+                        className="input input-bordered input-sm"
+                        {...register(`rates.${index}.rate`, {
+                          required: true,
+                          pattern: /^[0-9]+$/,
+                        })}
+                      />
+                    </div>
+                    {errors.rates?.[index]?.rate && (
+                      <span className="text-red-600 text-ssm md:text-sm mt-2">
+                        半角数字で入力してください。
+                      </span>
+                    )}
+                  </td>
+                  <td>
+                    <div>
+                      <input
+                        key={field.id}
+                        className="input input-bordered input-sm"
+                        {...register(`rates.${index}.startTime`, {
+                          required: true,
+                          min: 0,
+                          max: 24,
+                          pattern: /^[0-9]+$/,
+                        })}
+                      />
+                    </div>
+                    {errors.rates?.[index]?.startTime && (
+                      <span className="text-red-600 text-ssm md:text-sm mt-2">
+                        0時から24時の半角数字で入力してください。
+                      </span>
+                    )}
+                  </td>
+                  <td>
+                    <div>
+                      <input
+                        key={field.id}
+                        className="input input-bordered input-sm"
+                        {...register(`rates.${index}.endTime`, {
+                          required: true,
+                          min: 0,
+                          max: 24,
+                          pattern: /^[0-9]+$/,
+                        })}
+                      />
+                    </div>
+                    {errors.rates?.[index]?.endTime && (
+                      <span className="text-red-600 text-ssm md:text-sm mt-2">
+                        0時から24時の半角数字で入力してください。
+                      </span>
+                    )}
+                  </td>
+                  <td>
+                    <button
+                      className="btn btn-sm m-auto"
+                      onClick={(e) => removeRestRate(index, field)}
+                    >
+                      削除
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
             ))}
           </table>
         </div>
@@ -362,6 +353,7 @@ export const getServerSideProps = async (ctx: any) => {
         ctx.req.cookies._uid
       ),
     ]);
+
     console.log(serviceList);
 
     if (currentUser.data.data.id === hotelDetail.data.hotel.userId) {

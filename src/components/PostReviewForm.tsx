@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useForm, useFormState } from "react-hook-form";
 import { Rating } from "react-simple-star-rating";
@@ -28,7 +28,12 @@ const PostReviewForm = ({ id }: any) => {
     control,
   });
 
+  const buttonRef = useRef(false);
+
   const onSubmit = async (data: PostReviewParams) => {
+    if (buttonRef.current) return;
+    buttonRef.current = true;
+
     try {
       const res = await createReview(id, data);
       if (res.status === 200) {
@@ -39,6 +44,8 @@ const PostReviewForm = ({ id }: any) => {
       setInvalidTitle(error.response.data.title);
       setInvalidContent(error.response.data.content);
       setInvalidRating(error.response.data.five_star_rate);
+    } finally {
+      buttonRef.current = false;
     }
   };
 

@@ -45,9 +45,13 @@ const UserReviewShow = ({
     setEditReviewRating(rate);
   };
 
+  const buttonRef = useRef(false);
+
   const handleDeleteReviews = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    if (buttonRef.current) return;
+    buttonRef.current = true;
     event.preventDefault();
 
     try {
@@ -67,6 +71,8 @@ const UserReviewShow = ({
       } else {
         console.log(error);
       }
+    } finally {
+      buttonRef.current = false;
     }
   };
 
@@ -82,6 +88,9 @@ const UserReviewShow = ({
   const handleUpdateReview = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    if (buttonRef.current) return;
+    buttonRef.current = true;
+
     event.preventDefault();
 
     const params = generateParams();
@@ -105,10 +114,10 @@ const UserReviewShow = ({
       } else {
         console.log(error);
       }
+    } finally {
+      buttonRef.current = false;
     }
   };
-
-  const buttonRef = useRef(false);
 
   const handleDeleteHelpfulness = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -156,7 +165,6 @@ const UserReviewShow = ({
         setHelpfulness(helpfulness + 1);
         setIsHelpfulness(true);
         setError("");
-        buttonRef.current = false;
       } else {
         throw new Error(
           "参考になったの登録に失敗しました。画面をご確認の上もう一度実行してください。"
@@ -169,6 +177,8 @@ const UserReviewShow = ({
       } else {
         console.log(error);
       }
+    } finally {
+      buttonRef.current = false;
     }
   };
 

@@ -119,8 +119,9 @@ const HotelDetail = ({
   const handleChangeFull = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    if (buttonRef.current) return;
+    buttonRef.current = true;
     e.preventDefault();
-    console.log(editFull);
     const onlyUpdateFullParams: any = {
       content,
       company,
@@ -143,6 +144,8 @@ const HotelDetail = ({
         setError(error.response.data);
       }
       console.log(error);
+    } finally {
+      buttonRef.current = false;
     }
   };
 

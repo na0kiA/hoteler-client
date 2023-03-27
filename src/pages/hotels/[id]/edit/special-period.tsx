@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import client from "lib/client";
 import { getDays } from "lib/hotels";
@@ -9,6 +9,7 @@ import { GetServerSideProps } from "next";
 import Layout from "components/Layout";
 import SpecialPeriodForm from "components/SpecialPeriodForm";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 type PROPS = {
   name: string;
@@ -17,8 +18,7 @@ type PROPS = {
 };
 
 const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
-  const [flag, setFlag] = useState<boolean>(false);
-
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -68,19 +68,15 @@ const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
     }
   };
 
-  const closeConfirmFlag = () => {
-    setFlag(true);
-    setTimeout(() => {
-      setFlag(false);
-    }, 5000);
-  };
-
   type DATA = {
     periods: SpecialPeriodEditType[];
   };
 
+  const buttonRef = useRef(false);
+
   const onSubmit = async (data: DATA) => {
-    console.log(data.periods);
+    if (buttonRef.current) return;
+    buttonRef.current = true;
 
     const periods = data.periods.map((periodParams: SpecialPeriodEditType) => {
       console.log(typeof periodParams);
@@ -105,9 +101,11 @@ const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
           updateSpecialPeriod(periodParams, specialDay, periodParams.id);
         }),
       ]);
-      closeConfirmFlag();
+      router.reload();
     } catch (error: any) {
       console.log(error);
+    } finally {
+      buttonRef.current = false;
     }
   };
 
@@ -138,17 +136,6 @@ const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
           </Link>
         </div>
       </div>
-      {flag ? (
-        <div className="toast toast-top toast-end">
-          <div className="alert alert-success">
-            <div>
-              <span>編集が完了しました。</span>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <></>
-      )}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mt-5 mb-5 font-bold text-xl underline">
           既存の特別期間を編集する
@@ -280,7 +267,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }
     );
 
-    const specialPeriod = await specialPeriodResponse?.data;
+    const specialPeriod = await specialPeriodResponse?.data?.specialPeriods;
     console.log(specialPeriod);
 
     if (currentUser.data.data.id === hotelDetail.data.hotel.userId) {

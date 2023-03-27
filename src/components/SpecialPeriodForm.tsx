@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useRouter } from "next/router";
 import { getDays } from "lib/hotels";
 import { SpecialPeriodType } from "types/types";
@@ -50,7 +50,12 @@ const SpecialPeriodForm = ({ id }: PROPS) => {
     }
   };
 
+  const buttonRef = useRef(false);
+
   const onSubmit = async (data: DATA) => {
+    if (buttonRef.current) return;
+    buttonRef.current = true;
+
     const periods = data.periods.map((periodParams: SpecialPeriodType) => {
       const convertNumberToDate: SpecialPeriodType = {
         period: convertStringToAlphabet(periodParams.period),
@@ -74,6 +79,8 @@ const SpecialPeriodForm = ({ id }: PROPS) => {
       router.push(`/hotels/register/facilities`);
     } catch (error: any) {
       console.log(error);
+    } finally {
+      buttonRef.current = false;
     }
   };
 

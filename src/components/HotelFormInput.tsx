@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { createHotel, updateHotel } from "lib/hotels";
 import { HotelEditFormType, HotelUpdateType } from "types/types";
@@ -98,8 +98,11 @@ const HotelFormInput = memo(function hotelFormInput({
       setFlag(false);
     }, 5000);
   };
+  const buttonRef = useRef(false);
 
   const onSubmit = async (data: HotelEditFormType | HotelUpdateType) => {
+    if (buttonRef.current) return;
+    buttonRef.current = true;
     try {
       if (pathname.startsWith("/hotels/register")) {
         const res = await createHotel(data);
@@ -131,6 +134,8 @@ const HotelFormInput = memo(function hotelFormInput({
       } else {
         console.log(error);
       }
+    } finally {
+      buttonRef.current = false;
     }
   };
 

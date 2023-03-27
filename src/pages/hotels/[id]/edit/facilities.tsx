@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -105,7 +105,12 @@ const Facilities = ({
 
   type FacilitiesKey = keyof typeof getFacilitiesValue;
 
+  const buttonRef = useRef(false);
+
   const onSubmit = async (data: HotelFacilityType) => {
+    if (buttonRef.current) return;
+    buttonRef.current = true;
+
     try {
       const [results]: any = await Promise.all([
         postImageKeyOfHotel(hotelId, keyList),
@@ -122,6 +127,8 @@ const Facilities = ({
       } else {
         console.log(error);
       }
+    } finally {
+      buttonRef.current = false;
     }
   };
 

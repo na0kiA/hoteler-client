@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useRef } from "react";
 import Cookies from "js-cookie";
 import { useFieldArray, useForm } from "react-hook-form";
 import { createRestRate, createStayRate } from "lib/hotelRate";
@@ -56,7 +56,12 @@ const HotelRateTable = memo(function hotelRateTable({ id }: PROPS) {
     rates: ServiceParams[];
   };
 
+  const buttonRef = useRef(false);
+
   const onSubmit = async (data: DATA) => {
+    if (buttonRef.current) return;
+    buttonRef.current = true;
+
     const services = data.rates.map((service: ServiceParams) => {
       const convertNumberToDate: HotelRateParams = {
         plan: service.plan,
@@ -79,6 +84,8 @@ const HotelRateTable = memo(function hotelRateTable({ id }: PROPS) {
       ]);
     } catch (error: any) {
       console.log(error);
+    } finally {
+      buttonRef.current = false;
     }
   };
 
@@ -89,25 +96,25 @@ const HotelRateTable = memo(function hotelRateTable({ id }: PROPS) {
     if (service.service === "休憩") {
       switch (service.day) {
         case "月曜から木曜":
-          createRestRate(service, hotelDays[0].id);
+          createRestRate(service, hotelDays.days?.[0].id);
           break;
         case "金曜":
-          createRestRate(service, hotelDays[1].id);
+          createRestRate(service, hotelDays.days?.[1].id);
           break;
         case "土曜":
-          createRestRate(service, hotelDays[2].id);
+          createRestRate(service, hotelDays.days?.[2].id);
           break;
         case "日曜":
-          createRestRate(service, hotelDays[3].id);
+          createRestRate(service, hotelDays.days?.[3].id);
           break;
         case "祝日":
-          createRestRate(service, hotelDays[4].id);
+          createRestRate(service, hotelDays.days?.[4].id);
           break;
         case "祝前日":
-          createRestRate(service, hotelDays[5].id);
+          createRestRate(service, hotelDays.days?.[5].id);
           break;
         case "特別期間":
-          createRestRate(service, hotelDays[6].id);
+          createRestRate(service, hotelDays.days?.[6].id);
           break;
         default:
           console.log("不一致");
@@ -115,25 +122,25 @@ const HotelRateTable = memo(function hotelRateTable({ id }: PROPS) {
     } else {
       switch (service.day) {
         case "月曜から木曜":
-          createStayRate(service, hotelDays[0].id);
+          createStayRate(service, hotelDays.days?.[0].id);
           break;
         case "金曜":
-          createStayRate(service, hotelDays[1].id);
+          createStayRate(service, hotelDays.days?.[1].id);
           break;
         case "土曜":
-          createStayRate(service, hotelDays[2].id);
+          createStayRate(service, hotelDays.days?.[2].id);
           break;
         case "日曜":
-          createStayRate(service, hotelDays[3].id);
+          createStayRate(service, hotelDays.days?.[3].id);
           break;
         case "祝日":
-          createStayRate(service, hotelDays[4].id);
+          createStayRate(service, hotelDays.days?.[4].id);
           break;
         case "祝前日":
-          createStayRate(service, hotelDays[5].id);
+          createStayRate(service, hotelDays.days?.[5].id);
           break;
         case "特別期間":
-          createStayRate(service, hotelDays[6].id);
+          createStayRate(service, hotelDays.days?.[6].id);
           break;
         default:
           console.log("不一致");
