@@ -7,8 +7,7 @@ export const ResetPassword = () => {
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [confirmAlarm, setConfirmAlarm] = useState(false);
-  const redirectUrl =
-    "https://jp.lovehoteler.com/users/settings/update-password";
+  const redirectUrl = "https://hoteler.jp/users/settings/update-password";
   // const redirectUrl = "http://localhost:3000/users/settings/update-password";
   const [pageLoading, setPageLoading] = useState<boolean>(false);
 

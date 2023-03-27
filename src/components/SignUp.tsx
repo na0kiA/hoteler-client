@@ -22,7 +22,7 @@ export const SignUp = () => {
       image:
         "uploads/hoteler/4786f605-a290-4849-929f-cafbacb46beb/blank-profile-picture-g89cfeb4dc_640.png",
       passwordConfirmation: "",
-      confirmSuccessUrl: "https://jp.lovehoteler.com/signin",
+      confirmSuccessUrl: "https://hoteler.jp/signin",
       // confirmSuccessUrl: "http://localhost:3000/signin",
     },
   });
