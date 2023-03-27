@@ -66,6 +66,8 @@ const HotelDetail = ({
             ? hotelImages[srcIndex]?.fileUrl
             : "/noImageHotel.png"
         }
+        placeholder="blur"
+        blurDataURL={"/loading_image.svg"}
         className={className}
         width={1280}
         height={720}

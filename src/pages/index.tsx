@@ -115,6 +115,8 @@ const Home = ({ hotels }: PROPS) => {
                       ? hotel.hotelImages.fileUrl
                       : "/noImageHotel.png"
                   }
+                  placeholder="blur"
+                  blurDataURL={"/loading_image.svg"}
                   alt="ホテル画像"
                   style={{ objectFit: "cover" }}
                   fill
