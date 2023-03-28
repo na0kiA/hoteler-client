@@ -51,7 +51,7 @@ const Facilities = ({
     setFlag(true);
     setTimeout(() => {
       setFlag(false);
-    }, 5000);
+    }, 3000);
   };
 
   const handleChangeImage = async (

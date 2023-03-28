@@ -96,7 +96,7 @@ const HotelFormInput = memo(function hotelFormInput({
     setFlag(true);
     setTimeout(() => {
       setFlag(false);
-    }, 5000);
+    }, 3000);
   };
   const buttonRef = useRef(false);
 
