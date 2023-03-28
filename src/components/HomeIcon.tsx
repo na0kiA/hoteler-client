@@ -14,8 +14,19 @@ const HomeIcon = memo(function homeIcon({ title }: PROPS) {
     <>
       <Head>
         <title>{`${title} - ホテラー`}</title>
-        <meta property="og:image" content={`/heartIcon.png`} />
+        <link rel="icon" href="/hartIcon.png" />
+        <meta property="og:title" content="ホテラー hoteler.jp" />
+        <meta
+          property="og:description"
+          content="ラブホテルの掲載＆口コミサイトです"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta
+          property="og:image"
+          content="https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/hartIcon.png"
+        />
       </Head>
 
       <div className="navbar bg-neutral text-neutral-content  h-16">
