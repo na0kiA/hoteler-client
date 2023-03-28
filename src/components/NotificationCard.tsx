@@ -8,8 +8,6 @@ type PROPS = {
 };
 
 const NotificationCard = ({ props }: PROPS) => {
-  console.log(props);
-
   return (
     <div className="flex flex-col bg-base-100 shadow-xl ml-auto">
       {props ? (

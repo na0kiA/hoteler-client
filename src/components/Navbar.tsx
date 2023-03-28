@@ -3,22 +3,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import { signIn, signOut } from "lib/auth";
+import { getCurrentUser, signIn, signOut } from "lib/auth";
 import { getNotification } from "lib/notification";
 import { useAuthStateContext } from "context/AuthProvider";
 import NotificationCard from "./NotificationCard";
 
 const Navbar = memo(function navbar() {
-  const router = useRouter();
-
-  const [menuDisplay, setMenuDisplay] = useState<boolean>(true);
-  const [displayMenuStyle, setDisplayMenuStyle] = useState<string>("");
-  const [searchWord, setSearchWord] = useState<string>("");
-  const [search, setSearch] = useState<boolean>(true);
-  const [showNotificationCard, setShowNotificationCard] =
-    useState<boolean>(false);
-  const [notificationList, setNotificationList] = useState([]);
-
   const {
     currentUser,
     isSignedIn,
@@ -28,6 +18,15 @@ const Navbar = memo(function navbar() {
     notificationCount,
     setNotificationCount,
   } = useAuthStateContext();
+  const router = useRouter();
+
+  const [menuDisplay, setMenuDisplay] = useState<boolean>(true);
+  const [displayMenuStyle, setDisplayMenuStyle] = useState<string>("");
+  const [searchWord, setSearchWord] = useState<string>("");
+  const [search, setSearch] = useState<boolean>(true);
+  const [showNotificationCard, setShowNotificationCard] =
+    useState<boolean>(false);
+  const [notificationList, setNotificationList] = useState([]);
 
   const searchToggle = () => {
     setSearch(!search);
@@ -113,8 +112,7 @@ const Navbar = memo(function navbar() {
         Cookies.get("_uid")
       );
       if (res.status === 200) {
-        setNotificationList(res.data);
-        console.log(notificationList);
+        setNotificationList(res.data.notifications);
       } else {
         throw new Error("通知の取得に失敗しました。");
       }
@@ -123,8 +121,21 @@ const Navbar = memo(function navbar() {
     }
   };
 
+  const handleGetNotificationCounts = async () => {
+    try {
+      const res = await getCurrentUser();
+      if (res?.data.is_login === true) {
+        setNotificationCount(res?.data.notifications_count);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
-    handleGetNotifications();
+    console.log(notificationCount + "件の通知があります。");
+
+    handleGetNotificationCounts();
   }, [setNotificationCount]);
 
   return (
@@ -254,13 +265,14 @@ const Navbar = memo(function navbar() {
                 tabIndex={0}
                 onClick={(e) => {
                   setNotificationCount(0);
+                  handleGetNotifications();
                   setShowNotificationCard(!showNotificationCard);
                 }}
               >
                 <div className="indicator m-auto">
                   {notificationCount > 0 ? (
                     <>
-                      <span className="indicator-item badge badge-xs badge-secondary">
+                      <span className="indicator-item badge badge-sm badge-secondary">
                         {notificationCount > 9 ? "9+" : notificationCount}
                       </span>
                     </>
