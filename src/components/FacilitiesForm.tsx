@@ -37,14 +37,11 @@ const FacilitiesForm = ({ id }: PROPS) => {
   type FacilitiesKey = keyof typeof getFacilitiesValue;
 
   const onSubmit = async (data: HotelFacilityType) => {
-    console.log(data);
-
     try {
       const [results]: any = await Promise.all([
         postImageKeyOfHotel(id, keys),
         updateFacilities(id, data),
       ]);
-      console.log(results);
 
       if (results.status === 200) {
         Cookies.remove("_hotel_id");
@@ -52,7 +49,6 @@ const FacilitiesForm = ({ id }: PROPS) => {
       }
     } catch (error: any) {
       if (error.response.data) {
-        console.log(error);
         setError(error.response.data);
       } else {
         console.log(error);
