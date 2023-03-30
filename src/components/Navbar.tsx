@@ -19,7 +19,6 @@ const Navbar = memo(function navbar() {
     setNotificationCount,
   } = useAuthStateContext();
   const router = useRouter();
-
   const [menuDisplay, setMenuDisplay] = useState<boolean>(true);
   const [displayMenuStyle, setDisplayMenuStyle] = useState<string>("");
   const [searchWord, setSearchWord] = useState<string>("");
@@ -124,6 +123,8 @@ const Navbar = memo(function navbar() {
   const handleGetNotificationCounts = async () => {
     try {
       const res = await getCurrentUser();
+      console.log(res);
+
       if (res?.data.is_login === true) {
         setNotificationCount(res?.data.notifications_count);
       }
@@ -136,7 +137,7 @@ const Navbar = memo(function navbar() {
     console.log(notificationCount + "件の通知があります。");
 
     handleGetNotificationCounts();
-  }, [setNotificationCount]);
+  }, []);
 
   return (
     <>
