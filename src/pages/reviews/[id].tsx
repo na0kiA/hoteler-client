@@ -57,7 +57,6 @@ const UserReviewShow = ({
     try {
       const res = await deleteReview(id);
       if (res.status === 200) {
-        console.log("口コミ削除に成功");
         router.push(`/users/${userId}`);
       } else {
         throw new Error(
@@ -65,11 +64,8 @@ const UserReviewShow = ({
         );
       }
     } catch (error: any) {
-      console.log(error);
       if (error.response?.data) {
         setError(error.response?.data.errors);
-      } else {
-        console.log(error);
       }
     } finally {
       buttonRef.current = false;
@@ -97,10 +93,8 @@ const UserReviewShow = ({
 
     try {
       const res = await updateReview(id, params);
-      console.log(res);
 
       if (res.status === 200) {
-        console.log("口コミ編集に成功");
         router.reload();
       } else {
         throw new Error(
@@ -108,11 +102,8 @@ const UserReviewShow = ({
         );
       }
     } catch (error: any) {
-      console.log(error);
       if (error.response?.data) {
         setError(error.response?.data.errors);
-      } else {
-        console.log(error);
       }
     } finally {
       buttonRef.current = false;
@@ -128,7 +119,6 @@ const UserReviewShow = ({
     try {
       const res = await deleteHelpfulness(id);
       if (res.status === 200) {
-        console.log("参考になったの解除に成功");
         setIsHelpfulness(false);
         setHelpfulness(helpfulness - 1);
         setError("");
@@ -138,11 +128,8 @@ const UserReviewShow = ({
         );
       }
     } catch (error: any) {
-      console.log(error);
       if (error.response?.data) {
         setError(error.response?.data.errors);
-      } else {
-        console.log(error);
       }
     } finally {
       buttonRef.current = false;
@@ -159,9 +146,7 @@ const UserReviewShow = ({
 
     try {
       const res = await createHelpfulness(id);
-      console.log(res);
       if (res.status === 200) {
-        console.log("参考になったの登録に成功");
         setHelpfulness(helpfulness + 1);
         setIsHelpfulness(true);
         setError("");
@@ -171,11 +156,8 @@ const UserReviewShow = ({
         );
       }
     } catch (error: any) {
-      console.log(error);
       if (error.response?.data) {
         setError(error.response?.data.errors);
-      } else {
-        console.log(error);
       }
     } finally {
       buttonRef.current = false;
@@ -398,8 +380,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const reviewDetail = reviewShow?.value?.data.review;
   const helpful = helpfulOrNot?.value?.data.helpful;
-  console.log(reviewDetail);
-  console.log(helpful);
 
   if (!reviewDetail) {
     return {

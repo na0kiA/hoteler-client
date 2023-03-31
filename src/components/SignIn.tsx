@@ -36,7 +36,6 @@ export const SignIn = () => {
     buttonRef.current = true;
     try {
       const res = await signIn(data);
-      console.log(res);
       if (res.status === 200) {
         buttonRef.current = false;
 
@@ -50,7 +49,6 @@ export const SignIn = () => {
         router.push("/");
       }
     } catch (error: any) {
-      console.log(error);
       if (error.response?.data) {
         setError(error.response?.data.errors);
       } else {

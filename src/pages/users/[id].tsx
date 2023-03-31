@@ -17,7 +17,6 @@ const UserDetail = ({
   reviews,
   reviewsCount,
 }: UserDetailType) => {
-  console.log("ユーザー詳細ページが呼ばれたよ");
   const { currentUser } = useAuthStateContext();
   return (
     <>

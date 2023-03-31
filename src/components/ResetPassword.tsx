@@ -35,7 +35,6 @@ export const ResetPassword = () => {
 
     try {
       const res = await postResetPassword(params);
-      console.log(res);
 
       if (res.status === 200) {
         closeConfirmAlarm();

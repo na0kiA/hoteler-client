@@ -40,7 +40,6 @@ export const UpdatePassword = () => {
 
     try {
       const res = await updatePassword(params, query);
-      console.log(res);
 
       if (res.status === 200) {
         closeConfirmAlarm();

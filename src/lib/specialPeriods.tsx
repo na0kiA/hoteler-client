@@ -22,7 +22,6 @@ export const getSpecialPeriod = async (
       },
     }
   );
-  console.log(specialPeriod);
 
   return specialPeriod;
 };

@@ -44,10 +44,7 @@ const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
   ) => {
     e.preventDefault();
     try {
-      console.log(field);
       const res = await deleteSpecialPeriod(field.dayId, field.serviceId);
-      console.log(res);
-
       if (res.status === 200) {
         remove(index);
       }
@@ -79,8 +76,6 @@ const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
     buttonRef.current = true;
 
     const periods = data.periods.map((periodParams: SpecialPeriodEditType) => {
-      console.log(typeof periodParams);
-
       const convertNumberToDate: SpecialPeriodType = {
         period: convertStringToAlphabet(periodParams.period),
         start_date: `${periodParams.startDate}`,
@@ -268,8 +263,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     );
 
     const specialPeriod = await specialPeriodResponse?.data?.specialPeriods;
-    console.log(specialPeriod);
-
     if (currentUser.data.data.id === hotelDetail.data.hotel.userId) {
       return {
         props: {

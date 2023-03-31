@@ -43,8 +43,6 @@ const Home = ({
     } catch (error: any) {
       if (error.response.data) {
         setNameError(error.response.data.errors.name);
-      } else {
-        console.log("エラー");
       }
     }
   };
@@ -258,8 +256,6 @@ export const getServerSideProps = async (ctx: any) => {
       "access-token": req?.cookies._access_token || null,
     },
   });
-
-  console.log(response);
 
   if (!response.data.is_login) {
     return {

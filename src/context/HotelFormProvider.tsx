@@ -15,8 +15,6 @@ export const HotelFormProvider = memo(function hotelFormProvider({
   const [id, setId] = useState<number>(0);
   const [keys, setKeys] = useState<string[]>([]);
 
-  console.log("HotelFormProviderが呼ばれたよ");
-
   return (
     <HotelFormContext.Provider
       value={{

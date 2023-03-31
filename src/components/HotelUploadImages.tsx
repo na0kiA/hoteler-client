@@ -12,8 +12,6 @@ const HotelUploadImages = memo(function hotelUploadImages({
   imageUrl,
   keys,
 }: PROPS) {
-  console.log("FormInputがレンダリングされました");
-
   const { setKeys } = useHotelFormStateContext();
   const [keyList, setKeyList] = useState<string[]>([...keys]);
   const [imageList, setImageList] = useState<string[]>([...imageUrl]);

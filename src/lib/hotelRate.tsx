@@ -155,7 +155,6 @@ export const getServiceList = async (
           .flat();
       });
     const result: ServiceRateType[][] = filteredServiceList.flat();
-    console.log(result);
 
     return result;
   } catch (error) {

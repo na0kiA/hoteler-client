@@ -25,6 +25,7 @@ const Facilities = ({
   const hotelId = id.toString();
 
   const image = hotelImages ? hotelImages.map((image) => image.fileUrl) : [];
+
   // const image = hotelImages?.map((image) => {
   //   if (!image.fileUrl) return "";
   //   return image.fileUrl;
@@ -44,8 +45,6 @@ const Facilities = ({
   const [imageList, setImageList] = useState<string[]>(image);
   const maxImagesUpload = 10;
   const inputId = Math.random().toString(32).substring(2);
-  console.log(imageList);
-  console.log(keyList);
 
   const closeConfirmFlag = () => {
     setFlag(true);
@@ -122,10 +121,7 @@ const Facilities = ({
       }
     } catch (error: any) {
       if (error.response.data) {
-        console.log(error);
         setError(error.response.data);
-      } else {
-        console.log(error);
       }
     } finally {
       buttonRef.current = false;

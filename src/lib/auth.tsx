@@ -141,7 +141,6 @@ export const withAuthServerSideProps = (
     }
 
     const auth = await response.data;
-    console.log(auth);
 
     return {
       props: {
@@ -172,7 +171,6 @@ export const withRequireNotAuthServerSideProps = (): GetServerSideProps => {
     }
 
     const props = await response.data;
-    console.log(props);
 
     return {
       props,

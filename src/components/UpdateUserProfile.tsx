@@ -16,7 +16,6 @@ const UpdateUserProfile = ({ name, image, uid }: UpdateUserProfileType) => {
   const router = useRouter();
   const forSliceImageKeyNumber = 59;
   const { currentUser } = useAuthStateContext();
-  console.log("ユーザー詳細ページが呼ばれたよ");
 
   const [nameError, setNameError] = useState("");
   const [userName, setUserName] = useState<string>(name);

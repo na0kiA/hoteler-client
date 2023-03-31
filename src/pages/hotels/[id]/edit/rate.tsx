@@ -354,8 +354,6 @@ export const getServerSideProps = async (ctx: any) => {
       ),
     ]);
 
-    console.log(serviceList);
-
     if (currentUser.data.data.id === hotelDetail.data.hotel.userId) {
       return {
         props: {

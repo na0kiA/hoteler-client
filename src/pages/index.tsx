@@ -16,7 +16,6 @@ type PROPS = {
 };
 
 const Home = ({ hotels }: PROPS) => {
-  console.log("index.tsxが呼ばれたよ");
 
   const sliceNameOrNot = (name: string) => {
     if (name.length > 6) {
@@ -170,7 +169,6 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 
   const apiResponse = await getAllHotel(1);
   const hotels = await apiResponse.data.hotels;
-  console.log(hotels);
 
   const meta = await apiResponse.data.meta;
   console.log(meta);

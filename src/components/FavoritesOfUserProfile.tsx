@@ -11,8 +11,6 @@ type PROPS = {
 const FavoritesOfUserProfile = memo(function favoriteOfUserProfile({
   props,
 }: PROPS) {
-  console.log(props);
-
   return (
     <>
       {props.map((favorite: UserFavoritesType) => (

@@ -85,7 +85,6 @@ const Navbar = memo(function navbar() {
         email: "iam_guest_user@eripo.net",
         password: "guestUser1998",
       });
-      console.log(res);
       if (res.status === 200) {
         Cookies.set("_access_token", res.headers["access-token"]);
         Cookies.set("_client", res.headers.client);
@@ -123,7 +122,6 @@ const Navbar = memo(function navbar() {
   const handleGetNotificationCounts = async () => {
     try {
       const res = await getCurrentUser();
-      console.log(res);
 
       if (res?.data.is_login === true) {
         setNotificationCount(res?.data.notifications_count);
@@ -134,7 +132,6 @@ const Navbar = memo(function navbar() {
   };
 
   useEffect(() => {
-    console.log(notificationCount + "件の通知があります。");
 
     handleGetNotificationCounts();
   }, []);

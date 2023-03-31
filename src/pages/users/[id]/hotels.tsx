@@ -19,7 +19,6 @@ const UserHotels = ({
   reviewsCount,
 }: UserDetailType) => {
   const { currentUser } = useAuthStateContext();
-  console.log("ユーザー詳細ページが呼ばれたよ");
   return (
     <>
       <Layout title={`${name}さんの詳細ページ`}>

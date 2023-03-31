@@ -16,7 +16,6 @@ const Edit = ({
   phoneNumber,
   id,
 }: HotelEditFormType) => {
-  console.log(prefecture);
 
   return (
     <Layout title={`${name}の編集ページ`}>

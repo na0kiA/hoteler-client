@@ -32,12 +32,10 @@ export const AuthProvider = memo(function authProvider({ children }: any) {
   const [currentUser, setCurrentUser] = useState<CurrentUser>();
   const [id, setId] = useState<number>(0);
 
-  console.log("AuthProviderが呼ばれたよ");
 
   const handleGetCurrentUser = async () => {
     try {
       const res = await getCurrentUser();
-      console.log(res);
       client.defaults.headers.common["X-CSRF-Token"] =
         res.headers["x-csrf-token"];
 

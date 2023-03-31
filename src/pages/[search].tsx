@@ -199,7 +199,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       sort,
       hotelFacilities
     );
-    console.log(searchHotelResponse.data);
     const searchedHotelList = await searchHotelResponse.data.hotels;
 
     if (!searchedHotelList || typeof searchedHotelList === "string") {

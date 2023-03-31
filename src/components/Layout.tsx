@@ -8,8 +8,6 @@ type TITLE = {
 };
 
 const Layout = memo(function layout({ children, title }: TITLE) {
-  console.log("レイアウトが呼ばれたよ");
-
   return (
     <>
       <Head>

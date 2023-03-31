@@ -24,7 +24,6 @@ const DeleteAccount = () => {
 
     try {
       const res = await deleteAccount();
-      console.log(res);
       if (res.status === 200) {
         Cookies.remove("_access_token");
         Cookies.remove("_client");

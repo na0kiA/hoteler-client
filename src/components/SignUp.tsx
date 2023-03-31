@@ -47,7 +47,6 @@ export const SignUp = () => {
     setPageLoading(true);
     try {
       const res = await signUp(data);
-      console.log(res);
       if (res.status === 200) {
         setError({
           email: "",

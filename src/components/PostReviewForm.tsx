@@ -40,7 +40,6 @@ const PostReviewForm = ({ id }: any) => {
         router.reload();
       }
     } catch (error: any) {
-      console.log(error);
       setInvalidTitle(error.response.data.title);
       setInvalidContent(error.response.data.content);
       setInvalidRating(error.response.data.five_star_rate);

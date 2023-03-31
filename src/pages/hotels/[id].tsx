@@ -106,11 +106,8 @@ const HotelDetail = ({
         setIsFavorite(true);
       }
     } catch (error: any) {
-      console.log(error);
       if (error.response?.data) {
         setError(error.response?.data.errors);
-      } else {
-        console.log(error);
       }
     } finally {
       buttonRef.current = false;
@@ -143,7 +140,6 @@ const HotelDetail = ({
       if (error.response.data) {
         setError(error.response.data);
       }
-      console.log(error);
     } finally {
       buttonRef.current = false;
     }

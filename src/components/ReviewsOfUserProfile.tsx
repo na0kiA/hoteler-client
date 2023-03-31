@@ -11,7 +11,6 @@ type PROPS = {
 const ReviewsOfUserProfile = memo(function reviewOfUserProfile({
   props,
 }: PROPS) {
-  console.log("ユーザー詳細の口コミ一覧コンポーネントが呼ばれたよ");
 
   const sliceReviewContent = (content: string, maxLength: number) => {
     if (content.length > maxLength) {
