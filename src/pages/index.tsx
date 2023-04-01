@@ -164,9 +164,6 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   const hotels = await apiResponse.data.hotels;
   console.log(hotels);
 
-  const meta = await apiResponse.data.meta;
-  console.log(meta);
-
   return {
     props: {
       hotels,
