@@ -45,7 +45,7 @@ const Home = ({ hotels }: PROPS) => {
 
   const {
     data: hotelList,
-    // error,
+    error,
     size,
     setSize,
   } = useSWRInfinite(
@@ -80,15 +80,9 @@ const Home = ({ hotels }: PROPS) => {
     }
   }, [intersection, isReachingEnd]);
 
-  // if (error)
-  //   return (
-  //     <Layout title={"ホテル一覧"}>
-  //       <div
-  //         className="md:grid grid-cols-4 gap-5 px-10 pt-5 pb-0"
-  //         id="home"
-  //       ></div>
-  //     </Layout>
-  //   );
+  if (error) {
+    console.log(error);
+  }
 
   if (!hotelList)
     return (
