@@ -35,9 +35,7 @@ const Home = ({ hotels }: PROPS) => {
   // useSWRInfiniteのキーとなるパラメータ付きURLを生成
   const getKey = (pageIndex: number, previousPageData: HotelListType[]) => {
     if (previousPageData && !previousPageData.length) return null;
-    return `${process.env.NGROK_PUBLIC_API_URL}/v1/hotels?page=${
-      pageIndex + 1
-    }`;
+    return `${process.env.NEXT_PUBLIC_API_URL}/v1/hotels?page=${pageIndex + 1}`;
   };
 
   // fetchを使用してデータを取得

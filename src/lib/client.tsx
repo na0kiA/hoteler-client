@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 
 const client: AxiosInstance | any = axios.create({
-  baseURL: `${process.env.NGROK_PUBLIC_API_URL}/v1`,
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/v1`,
 });
 
 // client.defaults.xsrfCookieName = "CSRF-TOKEN";
