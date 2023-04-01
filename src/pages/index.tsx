@@ -16,7 +16,6 @@ type PROPS = {
 };
 
 const Home = ({ hotels }: PROPS) => {
-
   const sliceNameOrNot = (name: string) => {
     if (name.length > 6) {
       return name.slice(0, 6).concat("…");
@@ -170,10 +169,9 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   const apiResponse = await getAllHotel(1);
   const hotels = await apiResponse.data.hotels;
   console.log(hotels);
-  
 
-  const meta = await apiResponse.data.meta;
-  console.log(meta);
+  // const meta = await apiResponse.data.meta;
+  // console.log(meta);
 
   return {
     props: {
