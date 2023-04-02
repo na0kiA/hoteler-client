@@ -7,6 +7,7 @@ import HomeIcon from "./HomeIcon";
 export const UpdatePassword = () => {
   const router = useRouter();
   const query = router.query;
+  console.log(query);
 
   const [invalidPassword, setInvalidPassword] = useState("");
   const [invalidPasswordConfirmation, setInvalidPasswordConfirmation] =
@@ -39,7 +40,9 @@ export const UpdatePassword = () => {
     const params = generateParams();
 
     try {
+      console.log(params);
       const res = await updatePassword(params, query);
+      console.log(res);
 
       if (res.status === 200) {
         closeConfirmAlarm();
