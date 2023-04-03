@@ -211,14 +211,14 @@ const Home = ({
               お気に入りホテル一覧
             </Link>
           </li>
-          {/* <li>
+          <li>
             <Link
               className="link text-lg "
               href={"/users/settings/reset-password"}
             >
               パスワード再設定
             </Link>
-          </li> */}
+          </li>
           <li>
             {hasHotel && (
               <Link
