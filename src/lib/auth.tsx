@@ -36,16 +36,16 @@ export const postResetPassword = (params: PostResetPasswordParams) => {
 // パスワード更新
 export const updatePassword = (
   params: UpdatePasswordParams,
-  _query: ParsedUrlQuery
+  query: ParsedUrlQuery
 ) => {
   return client.put("/auth/password", params, {
     headers: {
-      "access-token": Cookies.get("_access_token"),
-      client: Cookies.get("_access_token"),
-      uid: Cookies.get("_access_token"),
-      // "access-token": query["access-token"],
-      // client: query.client,
-      // uid: query.uid,
+      // "access-token": Cookies.get("_access_token"),
+      // client: Cookies.get("_access_token"),
+      // uid: Cookies.get("_access_token"),
+      "access-token": query["access-token"],
+      client: query.client,
+      uid: query.uid,
     },
   });
 };
