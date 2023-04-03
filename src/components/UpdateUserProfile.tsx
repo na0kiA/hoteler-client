@@ -126,14 +126,17 @@ const UpdateUserProfile = ({ name, image, uid }: UpdateUserProfileType) => {
         </>
       ) : (
         <>
-          <Image
-            src={`https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/${userImageKey}`}
-            alt="ユーザー画像"
-            width={50}
-            height={50}
-            priority={true}
-            className="rounded-full m-auto"
-          />
+          <div className="m-auto btn btn-ghost btn-circle avatar">
+            <div className="rounded-full" id="AvatarImage">
+              <Image
+                src={`https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/${currentUser?.image}`}
+                alt="アバター"
+                width={50}
+                height={50}
+                priority={true}
+              />
+            </div>
+          </div>
         </>
       )}
       <div className="card-body items-center text-center pt-1">
