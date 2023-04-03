@@ -12,6 +12,7 @@ type PROPS = {
 
 const SpecialPeriodForm = ({ id }: PROPS) => {
   const router = useRouter();
+  const pathname = router.asPath;
   const {
     register,
     handleSubmit,
@@ -76,7 +77,12 @@ const SpecialPeriodForm = ({ id }: PROPS) => {
           createSpecialPeriod(periodParams, specialDay);
         }),
       ]);
-      router.push(`/hotels/register/facilities`);
+
+      if (pathname.startsWith("/hotels/register")) {
+        router.push(`/hotels/register/facilities`);
+      } else {
+        router.reload();
+      }
     } catch (error: any) {
       console.log(error);
     } finally {

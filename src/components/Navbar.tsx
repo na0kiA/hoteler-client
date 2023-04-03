@@ -82,7 +82,7 @@ const Navbar = memo(function navbar() {
 
     try {
       const res = await signIn({
-        email: "iam_guest_user@eripo.net",
+        email: "na0ki199823@gmail.com",
         password: "guestUser1998",
       });
       if (res.status === 200) {
@@ -132,7 +132,6 @@ const Navbar = memo(function navbar() {
   };
 
   useEffect(() => {
-
     handleGetNotificationCounts();
   }, []);
 
