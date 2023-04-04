@@ -13,10 +13,10 @@ const Layout = memo(function layout({ children, title }: TITLE) {
       <Head>
         <title>{`${title} - ホテラー`}</title>
         <link rel="icon" href="/hartIcon.png" />
-        <meta property="og:title" content="ホテラー | hoteler.jp" />
+        <meta property="og:title" content="ホテラー" />
         <meta
           property="og:description"
-          content="ラブホテルの掲載＆口コミサイトです"
+          content="レジャーホテルの掲載＆口コミサイトです"
         />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
