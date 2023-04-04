@@ -20,7 +20,7 @@ const SpecialPeriodForm = ({ id }: PROPS) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      periods: [{ period: "GW", start_date: "", end_date: "" }],
+      periods: [{ period: "GW", start_date: "20230501", end_date: "20230510" }],
     },
   });
 
