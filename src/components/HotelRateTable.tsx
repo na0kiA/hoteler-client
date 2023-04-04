@@ -284,7 +284,8 @@ const HotelRateTable = memo(function hotelRateTable({ id }: PROPS) {
           </table>
         </div>
         <button
-          className="inline btn btn-sm "
+          className="inline btn btn-sm"
+          type="button"
           onClick={(e) => {
             append({
               plan: "休憩90分",

@@ -109,6 +109,7 @@ const Facilities = ({
   const onSubmit = async (data: HotelFacilityType) => {
     if (buttonRef.current) return;
     buttonRef.current = true;
+    console.log(data);
 
     try {
       const [results]: any = await Promise.all([

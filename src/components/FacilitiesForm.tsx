@@ -37,6 +37,8 @@ const FacilitiesForm = ({ id }: PROPS) => {
   type FacilitiesKey = keyof typeof getFacilitiesValue;
 
   const onSubmit = async (data: HotelFacilityType) => {
+    console.log(data);
+
     try {
       const [results]: any = await Promise.all([
         postImageKeyOfHotel(id, keys),

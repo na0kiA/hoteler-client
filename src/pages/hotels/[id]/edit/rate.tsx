@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import Link from "next/link";
 import { useForm, useFieldArray } from "react-hook-form";
 import HotelRateTable from "components/HotelRateTable";
@@ -50,12 +50,7 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
 
   type UpdateServiceType = HotelRateParams & { id: number };
 
-  const buttonRef = useRef(false);
-
   const onSubmit = async (data: any) => {
-    if (buttonRef.current) return;
-    buttonRef.current = true;
-
     const services = data.rates.map((service: any) => {
       const converNumberToDate: UpdateServiceType = {
         plan: service.plan,
@@ -77,12 +72,8 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
           updateServiceListByWeekdays(service, hotelDays.data);
         }),
       ]);
-
-      router.reload();
     } catch (error: any) {
       console.log(error);
-    } finally {
-      buttonRef.current = false;
     }
   };
 
@@ -311,6 +302,7 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
           disabled={!isDirty}
           className="btn btn-primary btn-sm mb-5"
           type="submit"
+          onClick={() => router.reload()}
         >
           編集を完了する
         </button>
