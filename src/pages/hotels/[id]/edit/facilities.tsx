@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -25,6 +25,7 @@ const Facilities = ({
   const hotelId = id.toString();
 
   const image = hotelImages ? hotelImages.map((image) => image.fileUrl) : [];
+
   // const image = hotelImages?.map((image) => {
   //   if (!image.fileUrl) return "";
   //   return image.fileUrl;
@@ -44,14 +45,12 @@ const Facilities = ({
   const [imageList, setImageList] = useState<string[]>(image);
   const maxImagesUpload = 10;
   const inputId = Math.random().toString(32).substring(2);
-  console.log(imageList);
-  console.log(keyList);
 
   const closeConfirmFlag = () => {
     setFlag(true);
     setTimeout(() => {
       setFlag(false);
-    }, 5000);
+    }, 3000);
   };
 
   const handleChangeImage = async (
@@ -105,7 +104,13 @@ const Facilities = ({
 
   type FacilitiesKey = keyof typeof getFacilitiesValue;
 
+  const buttonRef = useRef(false);
+
   const onSubmit = async (data: HotelFacilityType) => {
+    if (buttonRef.current) return;
+    buttonRef.current = true;
+    console.log(data);
+
     try {
       const [results]: any = await Promise.all([
         postImageKeyOfHotel(hotelId, keyList),
@@ -117,11 +122,10 @@ const Facilities = ({
       }
     } catch (error: any) {
       if (error.response.data) {
-        console.log(error);
         setError(error.response.data);
-      } else {
-        console.log(error);
       }
+    } finally {
+      buttonRef.current = false;
     }
   };
 

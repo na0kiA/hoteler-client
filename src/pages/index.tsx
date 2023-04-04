@@ -16,8 +16,6 @@ type PROPS = {
 };
 
 const Home = ({ hotels }: PROPS) => {
-  console.log("index.tsxが呼ばれたよ");
-
   const sliceNameOrNot = (name: string) => {
     if (name.length > 6) {
       return name.slice(0, 6).concat("…");
@@ -47,7 +45,7 @@ const Home = ({ hotels }: PROPS) => {
 
   const {
     data: hotelList,
-    // error,
+    error,
     size,
     setSize,
   } = useSWRInfinite(
@@ -82,15 +80,9 @@ const Home = ({ hotels }: PROPS) => {
     }
   }, [intersection, isReachingEnd]);
 
-  // if (error)
-  //   return (
-  //     <Layout title={"ホテル一覧"}>
-  //       <div
-  //         className="md:grid grid-cols-4 gap-5 px-10 pt-5 pb-0"
-  //         id="home"
-  //       ></div>
-  //     </Layout>
-  //   );
+  if (error) {
+    console.log(error);
+  }
 
   if (!hotelList)
     return (
@@ -103,25 +95,27 @@ const Home = ({ hotels }: PROPS) => {
 
   return (
     <Layout title={"ホテル一覧"}>
-      <div className="md:grid grid-cols-4 gap-5 px-10 pt-5 pb-0" id="home">
+      <div className="md:grid grid-cols-4 gap-5 px-10 pt-5 pb-0">
         {flattenHotelList &&
           flattenHotelList.map((hotel: HotelListType) => (
-            <div key={hotel.id}>
-              <figure>
+            <div key={hotel.id} className="my-1 pb-5">
+              <figure className="relative max-w-full h-56 md:h-1/5 md:py-20 lg:h-64">
                 <Image
-                  className="object-fill rounded-lg"
+                  className="rounded-lg"
                   src={
                     hotel.hotelImages
                       ? hotel.hotelImages.fileUrl
                       : "/noImageHotel.png"
                   }
+                  placeholder="blur"
+                  blurDataURL={"/loading_image.svg"}
                   alt="ホテル画像"
-                  width={640}
-                  height={480}
+                  style={{ objectFit: "cover" }}
+                  fill
                   priority={true}
                 />
               </figure>
-              <div className="p-0 mb-10">
+              <div className="p-0 mb-1">
                 <Link href={`/hotels/${hotel.id}`}>
                   <div className="inline-block mt-1 text-base font-bold font-mono">
                     {sliceNameOrNot(hotel.name)}
@@ -169,9 +163,6 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   const apiResponse = await getAllHotel(1);
   const hotels = await apiResponse.data.hotels;
   console.log(hotels);
-
-  const meta = await apiResponse.data.meta;
-  console.log(meta);
 
   return {
     props: {

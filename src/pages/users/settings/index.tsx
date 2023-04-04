@@ -43,8 +43,6 @@ const Home = ({
     } catch (error: any) {
       if (error.response.data) {
         setNameError(error.response.data.errors.name);
-      } else {
-        console.log("エラー");
       }
     }
   };
@@ -119,7 +117,7 @@ const Home = ({
         ) : (
           <>
             <Image
-              src={`https://hoteler-image.s3.ap-northeast-1.amazonaws.com/${userImageKey}`}
+              src={`https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/${userImageKey}`}
               alt="ユーザー画像"
               width={50}
               height={50}
@@ -258,8 +256,6 @@ export const getServerSideProps = async (ctx: any) => {
       "access-token": req?.cookies._access_token || null,
     },
   });
-
-  console.log(response);
 
   if (!response.data.is_login) {
     return {

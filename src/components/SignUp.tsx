@@ -19,8 +19,11 @@ export const SignUp = () => {
       email: "",
       password: "",
       name: "名無しさん",
+      image:
+        "uploads/hoteler/4786f605-a290-4849-929f-cafbacb46beb/blank-profile-picture-g89cfeb4dc_640.png",
       passwordConfirmation: "",
-      confirmSuccessUrl: "http://localhost:3000/signin",
+      confirmSuccessUrl: "https://www.hoteler.jp/signin",
+      // confirmSuccessUrl: "http://localhost:3000/signin",
     },
   });
 
@@ -44,7 +47,6 @@ export const SignUp = () => {
     setPageLoading(true);
     try {
       const res = await signUp(data);
-      console.log(res);
       if (res.status === 200) {
         setError({
           email: "",
@@ -78,18 +80,15 @@ export const SignUp = () => {
     <>
       <HomeIcon title={"新規登録"} />
       <form onSubmit={handleSubmit(onSubmit)}>
-        {pageLoading && (
-          <div className="md:hidden absolute bottom-5 right-10">
-            <button className="md:hidden btn btn-square loading"></button>
-          </div>
-        )}
         <div className="hero min-h-screen bg-base-200">
           <div className="hero-content flex-col w-full mb-auto">
             {confirmAlarm && (
               <div className="toast toast-top toast-end">
                 <div className="alert alert-success">
                   <div>
-                    <span>認証用のメールを送信しました。</span>
+                    <span>
+                      認証用のメールを送信しました。届くのに数分かかる場合があります。
+                    </span>
                   </div>
                 </div>
               </div>
@@ -170,19 +169,23 @@ export const SignUp = () => {
                   </label>
                 </div>
                 <div className="form-control mt-6">
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    disabled={
-                      !(
-                        dirtyFields.email &&
-                        dirtyFields.password &&
-                        dirtyFields.passwordConfirmation
-                      )
-                    }
-                  >
-                    登録する
-                  </button>
+                  {pageLoading ? (
+                    <button className="m-auto btn btn-square loading"></button>
+                  ) : (
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      disabled={
+                        !(
+                          dirtyFields.email &&
+                          dirtyFields.password &&
+                          dirtyFields.passwordConfirmation
+                        )
+                      }
+                    >
+                      登録する
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

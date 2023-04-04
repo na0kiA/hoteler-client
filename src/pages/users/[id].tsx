@@ -17,7 +17,6 @@ const UserDetail = ({
   reviews,
   reviewsCount,
 }: UserDetailType) => {
-  console.log("ユーザー詳細ページが呼ばれたよ");
   const { currentUser } = useAuthStateContext();
   return (
     <>
@@ -64,10 +63,10 @@ const UserDetail = ({
 export default UserDetail;
 
 export const getServerSideProps = async (ctx: any) => {
-  ctx.res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=1800, stale-while-revalidate=180"
-  );
+  // ctx.res.setHeader(
+  //   "Cache-Control",
+  //   "public, s-maxage=1800, stale-while-revalidate=180"
+  // );
 
   const { id } = ctx.query;
 
@@ -75,9 +74,9 @@ export const getServerSideProps = async (ctx: any) => {
     const response = await client.get(`/users/${id}`, {
       headers: {
         "Content-Type": "application/json",
-        uid: ctx.req.cookies._uid,
-        client: ctx.req.cookies._client,
-        "access-token": ctx.req.cookies._access_token,
+        uid: ctx.req.cookies._uid || "",
+        client: ctx.req.cookies._client || "",
+        "access-token": ctx.req.cookies._access_token || "",
       },
     });
     const UserDetail: UserDetailType = response?.data?.user;

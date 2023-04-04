@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { useAuthStateContext } from "context/AuthProvider";
 import { updateUserShow } from "lib/auth";
@@ -16,7 +16,6 @@ const UpdateUserProfile = ({ name, image, uid }: UpdateUserProfileType) => {
   const router = useRouter();
   const forSliceImageKeyNumber = 59;
   const { currentUser } = useAuthStateContext();
-  console.log("ユーザー詳細ページが呼ばれたよ");
 
   const [nameError, setNameError] = useState("");
   const [userName, setUserName] = useState<string>(name);
@@ -36,9 +35,13 @@ const UpdateUserProfile = ({ name, image, uid }: UpdateUserProfileType) => {
     return editProfileParams;
   };
 
+  const buttonRef = useRef(false);
+
   const handleUpdateUserProfile = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    if (buttonRef.current) return;
+    buttonRef.current = true;
     event.preventDefault();
     const params = generateParams();
 
@@ -51,6 +54,8 @@ const UpdateUserProfile = ({ name, image, uid }: UpdateUserProfileType) => {
       } else {
         console.log(error.response);
       }
+    } finally {
+      buttonRef.current = false;
     }
   };
 
@@ -121,14 +126,17 @@ const UpdateUserProfile = ({ name, image, uid }: UpdateUserProfileType) => {
         </>
       ) : (
         <>
-          <Image
-            src={`https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/${userImageKey}`}
-            alt="ユーザー画像"
-            width={50}
-            height={50}
-            priority={true}
-            className="rounded-full m-auto"
-          />
+          <div className="m-auto btn btn-ghost btn-circle avatar">
+            <div className="rounded-full" id="AvatarImage">
+              <Image
+                src={`https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/${currentUser?.image}`}
+                alt="アバター"
+                width={50}
+                height={50}
+                priority={true}
+              />
+            </div>
+          </div>
         </>
       )}
       <div className="card-body items-center text-center pt-1">

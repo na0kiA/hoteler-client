@@ -17,8 +17,18 @@ const HotelOfUserProfile = ({ props }: PROPS) => {
 
   const handleDeleteHotel = (id: number) => async () => {
     if (window.confirm("本当に削除しますか？")) {
-      await deleteHotel(id);
-      router.reload();
+      try {
+        const res = await deleteHotel(id);
+        if (res.status === 200) {
+          router.reload();
+        }
+      } catch (error: any) {
+        if (error.response.status === 403) {
+          alert(`${error.response.data.errors.message}`);
+        } else {
+          alert("削除に失敗しました。");
+        }
+      }
     }
   };
 
@@ -113,8 +123,6 @@ const HotelOfUserProfile = ({ props }: PROPS) => {
           </div>
         ))}
       </div>
-
-      {/* PC */}
     </>
   );
 };

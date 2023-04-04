@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { createHotel, updateHotel } from "lib/hotels";
 import { HotelEditFormType, HotelUpdateType } from "types/types";
@@ -16,7 +16,6 @@ const HotelFormInput = memo(function hotelFormInput({
   phoneNumber,
   id,
 }: HotelEditFormType) {
-  console.log("FormInputがレンダリングされました");
   const [flag, setFlag] = useState<boolean>(false);
   const [invalidName, setInvalidName] = useState<string>("");
   const [, setInvalidContent] = useState<string>("");
@@ -96,10 +95,13 @@ const HotelFormInput = memo(function hotelFormInput({
     setFlag(true);
     setTimeout(() => {
       setFlag(false);
-    }, 5000);
+    }, 3000);
   };
+  const buttonRef = useRef(false);
 
   const onSubmit = async (data: HotelEditFormType | HotelUpdateType) => {
+    if (buttonRef.current) return;
+    buttonRef.current = true;
     try {
       if (pathname.startsWith("/hotels/register")) {
         const res = await createHotel(data);
@@ -110,7 +112,6 @@ const HotelFormInput = memo(function hotelFormInput({
       } else {
         if (data.notification?.message && id) {
           const res = await updateHotel(id, data);
-          console.log(res);
 
           if (res.status === 200) {
             closeConfirmFlag();
@@ -131,6 +132,8 @@ const HotelFormInput = memo(function hotelFormInput({
       } else {
         console.log(error);
       }
+    } finally {
+      buttonRef.current = false;
     }
   };
 

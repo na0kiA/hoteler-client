@@ -46,7 +46,7 @@ const HotelDetail = ({
   ) => {
     return (
       facility && (
-        <div className="flex text-base w-full my-1 md:w-1/2 md:p-3 md:m-auto">
+        <div className="flex text-base w-full my-1 md:w-1/2 md:p-3 mr-auto">
           <Image src={imageSrc} width={24} height={24} alt="アイコン" />
           <div className="ml-3">{property}</div>
         </div>
@@ -66,9 +66,11 @@ const HotelDetail = ({
             ? hotelImages[srcIndex]?.fileUrl
             : "/noImageHotel.png"
         }
+        placeholder="blur"
+        blurDataURL={"/loading_image.svg"}
         className={className}
-        width={1280}
-        height={720}
+        width={600}
+        height={600}
         alt={alt}
         priority={true}
         style={{ objectFit: "cover" }}
@@ -104,11 +106,8 @@ const HotelDetail = ({
         setIsFavorite(true);
       }
     } catch (error: any) {
-      console.log(error);
       if (error.response?.data) {
         setError(error.response?.data.errors);
-      } else {
-        console.log(error);
       }
     } finally {
       buttonRef.current = false;
@@ -117,8 +116,9 @@ const HotelDetail = ({
   const handleChangeFull = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    if (buttonRef.current) return;
+    buttonRef.current = true;
     e.preventDefault();
-    console.log(editFull);
     const onlyUpdateFullParams: any = {
       content,
       company,
@@ -140,7 +140,8 @@ const HotelDetail = ({
       if (error.response.data) {
         setError(error.response.data);
       }
-      console.log(error);
+    } finally {
+      buttonRef.current = false;
     }
   };
 
@@ -216,7 +217,7 @@ const HotelDetail = ({
         <div className="hidden md:flex">
           {hotelImageViews(
             0,
-            "flex lg:max-w-lg lg:max-h-lg md:max-w-sm md:max-h-sm rounded-lg p-1",
+            "flex lg:w-11/12 md:w-6/12  rounded-lg p-1",
             "サムネイル画像"
           )}
           <div className="flex flex-wrap items-stretch">
@@ -382,7 +383,7 @@ const HotelDetail = ({
               <span className="text-xl align-middle">
                 ({averageRating}){" "}
                 <Link
-                  href={`/hotel/${id}/reviews`}
+                  href={`/hotels/${id}/reviews`}
                   className="text-blue-link text-lg"
                 >
                   {reviewsCount}件
@@ -423,7 +424,7 @@ const HotelDetail = ({
                           readonly={true}
                           allowTitleTag={false}
                         />
-                        <span className="align-bottom">
+                        <span className="align-bottom ml-2 font-bold">
                           {sliceString(`${review.title}`, 10)}
                         </span>
                       </span>
@@ -433,8 +434,11 @@ const HotelDetail = ({
                     {review.createdDate}に口コミを投稿
                   </div>
                   <div className="max-x-sm">
+                    {sliceString(`${review.content}`, 50)}
                     <Link href={`/reviews/${review.id}`}>
-                      {sliceString(`${review.content}`, 50)}
+                      <span className="text-blue-link text-sm align-middle ml-2 font-bold">
+                        続きを読む
+                      </span>
                     </Link>
                   </div>
                 </>

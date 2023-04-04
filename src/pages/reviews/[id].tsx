@@ -45,15 +45,18 @@ const UserReviewShow = ({
     setEditReviewRating(rate);
   };
 
+  const buttonRef = useRef(false);
+
   const handleDeleteReviews = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    if (buttonRef.current) return;
+    buttonRef.current = true;
     event.preventDefault();
 
     try {
       const res = await deleteReview(id);
       if (res.status === 200) {
-        console.log("口コミ削除に成功");
         router.push(`/users/${userId}`);
       } else {
         throw new Error(
@@ -61,12 +64,11 @@ const UserReviewShow = ({
         );
       }
     } catch (error: any) {
-      console.log(error);
       if (error.response?.data) {
         setError(error.response?.data.errors);
-      } else {
-        console.log(error);
       }
+    } finally {
+      buttonRef.current = false;
     }
   };
 
@@ -82,33 +84,31 @@ const UserReviewShow = ({
   const handleUpdateReview = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    if (buttonRef.current) return;
+    buttonRef.current = true;
+
     event.preventDefault();
 
     const params = generateParams();
 
     try {
       const res = await updateReview(id, params);
-      console.log(res);
 
       if (res.status === 200) {
-        console.log("口コミ編集に成功");
-        router.push(`/reviews/${id}`);
+        router.reload();
       } else {
         throw new Error(
           "口コミ削除に失敗しました。画面をご確認の上もう一度実行してください。"
         );
       }
     } catch (error: any) {
-      console.log(error);
       if (error.response?.data) {
         setError(error.response?.data.errors);
-      } else {
-        console.log(error);
       }
+    } finally {
+      buttonRef.current = false;
     }
   };
-
-  const buttonRef = useRef(false);
 
   const handleDeleteHelpfulness = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -119,7 +119,6 @@ const UserReviewShow = ({
     try {
       const res = await deleteHelpfulness(id);
       if (res.status === 200) {
-        console.log("参考になったの解除に成功");
         setIsHelpfulness(false);
         setHelpfulness(helpfulness - 1);
         setError("");
@@ -129,11 +128,8 @@ const UserReviewShow = ({
         );
       }
     } catch (error: any) {
-      console.log(error);
       if (error.response?.data) {
         setError(error.response?.data.errors);
-      } else {
-        console.log(error);
       }
     } finally {
       buttonRef.current = false;
@@ -150,25 +146,21 @@ const UserReviewShow = ({
 
     try {
       const res = await createHelpfulness(id);
-      console.log(res);
       if (res.status === 200) {
-        console.log("参考になったの登録に成功");
         setHelpfulness(helpfulness + 1);
         setIsHelpfulness(true);
         setError("");
-        buttonRef.current = false;
       } else {
         throw new Error(
           "参考になったの登録に失敗しました。画面をご確認の上もう一度実行してください。"
         );
       }
     } catch (error: any) {
-      console.log(error);
       if (error.response?.data) {
         setError(error.response?.data.errors);
-      } else {
-        console.log(error);
       }
+    } finally {
+      buttonRef.current = false;
     }
   };
 
@@ -373,11 +365,6 @@ const UserReviewShow = ({
 export default UserReviewShow;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  ctx.res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=1800, stale-while-revalidate=180"
-  );
-
   const { id } = ctx.query;
   const accessToken = ctx.req.cookies._access_token;
   const clientToken = ctx.req.cookies._client;
@@ -393,19 +380,27 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const reviewDetail = reviewShow?.value?.data.review;
   const helpful = helpfulOrNot?.value?.data.helpful;
-  console.log(reviewDetail);
-  console.log(helpful);
 
-  if (!reviewDetail || helpful === undefined) {
+  if (!reviewDetail) {
     return {
       notFound: true,
     };
   }
 
-  return {
-    props: {
-      ...reviewDetail,
-      helpful,
-    },
-  };
+  if (helpful === undefined) {
+    const helpful = false;
+    return {
+      props: {
+        ...reviewDetail,
+        helpful,
+      },
+    };
+  } else {
+    return {
+      props: {
+        ...reviewDetail,
+        helpful,
+      },
+    };
+  }
 };

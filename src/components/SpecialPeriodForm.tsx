@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useRouter } from "next/router";
 import { getDays } from "lib/hotels";
 import { SpecialPeriodType } from "types/types";
@@ -12,6 +12,7 @@ type PROPS = {
 
 const SpecialPeriodForm = ({ id }: PROPS) => {
   const router = useRouter();
+  const pathname = router.asPath;
   const {
     register,
     handleSubmit,
@@ -50,8 +51,11 @@ const SpecialPeriodForm = ({ id }: PROPS) => {
     }
   };
 
+  const buttonRef = useRef(false);
+
   const onSubmit = async (data: DATA) => {
-    console.log(data.periods);
+    if (buttonRef.current) return;
+    buttonRef.current = true;
 
     const periods = data.periods.map((periodParams: SpecialPeriodType) => {
       const convertNumberToDate: SpecialPeriodType = {
@@ -66,15 +70,23 @@ const SpecialPeriodForm = ({ id }: PROPS) => {
     try {
       const hotelId = Cookies.get("_hotel_id") || id;
       const hotelDays = await getDays(hotelId);
-      const specialDay = hotelDays.data?.[6]?.id;
+      const specialDay = hotelDays.data.days?.[6].id;
+
       await Promise.all([
         periods.forEach((periodParams: SpecialPeriodType) => {
           createSpecialPeriod(periodParams, specialDay);
         }),
       ]);
-      router.push(`/hotels/register/facilities`);
+
+      if (pathname.startsWith("/hotels/register")) {
+        router.push(`/hotels/register/facilities`);
+      } else {
+        router.reload();
+      }
     } catch (error: any) {
       console.log(error);
+    } finally {
+      buttonRef.current = false;
     }
   };
 

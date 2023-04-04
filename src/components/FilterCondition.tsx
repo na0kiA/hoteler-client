@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 const FilterCondition = () => {
   const router = useRouter();
   const query = router.query;
-  console.log("FIlterConditionがレンダリングされました");
 
   const facilityQueryList = () => {
     if (typeof query["hotel_facilities[]"] === "string") {

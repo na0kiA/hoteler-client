@@ -117,13 +117,13 @@ export const getServiceList = async (
     });
 
     const weekDayIdList = [
-      hotelDays.data[0]?.id,
-      hotelDays.data[1]?.id,
-      hotelDays.data[2]?.id,
-      hotelDays.data[3]?.id,
-      hotelDays.data[4]?.id,
-      hotelDays.data[5]?.id,
-      hotelDays.data[6]?.id,
+      hotelDays.data.days?.[0]?.id,
+      hotelDays.data.days?.[1]?.id,
+      hotelDays.data.days?.[2]?.id,
+      hotelDays.data.days?.[3]?.id,
+      hotelDays.data.days?.[4]?.id,
+      hotelDays.data.days?.[5]?.id,
+      hotelDays.data.days?.[6]?.id,
     ];
 
     const getEachServiceList = weekDayIdList.flatMap(async (id) => {
@@ -135,6 +135,7 @@ export const getServiceList = async (
     });
 
     const [results] = await Promise.all([getEachServiceList]);
+
     const serviceList = [
       await results[0],
       await results[1],
@@ -149,9 +150,12 @@ export const getServiceList = async (
       .flat()
       .filter((item: any) => item.status === 200)
       .map((item: any) => {
-        return item.data;
+        return [item.data.restRates, item.data.stayRates]
+          .filter((val) => val !== undefined)
+          .flat();
       });
     const result: ServiceRateType[][] = filteredServiceList.flat();
+
     return result;
   } catch (error) {
     console.log(error);

@@ -1,12 +1,13 @@
-name: Sample Test
+name: test
 
 on:
   push:
     branches:
-      - feature7
+      - feature9
 
 jobs:
   test:
+    name: test
     runs-on: ubuntu-latest
 
     steps:
@@ -17,6 +18,7 @@ jobs:
           node-version: "16"
           cache: "yarn"
           cache-dependency-path: "**/yarn.lock"
+
       - name: Install packages
         run: yarn install
       - name: jest

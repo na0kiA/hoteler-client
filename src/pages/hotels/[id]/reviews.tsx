@@ -69,7 +69,6 @@ export const getServerSideProps = async (ctx: any) => {
 
   try {
     const res = await getHotelReviews(id);
-    console.log(res.data);
 
     const hotelReviews = await res.data.reviews;
 

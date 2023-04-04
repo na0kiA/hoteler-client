@@ -40,6 +40,9 @@ export const updatePassword = (
 ) => {
   return client.put("/auth/password", params, {
     headers: {
+      // "access-token": Cookies.get("_access_token"),
+      // client: Cookies.get("_access_token"),
+      // uid: Cookies.get("_access_token"),
       "access-token": query["access-token"],
       client: query.client,
       uid: query.uid,
@@ -141,7 +144,6 @@ export const withAuthServerSideProps = (
     }
 
     const auth = await response.data;
-    console.log(auth);
 
     return {
       props: {
@@ -172,7 +174,6 @@ export const withRequireNotAuthServerSideProps = (): GetServerSideProps => {
     }
 
     const props = await response.data;
-    console.log(props);
 
     return {
       props,

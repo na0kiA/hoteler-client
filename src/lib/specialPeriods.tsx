@@ -10,7 +10,7 @@ export const getSpecialPeriod = async (
   uid: string
 ) => {
   const hotelDays = await getDays(id);
-  const specialPeriodId = await hotelDays.data?.[6]?.id;
+  const specialPeriodId = await hotelDays.data.days?.[6]?.id;
   const specialPeriod = await client.get(
     `/days/${specialPeriodId}/special_periods`,
     {
@@ -22,7 +22,6 @@ export const getSpecialPeriod = async (
       },
     }
   );
-  console.log(specialPeriod);
 
   return specialPeriod;
 };

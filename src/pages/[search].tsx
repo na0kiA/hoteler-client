@@ -56,7 +56,7 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
 
   return (
     <Layout title={`${keyword}の検索結果`}>
-      <div className="p-10 pt-5" id="home">
+      <div className="p-10 pt-5">
         {searchedHotelList && (
           <>
             <form>
@@ -105,26 +105,26 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
             </div>
           </>
         )}
-        <div className="hidden md:block w-1/3 absolute left-3">
+        <div className="hidden md:block w-1/3 absolute left-3 lg:left-20">
           <FilterCondition />
         </div>
         {searchedHotelList ? (
           searchedHotelList.map((hotel: HotelListType) => (
             <div
               key={hotel.id}
-              className="md:flex md:justify-center md:ml-auto md:w-2/3 md:h-2/3"
+              className="md:flex md:justify-center md:ml-auto md:w-2/3 md:h-2/3 my-5"
             >
-              <figure className="md:w-4/5 md:h-4/5">
+              <figure className="relative lg:w-80 h-64 mt-5 md:mt-0 md:h-56 md:w-56 md:mb-5 md:mr-5">
                 <Image
-                  className="object-fill rounded-lg md:w-4/5 md:h-4/5 md:m-auto"
+                  className="rounded-lg"
                   src={
                     hotel?.hotelImages?.fileUrl
                       ? hotel.hotelImages?.fileUrl
                       : "/noImageHotel.png"
                   }
                   alt="ホテル画像"
-                  width={640}
-                  height={480}
+                  style={{ objectFit: "cover" }}
+                  fill
                   priority={true}
                 />
               </figure>
@@ -155,8 +155,8 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
           ))
         ) : (
           <div className="text-center">
-            <div className="w-full">
-              <p className="text-sm md:text-base py-6 font-bold">
+            <div className="md:w-3/5 md:ml-auto">
+              <p className="text-sm md:text-base py-6 font-bold ml-auto">
                 「{keyword}」に該当するホテルがありませんでした。
               </p>
               <button className="btn btn-primary" onClick={() => router.back()}>
@@ -179,6 +179,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   );
 
   const query = ctx.query;
+
   const keyword = query.keyword;
   const sort = query.sort;
   const hotelFacilities =
@@ -186,13 +187,18 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       ? [query["hotel_facilities[]"]]
       : query["hotel_facilities[]"];
 
+  if (!ctx.resolvedUrl.startsWith("/search")) {
+    return {
+      notFound: true,
+    };
+  }
+
   try {
     const searchHotelResponse = await searchHotels(
       keyword,
       sort,
       hotelFacilities
     );
-    console.log(searchHotelResponse.data);
     const searchedHotelList = await searchHotelResponse.data.hotels;
 
     if (!searchedHotelList || typeof searchedHotelList === "string") {
@@ -209,7 +215,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   } catch (error) {
-    console.log(error);
     return {
       props: {
         notFound: true,

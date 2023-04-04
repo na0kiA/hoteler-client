@@ -39,7 +39,9 @@ const DeleteAccount = () => {
         );
       }
     } catch (error: any) {
-      console.log(error);
+      if (error.response.status === 403) {
+        return alert(`${error.response.data.errors.message}`);
+      }
     }
   };
 

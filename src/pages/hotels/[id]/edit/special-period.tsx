@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import client from "lib/client";
 import { getDays } from "lib/hotels";
@@ -9,6 +9,7 @@ import { GetServerSideProps } from "next";
 import Layout from "components/Layout";
 import SpecialPeriodForm from "components/SpecialPeriodForm";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 type PROPS = {
   name: string;
@@ -17,8 +18,7 @@ type PROPS = {
 };
 
 const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
-  const [flag, setFlag] = useState<boolean>(false);
-
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -44,10 +44,7 @@ const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
   ) => {
     e.preventDefault();
     try {
-      console.log(field);
       const res = await deleteSpecialPeriod(field.dayId, field.serviceId);
-      console.log(res);
-
       if (res.status === 200) {
         remove(index);
       }
@@ -68,23 +65,17 @@ const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
     }
   };
 
-  const closeConfirmFlag = () => {
-    setFlag(true);
-    setTimeout(() => {
-      setFlag(false);
-    }, 5000);
-  };
-
   type DATA = {
     periods: SpecialPeriodEditType[];
   };
 
+  const buttonRef = useRef(false);
+
   const onSubmit = async (data: DATA) => {
-    console.log(data.periods);
+    if (buttonRef.current) return;
+    buttonRef.current = true;
 
     const periods = data.periods.map((periodParams: SpecialPeriodEditType) => {
-      console.log(typeof periodParams);
-
       const convertNumberToDate: SpecialPeriodType = {
         period: convertStringToAlphabet(periodParams.period),
         start_date: `${periodParams.startDate}`,
@@ -97,7 +88,7 @@ const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
     try {
       const hotelId = Cookies.get("_hotel_id") || id;
       const hotelDays = await getDays(hotelId);
-      const specialDay: number = hotelDays.data?.[6]?.id;
+      const specialDay: number = hotelDays.data?.days?.[6]?.id;
 
       await Promise.all([
         periods.forEach((periodParams: SpecialPeriodType) => {
@@ -105,9 +96,11 @@ const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
           updateSpecialPeriod(periodParams, specialDay, periodParams.id);
         }),
       ]);
-      closeConfirmFlag();
+      router.reload();
     } catch (error: any) {
       console.log(error);
+    } finally {
+      buttonRef.current = false;
     }
   };
 
@@ -121,7 +114,12 @@ const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
           >
             詳細
           </Link>
-          <div className="tab tab-md md:tab-lg tab-bordered ">料金</div>
+          <Link
+            className="tab tab-md md:tab-lg tab-bordered"
+            href={`/hotels/${id}/edit/rate`}
+          >
+            料金
+          </Link>
           <div className="tab tab-md md:tab-lg tab-bordered tab-active">
             特別期間
           </div>
@@ -133,17 +131,6 @@ const SpecialPeriod = ({ name, id, specialPeriod }: PROPS) => {
           </Link>
         </div>
       </div>
-      {flag ? (
-        <div className="toast toast-top toast-end">
-          <div className="alert alert-success">
-            <div>
-              <span>編集が完了しました。</span>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <></>
-      )}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mt-5 mb-5 font-bold text-xl underline">
           既存の特別期間を編集する
@@ -262,7 +249,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }),
       getDays(id),
     ]);
-    const specialPeriodId = await hotelDays.data?.[6]?.id;
+    const specialPeriodId = await hotelDays.data.days?.[6].id;
     const specialPeriodResponse = await client.get(
       `/days/${specialPeriodId}/special_periods`,
       {
@@ -275,9 +262,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }
     );
 
-    const specialPeriod = await specialPeriodResponse?.data;
-    console.log(specialPeriod);
-
+    const specialPeriod = await specialPeriodResponse?.data?.specialPeriods;
     if (currentUser.data.data.id === hotelDetail.data.hotel.userId) {
       return {
         props: {
