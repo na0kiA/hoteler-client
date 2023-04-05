@@ -171,6 +171,7 @@ const SpecialPeriodForm = ({ id }: PROPS) => {
           </table>
         </div>
         <button
+          type="button"
           className="inline btn btn-sm "
           onClick={(e) => {
             append({
