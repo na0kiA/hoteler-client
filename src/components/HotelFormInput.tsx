@@ -66,7 +66,7 @@ const HotelFormInput = memo(function hotelFormInput({
         <div className="form-control">
           <>
             <label className="label">
-              <span className="label-text text-sm">{labelText}</span>
+              <span className="label-text text-sm font-bold">{labelText}</span>
             </label>
             <input
               type="text"
