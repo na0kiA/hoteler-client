@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.star-svg {
+/* .star-svg {
   position: relative;
   display: inline-block;
   overflow: hidden;
@@ -10,4 +10,4 @@
   vertical-align: middle;
   user-select: none;
   touch-action: none;
-}
+} */
