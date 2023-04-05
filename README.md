@@ -1,34 +1,142 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# サービス概要
 
-## Getting Started
+下記リンクからアクセスできます。
 
-First, run the development server:
+[ホテラー](https://hoteler.jp/)
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+バックエンドはこちらです。
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+[https://github.com/na0kiA/hoteler-server](https://github.com/na0kiA/hoteler-server)
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+#### 私は 5 年間レジャーホテル 2 店舗でフロント業務をしてきました。そのため、常日頃からお客様からのお問い合わせやお申しつけを受ける立場にありました。それらの経験から、レジャーホテルの問題点を当アプリに落とし込みました。
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- 電話対応でのお問い合わせで最も多いのは、「今空いていますか？」
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- 来店されたお客様からのお申し付けで最も多いのは、「なんでこんなに高いんですか？」
 
-## Learn More
+#### これらの問い合わせを、当アプリを見るだけですぐに解決できるように、「空室状況」、「リアルタイムで最安の料金」をトップページに記載しました
 
-To learn more about Next.js, take a look at the following resources:
+![トップ画面](https://user-images.githubusercontent.com/96788618/229489642-685c4da7-8c08-432c-940e-de2cb109191f.gif)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### ホテル運営者はワンクリックで満室と空室を切り替えられます。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+![満室切り替え10fps](https://user-images.githubusercontent.com/96788618/229475206-118bb083-bc36-41e2-adb3-564971d95ee0.gif)
 
-## Deploy on Vercel
+#### 曜日と時間と時期によって料金が変動するレジャーホテルでは、10 個以上の休憩料金があることも珍しくありません。そこで、ホテル運営者は下記のようにテーブル形式で料金を管理できます。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+![料金表20fps](https://user-images.githubusercontent.com/96788618/229476831-68f190c6-426e-41ec-b0aa-86c46646646c.gif)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+#### クレームの多かった、特別期間の設定もできるようにしました。
+
+レジャーホテルでは平日の宿泊料金が 5,000 円前後なのに対して、土曜日の宿泊料金は 16,000 円前後の値段がします。
+土曜日の料金が高いと分かっていれば、何ら問題は無いのですが、平日なのに土曜日料金になる期間があります。
+それが特別期間です。「GW、お盆、年末年始」　これらの期間は土曜日料金になります。そのため、**平日に来店したとおもっていたら土曜日料金を請求されてしまう。**というお客様が多々いらっしゃいます。そこで、特別期間の設定をすることで、その期間は、特別期間の料金を表示することができます。
+![特別期間](https://user-images.githubusercontent.com/96788618/230163704-8369ab11-621c-4691-a177-2d6276932f8e.gif)
+
+#### 休憩料金、宿泊料金、口コミ数、お気に入り数による並び替え機能や、設備アメニティによる絞り込み機能もあります。
+
+![検索](https://user-images.githubusercontent.com/96788618/229491452-c490b0c3-d64f-4e99-9f96-9013b58cbee6.gif)
+
+#### ホテル運営者がホテルの料金やコンテンツを編集した際にはお気に入り登録をしているユーザーが通知を受け取れます。
+
+![ホテルからの通知](https://user-images.githubusercontent.com/96788618/229484327-77fc141b-eb7e-4c0b-9710-b431abec6e97.gif)
+
+#### 口コミが投稿された場合、ホテル運営者は通知を受け取れます。
+
+![ホテルが口コミを受ける通知](https://user-images.githubusercontent.com/96788618/229493460-60a40624-9861-426a-9001-7825201f7bf1.gif)
+
+# インフラ構成図
+
+<img width="1072" alt="スクリーンショット 2023-03-30 2 47 16" src="https://user-images.githubusercontent.com/96788618/229451278-b0894507-db98-499a-929d-c1c1850dd4b5.png">
+
+# ER 図
+
+<img width="1071" alt="スクリーンショット 2023-03-30 3 08 55" src="https://user-images.githubusercontent.com/96788618/229451346-49f59fe2-f1b1-44b9-8bd9-991a3877d98f.png">
+
+# 使用技術
+
+| バックエンド   |
+| -------------- |
+| Ruby 3.1.2     |
+| Rails 7.0.4.2  |
+| Rspec, Rubocop |
+
+| フロントエンド             |
+| -------------------------- |
+| React 18.2.0               |
+| Next.js(SSR) 13.1.1        |
+| TypeScript                 |
+| Jest, React Testing Librar |
+| prettier, eslint           |
+| TailwindCSS, daisyUI       |
+
+| インフラ                                                                                                 |
+| -------------------------------------------------------------------------------------------------------- |
+| Docker / Docker-Compose                                                                                  |
+| AWS(ECS, Fargate, ECR, Amplify, CodeDeploy, ALB, SSM, ParameterStore, RDS, CloudWatch, S3, Route53, VPC) |
+| IaC(Terraform)                                                                                           |
+| Github Actions(ECR, ECS, CodeDeploy, Rubocop, Rspec, Slack)                                              |
+
+# 機能一覧
+
+### ホテル
+
+- CRUD
+- テーブル形式で料金表の CRUD
+- 画像の投稿、編集、削除(S3 の署名付き URL を用いた、クライアントサイドからの画像アップロード)
+- お気に入りの登録と解除
+- 現在の曜日と時間に基づいて、ホテルに登録されてある最安の料金を表示
+- お気に入り登録をしているユーザーに向けて更新メッセージの通知
+
+### レビュー
+
+- CRUD
+- 星５つ機能
+- 参考になったの登録と解除
+
+### ユーザー
+
+- ログイン、ログアウト、新規登録、退会、パスワード再設定
+- プロフィール編集
+- プロフィール画像の投稿、編集(S3 の署名付き URL を用いた、クライアントサイドからの画像アップロード)
+- お気に入り一覧
+- 通知
+- キーワード検索
+- ホテルのアメニティ・設備で絞り込み
+- 休憩料金、宿泊料金、レビュー数、お気に入り数の並び替え
+
+### その他
+
+- レスポンシブ対応
+- useSWRInfinite を用いた無限スクロール
+- React Hook Form を用いたフォーム入力
+- useFieldArray を用いてテーブル形式でのホテル料金の CRUD
+
+# 工夫したところ
+
+## バックエンド
+
+- N + 1 問題に関しては、Bullet gem を導入して、RSpec の設定に取り込むことによって、テスト実行時も N + 1 が発生した際にはテストが落ちるようにしました。また、N + 1 問題に対しては、includes を使わずに、preload と eager_load を使い分けるようにしました。理由としては、includes の場合は Rails がよしなに preload と eager_load を振り分けるため、制御しずらく、意図せぬ動作をしてしまうことがあるからです。
+- 署名付き URL を用いてクライアントサイドから直接 S3 にアップロードすることによって、 Rails の gem に依存することなく、直接 S3 へ画像のアップロードができるようにしました。
+- カスタムバリデーションを作り、連続した文字列や、特定のワードを検出してバリデーションにかけられるようにしました。
+- 全体を通してのテストのカバレッジは 99%を維持しました。そのため、リファクタリングや変更を安心して行えるようになりました。
+- リアルなサンプルデータ挿入のために Unsplash API を用いてランダムに一括で画像をダウンロードし、AWS CLI で S3 にアップロードしました。
+
+## フロントエンド
+
+- 複数のリクエストを行う際は Promise.all を用いて、非同期に並列実行できるようにしました。
+- Next.js の SSR を用いることで、ユーザーの実行環境に依存せず、SEO にも強くなりました。
+- 二重クリックによる誤送信を、useRef を用いてフラグをたてて、防止しました。
+- TypeScript を Strict モードで使うことで、型安全に、コンパイルエラーで事前に誤ったコーディングを修正しました。
+- useFieldArray を用いてテーブル形式でホテルの料金と特別期間の設定を CRUD できるようにしました。
+- フォーム入力は ReactHookForm を用いてフロントエンドからもバリデーションをかけました。
+
+## インフラ
+
+- GithubActions で Blue/Green CodeDeploy を行うことで、ダウンタイムなしで開発したコードを push して本番環境に反映させることができるようにしました。
+- Github Actions で Ruboocp, Rspec, ECR push を行う過程で、失敗 / 成功すると Slack に通知が行くようにしています。
+- IaC(Terraform)を用いることでインフラをコード化して保守運用をしやすくしました。また、チーム開発で行なっているように、tfstate は S3 で管理しています。
+- ECS Fargate は Auto Scaling にして、CloudWatchAlart で CPU 使用率が 80%を超えた際にタスク数を増やしてロードバランサーで振り分けるようにしました。
+
+以上をもって、当アプリの紹介は終わりになります。
+最後まで閲覧いただき、ありがとうございます！
