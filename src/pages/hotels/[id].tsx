@@ -464,11 +464,6 @@ const HotelDetail = ({
 export default HotelDetail;
 
 export const getServerSideProps = async (ctx: any) => {
-  ctx.res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=60, stale-while-revalidate=10"
-  );
-
   const { id } = ctx.query;
 
   try {
