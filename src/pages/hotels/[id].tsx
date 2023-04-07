@@ -53,6 +53,7 @@ const HotelDetail = ({
       )
     );
   };
+  console.log(`最初のfull: ${editFull}`);
 
   const hotelImageViews = (
     srcIndex: number,
@@ -118,7 +119,7 @@ const HotelDetail = ({
   ) => {
     if (buttonRef.current) return;
     buttonRef.current = true;
-    e.preventDefault();
+
     const onlyUpdateFullParams: any = {
       content,
       company,
