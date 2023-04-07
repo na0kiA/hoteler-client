@@ -38,6 +38,7 @@ const UserReviewShow = ({
   const [editReviewContent, setEditReviewContent] = useState<string>(content);
   const [editReviewRating, setEditReviewRating] =
     useState<number>(fiveStarRate);
+  console.log(`最初の星 ${fiveStarRate}}`);
 
   const router = useRouter();
 
@@ -76,7 +77,7 @@ const UserReviewShow = ({
     const reviewEditParams: ReviewEditParams = {
       title: editReviewTitle,
       content: editReviewContent,
-      fiveStarRate: editReviewRating,
+      five_star_rate: editReviewRating,
     };
     return reviewEditParams;
   };
@@ -90,6 +91,7 @@ const UserReviewShow = ({
     event.preventDefault();
 
     const params = generateParams();
+    console.log(params);
 
     try {
       const res = await updateReview(id, params);
@@ -98,7 +100,7 @@ const UserReviewShow = ({
         router.reload();
       } else {
         throw new Error(
-          "口コミ削除に失敗しました。画面をご確認の上もう一度実行してください。"
+          "口コミ編集に失敗しました。画面をご確認の上もう一度実行してください。"
         );
       }
     } catch (error: any) {

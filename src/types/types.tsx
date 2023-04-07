@@ -84,7 +84,7 @@ export type ReviewShowType = {
 export type ReviewEditParams = {
   title: string;
   content: string;
-  fiveStarRate: number;
+  five_star_rate: number;
 };
 
 export type PostReviewParams = {
@@ -281,6 +281,7 @@ export type NotificationType = {
   kind: string;
   read: boolean;
   hotelId: number;
+  reviewId: number;
   senderId: number;
   userId: number;
   createdDate: string;
