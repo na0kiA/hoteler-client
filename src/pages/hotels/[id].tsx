@@ -53,7 +53,6 @@ const HotelDetail = ({
       )
     );
   };
-  console.log(`最初のfull: ${editFull}`);
 
   const hotelImageViews = (
     srcIndex: number,
@@ -126,7 +125,7 @@ const HotelDetail = ({
       phone_number: phoneNumber,
       postal_code: postalCode,
       full_address: fullAddress,
-      full: !full,
+      full: !editFull,
       name,
       prefecture,
       city,
@@ -467,46 +466,29 @@ export const getServerSideProps = async (ctx: any) => {
   const { id } = ctx.query;
 
   try {
-    // const [hotelDetailResponse, favoriteOrNot]: any = await Promise.allSettled([
-    //   client.get(`/hotels/${id}`, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       uid: ctx.req.cookies._uid || null,
-    //       client: ctx.req.cookies._client || null,
-    //       "access-token": ctx.req.cookies._access_token || null,
-    //     },
-    //   }),
-    //   client.get(`/hotels/${id}/favorites`, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       uid: ctx.req.cookies._uid || null,
-    //       client: ctx.req.cookies._client || null,
-    //       "access-token": ctx.req.cookies._access_token || null,
-    //     },
-    //   }),
-    // ]);
+    const [hotelDetailResponse, favoriteOrNot]: any = await Promise.allSettled([
+      client.get(`/hotels/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          uid: ctx.req.cookies._uid || null,
+          client: ctx.req.cookies._client || null,
+          "access-token": ctx.req.cookies._access_token || null,
+        },
+      }),
+      client.get(`/hotels/${id}/favorites`, {
+        headers: {
+          "Content-Type": "application/json",
+          uid: ctx.req.cookies._uid || null,
+          client: ctx.req.cookies._client || null,
+          "access-token": ctx.req.cookies._access_token || null,
+        },
+      }),
+    ]);
 
-    const hotelDetailResponse = await client.get(`/hotels/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        uid: ctx.req.cookies._uid || null,
-        client: ctx.req.cookies._client || null,
-        "access-token": ctx.req.cookies._access_token || null,
-      },
-    });
+    const hotelDetail: HotelDetailType = await hotelDetailResponse?.value?.data
+      ?.hotel;
 
-    const favoriteOrNot = await client.get(`/hotels/${id}/favorites`, {
-      headers: {
-        "Content-Type": "application/json",
-        uid: ctx.req.cookies._uid || null,
-        client: ctx.req.cookies._client || null,
-        "access-token": ctx.req.cookies._access_token || null,
-      },
-    });
-
-    const hotelDetail: HotelDetailType = await hotelDetailResponse?.data?.hotel;
-
-    if (favoriteOrNot.status !== 200) {
+    if (favoriteOrNot.status === "rejected") {
       return {
         props: {
           ...hotelDetail,
@@ -515,7 +497,7 @@ export const getServerSideProps = async (ctx: any) => {
       };
     }
 
-    const isFavoriteOrNot: boolean = favoriteOrNot.data.favorite;
+    const isFavoriteOrNot: boolean = favoriteOrNot.value.data.favorite;
 
     if (!hotelDetail) {
       return {
