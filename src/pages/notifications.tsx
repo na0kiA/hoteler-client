@@ -57,7 +57,7 @@ const Notifications = ({ notificationList }: PROPS) => {
               <Link
                 href={`${
                   notification.kind === "came_reviews"
-                    ? `/hotels/${notification.hotelId}/reviews`
+                    ? `/reviews/${notification.reviewId}`
                     : `/hotels/${notification.hotelId}`
                 }`}
               >
