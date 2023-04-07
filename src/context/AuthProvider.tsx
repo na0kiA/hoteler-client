@@ -8,8 +8,6 @@ import React, {
 import Cookies from "js-cookie";
 import { getCurrentUser } from "lib/auth";
 import { CurrentUser } from "types/types";
-import axios from "axios";
-import client from "lib/client";
 
 type AuthContextType = {
   loading: boolean;

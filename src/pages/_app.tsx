@@ -3,12 +3,27 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { AuthProvider } from "context/AuthProvider";
 import { useRouter } from "next/router";
+import { getCurrentUser } from "lib/auth";
+import client from "lib/client";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [pageLoading, setPageLoading] = useState<boolean>(false);
 
+  const handleGetCurrentUser = async () => {
+    try {
+      const res = await getCurrentUser();
+      console.log(res);
+
+      client.defaults.headers.common["X-CSRF-Token"] =
+        res.headers["x-csrf-token"];
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
+    handleGetCurrentUser();
     const handleStart = (url: string) =>
       url !== router.asPath && setPageLoading(true);
     const handleComplete = () => setPageLoading(false);
