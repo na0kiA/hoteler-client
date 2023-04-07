@@ -8,6 +8,7 @@ import React, {
 import Cookies from "js-cookie";
 import { getCurrentUser } from "lib/auth";
 import { CurrentUser } from "types/types";
+import axios from "axios";
 import client from "lib/client";
 
 type AuthContextType = {
@@ -32,12 +33,9 @@ export const AuthProvider = memo(function authProvider({ children }: any) {
   const [currentUser, setCurrentUser] = useState<CurrentUser>();
   const [id, setId] = useState<number>(0);
 
-
   const handleGetCurrentUser = async () => {
     try {
       const res = await getCurrentUser();
-      client.defaults.headers.common["X-CSRF-Token"] =
-        res.headers["x-csrf-token"];
 
       if (res?.data.is_login === true) {
         setIsSignedIn(true);

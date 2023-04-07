@@ -89,41 +89,49 @@ const Home = ({
       <div className="card w-full bg-base-100 shadow-xl pt-5">
         {editToggle ? (
           <>
-            <Image
-              src={`https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/${image}`}
-              alt="ユーザー画像"
-              width={50}
-              height={50}
-              priority={true}
-              className="rounded-full m-auto"
-            />
+            <div className="avatar m-auto">
+              <div className="w-14 md:w-20 rounded-full">
+                <Image
+                  src={`https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/${image}`}
+                  alt="アバター"
+                  width={600}
+                  height={600}
+                  priority={true}
+                />
+              </div>
+            </div>
             <input
               type="file"
               className="file-input file-input-bordered file-input-xs w-5/6 max-w-xs m-auto mt-5"
               onChange={handleChangeImage}
             />
             {imageUrl && (
-              <>
-                <Image
-                  src={imageUrl}
-                  alt="ユーザー画像"
-                  width={50}
-                  height={50}
-                  className="rounded-full m-auto mt-3"
-                />
-              </>
+              <div className="avatar m-auto">
+                <div className="w-14 md:w-20 rounded-full">
+                  <Image
+                    src={imageUrl}
+                    alt="アバター"
+                    width={600}
+                    height={600}
+                    priority={true}
+                  />
+                </div>
+              </div>
             )}
           </>
         ) : (
           <>
-            <Image
-              src={`https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/${userImageKey}`}
-              alt="ユーザー画像"
-              width={50}
-              height={50}
-              priority={true}
-              className="rounded-full m-auto"
-            />
+            <div className="avatar m-auto">
+              <div className="w-14 md:w-20 rounded-full">
+                <Image
+                  src={`https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/${userImageKey}`}
+                  alt="アバター"
+                  width={600}
+                  height={600}
+                  priority={true}
+                />
+              </div>
+            </div>
           </>
         )}
         <div className="card-body items-center text-center pt-1">

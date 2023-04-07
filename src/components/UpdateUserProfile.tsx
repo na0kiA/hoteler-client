@@ -99,14 +99,17 @@ const UpdateUserProfile = ({ name, image, uid }: UpdateUserProfileType) => {
     <div className="card w-full bg-base-100 shadow-xl pt-5">
       {editToggle ? (
         <>
-          <Image
-            src={image}
-            alt="ユーザー画像"
-            width={50}
-            height={50}
-            priority={true}
-            className="rounded-full m-auto"
-          />
+          <div className="avatar m-auto">
+            <div className="w-14 md:w-20 rounded-full">
+              <Image
+                src={image}
+                alt="アバター"
+                width={600}
+                height={600}
+                priority={true}
+              />
+            </div>
+          </div>
           <input
             type="file"
             className="file-input file-input-bordered file-input-xs w-5/6 max-w-xs m-auto mt-5"
@@ -114,25 +117,29 @@ const UpdateUserProfile = ({ name, image, uid }: UpdateUserProfileType) => {
           />
           {imageUrl && (
             <>
-              <Image
-                src={imageUrl}
-                alt="ユーザー画像"
-                width={50}
-                height={50}
-                className="rounded-full m-auto mt-3"
-              />
+              <div className="avatar m-auto mt-3">
+                <div className="w-14 md:w-20 rounded-full">
+                  <Image
+                    src={imageUrl}
+                    alt="アバター"
+                    width={600}
+                    height={600}
+                    priority={true}
+                  />
+                </div>
+              </div>
             </>
           )}
         </>
       ) : (
         <>
-          <div className="m-auto btn btn-ghost btn-circle avatar">
-            <div className="rounded-full" id="AvatarImage">
+          <div className="avatar m-auto">
+            <div className="w-14 md:w-20 rounded-full">
               <Image
                 src={`https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/${currentUser?.image}`}
                 alt="アバター"
-                width={50}
-                height={50}
+                width={600}
+                height={600}
                 priority={true}
               />
             </div>
