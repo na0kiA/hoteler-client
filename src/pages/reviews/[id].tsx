@@ -231,6 +231,8 @@ const UserReviewShow = ({
               {editToggle ? (
                 <>
                   <Rating
+                    emptyStyle={{ display: "flex" }}
+                    fillStyle={{ display: "-webkit-inline-box" }}
                     initialValue={editReviewRating}
                     transition
                     size={30}
@@ -244,6 +246,8 @@ const UserReviewShow = ({
               ) : (
                 <>
                   <Rating
+                    emptyStyle={{ display: "flex" }}
+                    fillStyle={{ display: "-webkit-inline-box" }}
                     initialValue={fiveStarRate}
                     transition
                     size={20}

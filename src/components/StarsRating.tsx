@@ -11,6 +11,8 @@ const StarsRating = ({ props }: PROPS) => {
   return (
     <>
       <Rating
+        emptyStyle={{ display: "flex" }}
+        fillStyle={{ display: "-webkit-inline-box" }}
         initialValue={props.averageRating}
         transition
         size={20}

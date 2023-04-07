@@ -68,6 +68,8 @@ const HotelOfUserProfile = ({ props }: PROPS) => {
             <div className="m-auto p-2 mb-1">
               <div className="flex">
                 <Rating
+                  emptyStyle={{ display: "flex" }}
+                  fillStyle={{ display: "-webkit-inline-box" }}
                   initialValue={hotel.averageRating}
                   transition
                   size={20}

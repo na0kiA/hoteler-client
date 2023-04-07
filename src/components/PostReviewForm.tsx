@@ -94,6 +94,8 @@ const PostReviewForm = ({ id }: any) => {
         </label>
         <span>
           <Rating
+            emptyStyle={{ display: "flex" }}
+            fillStyle={{ display: "-webkit-inline-box" }}
             initialValue={editReviewRating}
             transition
             size={25}

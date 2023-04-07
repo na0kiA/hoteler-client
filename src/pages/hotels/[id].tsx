@@ -370,6 +370,8 @@ const HotelDetail = ({
           ) : (
             <div className="flex md:mb-2">
               <Rating
+                emptyStyle={{ display: "flex" }}
+                fillStyle={{ display: "-webkit-inline-box" }}
                 initialValue={averageRating}
                 transition
                 size={28}
@@ -414,6 +416,8 @@ const HotelDetail = ({
                     <Link href={`/reviews/${review.id}`}>
                       <span className="align-middle">
                         <Rating
+                          emptyStyle={{ display: "flex" }}
+                          fillStyle={{ display: "-webkit-inline-box" }}
                           initialValue={review.fiveStarRate}
                           transition
                           size={20}

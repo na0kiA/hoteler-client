@@ -11,7 +11,6 @@ type PROPS = {
 const ReviewsOfUserProfile = memo(function reviewOfUserProfile({
   props,
 }: PROPS) {
-
   const sliceReviewContent = (content: string, maxLength: number) => {
     if (content.length > maxLength) {
       return content.slice(0, maxLength).concat("…");
@@ -47,6 +46,8 @@ const ReviewsOfUserProfile = memo(function reviewOfUserProfile({
               </Link>
               <div className="flex">
                 <Rating
+                  emptyStyle={{ display: "flex" }}
+                  fillStyle={{ display: "-webkit-inline-box" }}
                   initialValue={review.hotelAverageRating}
                   transition
                   size={15}
@@ -64,6 +65,8 @@ const ReviewsOfUserProfile = memo(function reviewOfUserProfile({
             <div className="flex-1 p-3">
               <div className="">
                 <Rating
+                  emptyStyle={{ display: "flex" }}
+                  fillStyle={{ display: "-webkit-inline-box" }}
                   initialValue={review.fiveStarRate}
                   transition
                   size={20}
@@ -119,6 +122,8 @@ const ReviewsOfUserProfile = memo(function reviewOfUserProfile({
               </Link>
               <div className="m-auto">
                 <Rating
+                  emptyStyle={{ display: "flex" }}
+                  fillStyle={{ display: "-webkit-inline-box" }}
                   initialValue={review.hotelAverageRating}
                   transition
                   size={20}
@@ -141,6 +146,8 @@ const ReviewsOfUserProfile = memo(function reviewOfUserProfile({
             <div className="flex-1 p-5 pb-1">
               <div className="">
                 <Rating
+                  emptyStyle={{ display: "flex" }}
+                  fillStyle={{ display: "-webkit-inline-box" }}
                   initialValue={review.fiveStarRate}
                   transition
                   size={30}

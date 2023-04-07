@@ -35,6 +35,8 @@ const FavoritesOfUserProfile = memo(function favoriteOfUserProfile({
             <div className="flex-1 p-5 pb-1">
               <div className="">
                 <Rating
+                  emptyStyle={{ display: "flex" }}
+                  fillStyle={{ display: "-webkit-inline-box" }}
                   initialValue={favorite.fiveStarRate}
                   transition
                   size={20}
@@ -81,6 +83,8 @@ const FavoritesOfUserProfile = memo(function favoriteOfUserProfile({
               <div className="">
                 <div className="">
                   <Rating
+                    emptyStyle={{ display: "flex" }}
+                    fillStyle={{ display: "-webkit-inline-box" }}
                     initialValue={favorite.fiveStarRate}
                     transition
                     size={20}

@@ -34,6 +34,8 @@ const HotelReviews = ({ hotelReviews }: PROPS) => {
                 <Link href={`/reivews/${review.id}`}>
                   <span className="align-middle">
                     <Rating
+                      emptyStyle={{ display: "flex" }}
+                      fillStyle={{ display: "-webkit-inline-box" }}
                       initialValue={review.fiveStarRate}
                       transition
                       size={20}
