@@ -126,7 +126,7 @@ const HotelDetail = ({
       phone_number: phoneNumber,
       postal_code: postalCode,
       full_address: fullAddress,
-      full: !editFull,
+      full: !full,
       name,
       prefecture,
       city,
