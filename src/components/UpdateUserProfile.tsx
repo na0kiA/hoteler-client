@@ -136,7 +136,7 @@ const UpdateUserProfile = ({ name, image, uid }: UpdateUserProfileType) => {
           <div className="avatar m-auto">
             <div className="w-14 md:w-20 rounded-full">
               <Image
-                src={`https://hoteler-image-list.s3.ap-northeast-1.amazonaws.com/${currentUser?.image}`}
+                src={image}
                 alt="アバター"
                 width={600}
                 height={600}
