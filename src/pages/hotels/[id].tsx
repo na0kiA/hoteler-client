@@ -132,10 +132,7 @@ const HotelDetail = ({
       street_address: streetAddress,
     };
     try {
-      const res = await updateHotel(id, onlyUpdateFullParams);
-      if (res.status === 200) {
-        router.reload();
-      }
+      await updateHotel(id, onlyUpdateFullParams);
     } catch (error: any) {
       if (error.response.data) {
         setError(error.response.data);
@@ -158,6 +155,7 @@ const HotelDetail = ({
               }
               onClick={(e) => {
                 handleChangeFull(e);
+                router.reload();
               }}
             >
               {full ? (
