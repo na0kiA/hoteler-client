@@ -38,7 +38,6 @@ const UserReviewShow = ({
   const [editReviewContent, setEditReviewContent] = useState<string>(content);
   const [editReviewRating, setEditReviewRating] =
     useState<number>(fiveStarRate);
-  console.log(`最初の星 ${fiveStarRate}}`);
 
   const router = useRouter();
 
