@@ -26,19 +26,9 @@ const Facilities = ({
 
   const image = hotelImages ? hotelImages.map((image) => image.fileUrl) : [];
 
-  // const image = hotelImages?.map((image) => {
-  //   if (!image.fileUrl) return "";
-  //   return image.fileUrl;
-  // });
-
   const defaultKeyList = hotelImages
     ? hotelImages.map((image) => image.key)
     : [];
-
-  // const defaultKeyList = hotelImages?.map((image) => {
-  //   if (!image.key) return "";
-  //   return image.key;
-  // });
 
   const router = useRouter();
   const [keyList, setKeyList] = useState<string[]>(defaultKeyList);
