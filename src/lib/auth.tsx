@@ -40,9 +40,6 @@ export const updatePassword = (
 ) => {
   return client.put("/auth/password", params, {
     headers: {
-      // "access-token": Cookies.get("_access_token"),
-      // client: Cookies.get("_access_token"),
-      // uid: Cookies.get("_access_token"),
       "access-token": query["access-token"],
       client: query.client,
       uid: query.uid,

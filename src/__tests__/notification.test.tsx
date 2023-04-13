@@ -59,26 +59,6 @@ describe("Navbar", () => {
       );
       expect(await screen.findAllByText("9+")).toHaveLength(2);
     });
-
-    // it("通知用バッジを押下すると通知がなくなること", async () => {
-    //   const user = userEvent.setup();
-
-    //   render(
-    //     <AuthContext.Provider
-    //       value={
-    //         {
-    //           currentUser: {},
-    //           isSignedIn: true,
-    //           notificationCount: 10,
-    //         } as any
-    //       }
-    //     >
-    //       <Navbar />
-    //     </AuthContext.Provider>
-    //   );
-    //   await user.click(screen.getByTestId("notification-button-by-pc"));
-    //   expect(await screen.findByText("9+")).toBeNull();
-    // });
   });
 
   describe("通知がない場合", () => {
