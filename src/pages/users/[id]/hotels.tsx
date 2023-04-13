@@ -64,11 +64,6 @@ const UserHotels = ({
 export default UserHotels;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  ctx.res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=1800, stale-while-revalidate=180"
-  );
-
   const { id } = ctx.query;
   const apiResponse = await client.get(`/users/${id}`, {
     headers: {

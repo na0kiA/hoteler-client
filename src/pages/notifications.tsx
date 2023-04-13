@@ -110,11 +110,6 @@ const Notifications = ({ notificationList }: PROPS) => {
 export default Notifications;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  ctx.res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=1800, stale-while-revalidate=180"
-  );
-
   const accessToken = ctx.req.cookies._access_token;
   const clientToken = ctx.req.cookies._client;
   const uid = ctx.req.cookies._uid;

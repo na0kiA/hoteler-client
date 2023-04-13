@@ -54,11 +54,6 @@ const Images = ({ hotelImages }: PROPS) => {
 export default Images;
 
 export const getServerSideProps = async (ctx: any) => {
-  ctx.res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=1800, stale-while-revalidate=180"
-  );
-
   const { id } = ctx.query;
 
   try {

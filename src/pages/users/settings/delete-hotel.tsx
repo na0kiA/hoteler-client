@@ -19,11 +19,6 @@ const DeleteHotel = ({ hotels }: PROPS) => {
 export default DeleteHotel;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  ctx.res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=1800, stale-while-revalidate=180"
-  );
-
   const currentUser = await client.get(`/auth/sessions`, {
     headers: {
       "Content-Type": "application/json",
