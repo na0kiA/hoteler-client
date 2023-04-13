@@ -173,11 +173,6 @@ const HotelSearch = ({ searchedHotelList }: PROPS) => {
 export default HotelSearch;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  ctx.res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=1800, stale-while-revalidate=180"
-  );
-
   const query = ctx.query;
 
   const keyword = query.keyword;
