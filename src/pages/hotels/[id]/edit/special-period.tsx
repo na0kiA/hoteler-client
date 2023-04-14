@@ -249,20 +249,33 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }),
       getDays(id),
     ]);
+
     const specialPeriodId = await hotelDays.data.days?.[6].id;
+    console.log(specialPeriodId);
+
     const specialPeriodResponse = await client.get(
       `/days/${specialPeriodId}/special_periods`,
       {
         headers: {
           "Content-Type": "application/json",
-          uid: ctx.req.cookies._uid,
-          client: ctx.req.cookies._client,
-          "access-token": ctx.req.cookies._access_token,
+          uid: ctx.req.cookies._uid || "",
+          client: ctx.req.cookies._client || "",
+          "access-token": ctx.req.cookies._access_token || "",
         },
       }
     );
 
+    if (!specialPeriodResponse.data.specialPeriods) {
+      return {
+        props: {
+          ...hotelDetail.data.hotel,
+          specialPeriod: [],
+        },
+      };
+    }
+
     const specialPeriod = await specialPeriodResponse?.data?.specialPeriods;
+
     if (currentUser.data.data.id === hotelDetail.data.hotel.userId) {
       return {
         props: {
@@ -277,7 +290,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   } catch (error) {
     console.log(error);
-
     return {
       notFound: true,
     };

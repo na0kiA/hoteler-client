@@ -155,11 +155,6 @@ const Home = ({ hotels }: PROPS) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
-  res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=60, stale-while-revalidate=10"
-  );
-
   const apiResponse = await getAllHotel(1);
   const hotels = await apiResponse.data.hotels;
 
