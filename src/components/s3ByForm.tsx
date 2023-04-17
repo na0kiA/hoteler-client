@@ -31,7 +31,6 @@ export const handleChangeImage = async (
   const locationOfImage =
     resXML.getElementsByTagName("Location")[0].childNodes[0].nodeValue;
   if (!locationOfImage) return;
-  // setImageUrl(locationOfImage);
   const key = await resXML.getElementsByTagName("Key")[0].childNodes[0]
     .nodeValue;
   if (!key) return;
