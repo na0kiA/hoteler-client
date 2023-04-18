@@ -74,6 +74,8 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
       ]);
     } catch (error: any) {
       console.log(error);
+    } finally {
+      router.reload();
     }
   };
 
