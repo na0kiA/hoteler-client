@@ -288,6 +288,7 @@ const Rate = ({ name, id, serviceList }: HotelEditType) => {
                   <td>
                     <button
                       className="btn btn-sm m-auto"
+                      type="button"
                       onClick={(e) => removeRestRate(index, field)}
                     >
                       削除
