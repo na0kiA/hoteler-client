@@ -163,7 +163,6 @@ const Navbar = memo(function navbar() {
             router.push(`/search?keyword=${searchWord}`);
           }}
         >
-          {/* <form className="hidden md:block md:navbar-center"> */}
           <div className="relative">
             <svg
               xmlns="http://www.w3.org/2000/svg"
